@@ -1,0 +1,1754 @@
+================================================================================
+                          MONGODB - COMPLETE NOTES
+================================================================================
+
+================================================================================
+1. INTRODUCTION TO MONGODB
+================================================================================
+
+MongoDB is:
+- NoSQL document-oriented database
+- Stores data in flexible JSON-like documents (BSON)
+- Horizontally scalable (sharding)
+- High performance, high availability
+- Schema-less (dynamic schema)
+
+KEY CONCEPTS:
+Database   → Collection → Document → Field
+(SQL: Database → Table → Row → Column)
+
+BSON (Binary JSON):
+- Binary representation of JSON
+- Supports more data types than JSON
+- More efficient for storage and scanning
+
+INSTALLATION:
+- Download from mongodb.com
+- Use MongoDB Atlas (cloud)
+- Docker: docker run -d -p 27017:27017 mongo
+
+================================================================================
+2. MONGODB SHELL (mongosh)
+================================================================================
+
+BASIC COMMANDS:
+mongosh                         // Connect to localhost
+mongosh "mongodb://host:27017"  // Connect to specific host
+
+show dbs                        // List databases
+use mydb                        // Switch/create database
+db                              // Current database
+show collections                // List collections
+
+db.dropDatabase()               // Drop current database
+db.createCollection("users")    // Create collection
+db.users.drop()                 // Drop collection
+
+// Help
+help
+db.help()
+db.users.help()
+
+// Insert
+db.users.insertOne({ name: "John", age: 30 })
+db.users.insertMany([{ name: "Jane" }, { name: "Bob" }])
+
+// Find
+db.users.find()
+db.users.findOne({ name: "John" })
+db.users.find({ age: { $gt: 25 } })
+
+// Update
+db.users.updateOne({ name: "John" }, { $set: { age: 31 } })
+db.users.updateMany({ age: { $lt: 18 } }, { $set: { status: "minor" } })
+db.users.replaceOne({ name: "John" }, { name: "John Doe", age: 31 })
+
+// Delete
+db.users.deleteOne({ name: "John" })
+db.users.deleteMany({ status: "inactive" })
+
+// Query
+db.users.find().count()
+db.users.find().pretty()
+db.users.find().limit(10)
+db.users.find().skip(5).limit(10)
+db.users.find().sort({ age: -1 })
+db.users.countDocuments()
+db.users.distinct("name")
+
+// Indexes
+db.users.createIndex({ email: 1 })
+db.users.getIndexes()
+db.users.dropIndex("email_1")
+
+// Aggregation
+db.users.aggregate([{ $match: { age: { $gt: 25 } } }, { $group: { _id: "$role", count: { $sum: 1 } } }])
+
+================================================================================
+3. CRUD OPERATIONS
+================================================================================
+
+CREATE (Insert):
+// Insert one
+db.users.insertOne({
+    name: "John",
+    email: "john@example.com",
+    age: 30
+})
+
+// Insert many
+db.users.insertMany([
+    { name: "Jane", email: "jane@example.com", age: 25 },
+    { name: "Bob", email: "bob@example.com", age: 35 }
+])
+
+// Options
+db.users.insertOne(
+    { name: "John" },
+    { writeConcern: { w: "majority" } }
+)
+
+READ (Find):
+// Find all
+db.users.find()
+
+// Find with query
+db.users.find({ name: "John" })
+
+// Find one
+db.users.findOne({ email: "john@example.com" })
+
+// Pretty print
+db.users.find().pretty()
+
+// Limit and skip
+db.users.find().limit(10)
+db.users.find().skip(5).limit(10)
+
+// Sort (1 = asc, -1 = desc)
+db.users.find().sort({ name: 1 })
+db.users.find().sort({ age: -1, name: 1 })
+
+// Count
+db.users.countDocuments({ age: { $gt: 25 } })
+
+// Distinct
+db.users.distinct("name")
+
+UPDATE:
+// Update one
+db.users.updateOne(
+    { email: "john@example.com" },   // Filter
+    { $set: { age: 31 } }             // Update
+)
+
+// Update many
+db.users.updateMany(
+    { age: { $lt: 18 } },
+    { $set: { status: "minor" } }
+)
+
+// Replace one (entire document)
+db.users.replaceOne(
+    { email: "john@example.com" },
+    { name: "John Doe", email: "john@example.com", age: 31 }
+)
+
+// Upsert (insert if not found)
+db.users.updateOne(
+    { email: "new@example.com" },
+    { $set: { name: "New User", age: 20 } },
+    { upsert: true }
+)
+
+// Find and update (returns document)
+db.users.findOneAndUpdate(
+    { email: "john@example.com" },
+    { $set: { age: 32 } },
+    { returnDocument: "after" }  // or "before"
+)
+
+DELETE:
+// Delete one
+db.users.deleteOne({ email: "john@example.com" })
+
+// Delete many
+db.users.deleteMany({ status: "inactive" })
+
+// Delete all
+db.users.deleteMany({})
+
+// Find and delete
+db.users.findOneAndDelete({ email: "john@example.com" })
+
+================================================================================
+4. QUERY OPERATORS
+================================================================================
+
+COMPARISON OPERATORS:
+$eq   - Equal
+$ne   - Not equal
+$gt   - Greater than
+$gte  - Greater than or equal
+$lt   - Less than
+$lte  - Less than or equal
+$in   - In array
+$nin  - Not in array
+
+// Examples
+db.users.find({ age: { $eq: 30 } })        // age == 30
+db.users.find({ age: { $ne: 30 } })        // age != 30
+db.users.find({ age: { $gt: 25 } })        // age > 25
+db.users.find({ age: { $gte: 25 } })       // age >= 25
+db.users.find({ age: { $lt: 30 } })        // age < 30
+db.users.find({ age: { $lte: 30 } })       // age <= 30
+db.users.find({ age: { $in: [25, 30, 35] } })   // age in [25,30,35]
+db.users.find({ age: { $nin: [25, 30] } })      // age not in [25,30]
+
+// Range
+db.users.find({ age: { $gte: 25, $lte: 35 } })  // 25 <= age <= 35
+
+LOGICAL OPERATORS:
+$and  - Logical AND
+$or   - Logical OR
+$not  - Logical NOT
+$nor  - Logical NOR
+
+// Examples
+db.users.find({ $and: [{ age: { $gt: 25 } }, { status: "active" }] })
+
+// Shorthand for AND
+db.users.find({ age: { $gt: 25 }, status: "active" })
+
+db.users.find({ $or: [{ age: { $lt: 20 } }, { age: { $gt: 60 } }] })
+
+db.users.find({ age: { $not: { $gt: 30 } } })
+
+db.users.find({ $nor: [{ age: { $lt: 20 } }, { status: "inactive" }] })
+
+ELEMENT OPERATORS:
+$exists - Field exists
+$type   - Field type
+
+db.users.find({ phone: { $exists: true } })
+db.users.find({ phone: { $exists: false } })
+db.users.find({ age: { $type: "int" } })
+db.users.find({ age: { $type: "number" } })  // Any numeric type
+
+EVALUATION OPERATORS:
+$regex  - Regular expression
+$expr   - Aggregation expression
+$mod    - Modulo
+$text   - Text search
+
+// Regex
+db.users.find({ name: { $regex: /^J/i } })     // Starts with J (case insensitive)
+db.users.find({ email: { $regex: /@gmail\.com$/ } })
+
+// Expr (compare fields in same document)
+db.products.find({ $expr: { $gt: ["$sold", "$stock"] } })
+
+// Mod
+db.users.find({ age: { $mod: [5, 0] } })  // age divisible by 5
+
+ARRAY OPERATORS:
+$all        - Contains all elements
+$elemMatch  - Element matches conditions
+$size       - Array size
+
+// Array contains all
+db.users.find({ tags: { $all: ["developer", "designer"] } })
+
+// Array contains element
+db.users.find({ tags: "developer" })  // Simple contains
+
+// elemMatch
+db.orders.find({
+    items: {
+        $elemMatch: { product: "laptop", quantity: { $gt: 1 } }
+    }
+})
+
+// Array size
+db.users.find({ tags: { $size: 3 } })
+
+================================================================================
+5. UPDATE OPERATORS
+================================================================================
+
+FIELD OPERATORS:
+$set         - Set field value
+$unset       - Remove field
+$rename      - Rename field
+$inc         - Increment value
+$mul         - Multiply value
+$min         - Update if less than
+$max         - Update if greater than
+$currentDate - Set to current date
+
+// Examples
+db.users.updateOne(
+    { _id: ObjectId("...") },
+    {
+        $set: { name: "John Doe", updatedAt: new Date() },
+        $unset: { tempField: "" },
+        $inc: { loginCount: 1 },
+        $currentDate: { lastLogin: true }
+    }
+)
+
+db.products.updateOne(
+    { _id: ObjectId("...") },
+    { $mul: { price: 1.1 } }  // Increase by 10%
+)
+
+db.users.updateOne(
+    { _id: ObjectId("...") },
+    { $min: { lowScore: 50 } }  // Only update if 50 < current value
+)
+
+db.users.updateOne(
+    { _id: ObjectId("...") },
+    { $rename: { "name": "fullName" } }
+)
+
+ARRAY OPERATORS:
+$push      - Add to array
+$pop       - Remove first/last element
+$pull      - Remove by condition
+$pullAll   - Remove multiple values
+$addToSet  - Add if not exists
+
+// Push
+db.users.updateOne(
+    { _id: ObjectId("...") },
+    { $push: { tags: "newTag" } }
+)
+
+// Push with modifiers
+db.users.updateOne(
+    { _id: ObjectId("...") },
+    {
+        $push: {
+            scores: {
+                $each: [85, 90, 95],      // Multiple values
+                $sort: -1,                 // Sort descending
+                $slice: 5,                 // Keep top 5
+                $position: 0               // Insert at position
+            }
+        }
+    }
+)
+
+// Pop
+db.users.updateOne(
+    { _id: ObjectId("...") },
+    { $pop: { tags: 1 } }   // 1 = last, -1 = first
+)
+
+// Pull
+db.users.updateOne(
+    { _id: ObjectId("...") },
+    { $pull: { tags: "oldTag" } }
+)
+
+db.orders.updateOne(
+    { _id: ObjectId("...") },
+    { $pull: { items: { quantity: { $lt: 1 } } } }
+)
+
+// Pull all
+db.users.updateOne(
+    { _id: ObjectId("...") },
+    { $pullAll: { tags: ["tag1", "tag2"] } }
+)
+
+// Add to set (no duplicates)
+db.users.updateOne(
+    { _id: ObjectId("...") },
+    { $addToSet: { tags: "uniqueTag" } }
+)
+
+db.users.updateOne(
+    { _id: ObjectId("...") },
+    { $addToSet: { tags: { $each: ["tag1", "tag2"] } } }
+)
+
+ARRAY POSITIONAL OPERATORS:
+$     - First matching element
+$[]   - All elements
+$[id] - Filtered elements
+
+// Update first match
+db.orders.updateOne(
+    { "items.product": "laptop" },
+    { $set: { "items.$.price": 1000 } }
+)
+
+// Update all elements
+db.users.updateOne(
+    { _id: ObjectId("...") },
+    { $inc: { "scores.$[]": 5 } }  // Add 5 to all scores
+)
+
+// Update filtered elements
+db.users.updateOne(
+    { _id: ObjectId("...") },
+    { $set: { "items.$[elem].status": "shipped" } },
+    { arrayFilters: [{ "elem.quantity": { $gt: 5 } }] }
+)
+
+================================================================================
+6. PROJECTION
+================================================================================
+
+// Include specific fields (1 = include)
+db.users.find({}, { name: 1, email: 1 })
+
+// Exclude specific fields (0 = exclude)
+db.users.find({}, { password: 0, __v: 0 })
+
+// Cannot mix include/exclude (except _id)
+db.users.find({}, { name: 1, _id: 0 })  // Valid
+
+// Array slice
+db.users.find({}, { posts: { $slice: 5 } })      // First 5
+db.users.find({}, { posts: { $slice: -5 } })     // Last 5
+db.users.find({}, { posts: { $slice: [10, 5] } }) // Skip 10, take 5
+
+// Array elemMatch
+db.users.find(
+    {},
+    { scores: { $elemMatch: { $gt: 90 } } }
+)
+
+================================================================================
+7. INDEXES
+================================================================================
+
+TYPES:
+- Single field
+- Compound
+- Multikey (arrays)
+- Text
+- Geospatial
+- Hashed
+
+CREATE INDEXES:
+// Single field
+db.users.createIndex({ email: 1 })      // Ascending
+db.users.createIndex({ createdAt: -1 }) // Descending
+
+// Unique index
+db.users.createIndex({ email: 1 }, { unique: true })
+
+// Compound index
+db.users.createIndex({ firstName: 1, lastName: 1 })
+
+// Sparse (only indexed if field exists)
+db.users.createIndex({ phone: 1 }, { sparse: true })
+
+// TTL (auto-delete after time)
+db.sessions.createIndex(
+    { createdAt: 1 },
+    { expireAfterSeconds: 3600 }  // Delete after 1 hour
+)
+
+// Text index
+db.articles.createIndex({ title: "text", content: "text" })
+
+// Partial index
+db.users.createIndex(
+    { email: 1 },
+    { partialFilterExpression: { status: "active" } }
+)
+
+MANAGE INDEXES:
+// List indexes
+db.users.getIndexes()
+
+// Drop index
+db.users.dropIndex("email_1")
+db.users.dropIndex({ email: 1 })
+
+// Drop all indexes (except _id)
+db.users.dropIndexes()
+
+// Explain query (check index usage)
+db.users.find({ email: "test@example.com" }).explain("executionStats")
+
+================================================================================
+8. AGGREGATION PIPELINE
+================================================================================
+
+The aggregation pipeline processes documents through stages.
+
+BASIC STRUCTURE:
+db.collection.aggregate([
+    { stage1 },
+    { stage2 },
+    { stage3 }
+])
+
+COMMON STAGES:
+$match     - Filter documents
+$project   - Shape output
+$group     - Group and aggregate
+$sort      - Sort documents
+$limit     - Limit results
+$skip      - Skip documents
+$unwind    - Deconstruct arrays
+$lookup    - Join collections
+$addFields - Add new fields
+$count     - Count documents
+$out       - Write to collection
+
+$MATCH:
+db.orders.aggregate([
+    { $match: { status: "completed" } }
+])
+
+$PROJECT:
+db.users.aggregate([
+    {
+        $project: {
+            fullName: { $concat: ["$firstName", " ", "$lastName"] },
+            email: 1,
+            _id: 0
+        }
+    }
+])
+
+$GROUP:
+// Count by status
+db.orders.aggregate([
+    {
+        $group: {
+            _id: "$status",
+            count: { $sum: 1 }
+        }
+    }
+])
+
+// Sum, average, min, max
+db.orders.aggregate([
+    {
+        $group: {
+            _id: "$customerId",
+            totalAmount: { $sum: "$amount" },
+            avgAmount: { $avg: "$amount" },
+            minAmount: { $min: "$amount" },
+            maxAmount: { $max: "$amount" },
+            orderCount: { $sum: 1 },
+            orders: { $push: "$_id" }
+        }
+    }
+])
+
+// Group all (no grouping key)
+db.orders.aggregate([
+    {
+        $group: {
+            _id: null,
+            total: { $sum: "$amount" },
+            count: { $sum: 1 }
+        }
+    }
+])
+
+$SORT, $LIMIT, $SKIP:
+db.users.aggregate([
+    { $sort: { age: -1 } },
+    { $skip: 10 },
+    { $limit: 5 }
+])
+
+$UNWIND:
+// Deconstruct array into separate documents
+db.orders.aggregate([
+    { $unwind: "$items" },
+    {
+        $group: {
+            _id: "$items.product",
+            totalQuantity: { $sum: "$items.quantity" }
+        }
+    }
+])
+
+$LOOKUP (JOIN):
+db.orders.aggregate([
+    {
+        $lookup: {
+            from: "users",           // Collection to join
+            localField: "userId",    // Field in orders
+            foreignField: "_id",     // Field in users
+            as: "user"               // Output array field
+        }
+    },
+    { $unwind: "$user" }  // Convert array to object
+])
+
+// Pipeline lookup (more complex)
+db.orders.aggregate([
+    {
+        $lookup: {
+            from: "products",
+            let: { productIds: "$items.productId" },
+            pipeline: [
+                { $match: { $expr: { $in: ["$_id", "$$productIds"] } } },
+                { $project: { name: 1, price: 1 } }
+            ],
+            as: "products"
+        }
+    }
+])
+
+$ADDFIELDS:
+db.users.aggregate([
+    {
+        $addFields: {
+            fullName: { $concat: ["$firstName", " ", "$lastName"] },
+            isAdult: { $gte: ["$age", 18] }
+        }
+    }
+])
+
+COMPLETE EXAMPLE:
+// Get top 5 customers by total spending
+db.orders.aggregate([
+    // Filter completed orders
+    { $match: { status: "completed" } },
+    
+    // Group by customer
+    {
+        $group: {
+            _id: "$customerId",
+            totalSpent: { $sum: "$amount" },
+            orderCount: { $sum: 1 }
+        }
+    },
+    
+    // Sort by total spent
+    { $sort: { totalSpent: -1 } },
+    
+    // Top 5
+    { $limit: 5 },
+    
+    // Join with customers
+    {
+        $lookup: {
+            from: "customers",
+            localField: "_id",
+            foreignField: "_id",
+            as: "customer"
+        }
+    },
+    
+    // Unwind customer
+    { $unwind: "$customer" },
+    
+    // Shape output
+    {
+        $project: {
+            _id: 0,
+            customerName: "$customer.name",
+            email: "$customer.email",
+            totalSpent: 1,
+            orderCount: 1
+        }
+    }
+])
+
+================================================================================
+9. MONGOOSE (ODM for Node.js)
+================================================================================
+
+Mongoose provides schema-based solution for MongoDB.
+
+INSTALLATION:
+npm install mongoose
+
+CONNECTION:
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost:27017/mydb', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.error('Connection error:', err));
+
+// Connection events
+mongoose.connection.on('connected', () => console.log('Connected'));
+mongoose.connection.on('error', (err) => console.log('Error:', err));
+mongoose.connection.on('disconnected', () => console.log('Disconnected'));
+
+// Close connection
+process.on('SIGINT', async () => {
+    await mongoose.connection.close();
+    process.exit(0);
+});
+
+================================================================================
+10. MONGOOSE SCHEMAS
+================================================================================
+
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+
+const userSchema = new Schema({
+    // String
+    name: {
+        type: String,
+        required: [true, 'Name is required'],
+        trim: true,
+        minlength: [2, 'Name must be at least 2 characters'],
+        maxlength: [50, 'Name cannot exceed 50 characters']
+    },
+    
+    // Unique field
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+        match: [/^\S+@\S+\.\S+$/, 'Invalid email']
+    },
+    
+    // Number
+    age: {
+        type: Number,
+        min: [0, 'Age cannot be negative'],
+        max: [150, 'Invalid age']
+    },
+    
+    // Enum
+    role: {
+        type: String,
+        enum: ['user', 'admin', 'moderator'],
+        default: 'user'
+    },
+    
+    // Boolean
+    isActive: {
+        type: Boolean,
+        default: true
+    },
+    
+    // Date
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    
+    // Array of strings
+    tags: [String],
+    
+    // Array of objects
+    addresses: [{
+        street: String,
+        city: String,
+        country: { type: String, default: 'USA' }
+    }],
+    
+    // Nested object
+    profile: {
+        bio: String,
+        avatar: String,
+        social: {
+            twitter: String,
+            facebook: String
+        }
+    },
+    
+    // Reference to another model
+    createdBy: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    
+    // Mixed type (any data)
+    metadata: Schema.Types.Mixed
+}, {
+    timestamps: true,              // Adds createdAt, updatedAt
+    toJSON: { virtuals: true },    // Include virtuals in JSON
+    toObject: { virtuals: true }
+});
+
+// Create model
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;
+
+SCHEMA OPTIONS:
+new Schema({...}, {
+    timestamps: true,
+    collection: 'custom_name',     // Custom collection name
+    strict: true,                  // Only save schema fields
+    strictQuery: true,             // Strict mode for queries
+    id: false,                     // Disable virtual id
+    _id: true,                     // Enable _id
+    versionKey: '__v',             // Version key name
+    minimize: true,                // Remove empty objects
+    autoIndex: true                // Auto create indexes
+});
+
+================================================================================
+11. MONGOOSE VIRTUALS
+================================================================================
+
+Virtuals are computed properties that don't persist in DB.
+
+const userSchema = new Schema({
+    firstName: String,
+    lastName: String,
+    email: String
+});
+
+// Virtual getter
+userSchema.virtual('fullName').get(function() {
+    return `${this.firstName} ${this.lastName}`;
+});
+
+// Virtual setter
+userSchema.virtual('fullName').set(function(name) {
+    const [firstName, lastName] = name.split(' ');
+    this.firstName = firstName;
+    this.lastName = lastName;
+});
+
+// Virtual populate
+const postSchema = new Schema({
+    title: String,
+    author: { type: Schema.Types.ObjectId, ref: 'User' }
+});
+
+userSchema.virtual('posts', {
+    ref: 'Post',
+    localField: '_id',
+    foreignField: 'author'
+});
+
+// Usage
+const user = await User.findById(id).populate('posts');
+
+================================================================================
+12. MONGOOSE MIDDLEWARE (HOOKS)
+================================================================================
+
+PRE MIDDLEWARE:
+// Before save
+userSchema.pre('save', async function(next) {
+    // 'this' refers to the document
+    if (this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password, 10);
+    }
+    next();
+});
+
+// Before find
+userSchema.pre('find', function() {
+    // 'this' refers to the query
+    this.where({ isActive: true });
+});
+
+// Before findOne
+userSchema.pre('findOne', function() {
+    this.where({ isActive: true });
+});
+
+// Before updateOne
+userSchema.pre('updateOne', function() {
+    this.set({ updatedAt: new Date() });
+});
+
+// Before deleteOne
+userSchema.pre('deleteOne', { document: true }, async function() {
+    // Clean up related data
+    await Comment.deleteMany({ userId: this._id });
+});
+
+POST MIDDLEWARE:
+// After save
+userSchema.post('save', function(doc) {
+    console.log('User saved:', doc._id);
+});
+
+// After find
+userSchema.post('find', function(docs) {
+    console.log('Found', docs.length, 'documents');
+});
+
+// Error handling
+userSchema.post('save', function(error, doc, next) {
+    if (error.name === 'MongoServerError' && error.code === 11000) {
+        next(new Error('Email already exists'));
+    } else {
+        next(error);
+    }
+});
+
+================================================================================
+13. MONGOOSE INSTANCE METHODS
+================================================================================
+
+userSchema.methods.comparePassword = async function(candidatePassword) {
+    return bcrypt.compare(candidatePassword, this.password);
+};
+
+userSchema.methods.generateAuthToken = function() {
+    return jwt.sign(
+        { userId: this._id },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+    );
+};
+
+userSchema.methods.toPublicJSON = function() {
+    return {
+        id: this._id,
+        name: this.name,
+        email: this.email
+    };
+};
+
+// Usage
+const user = await User.findOne({ email });
+const isMatch = await user.comparePassword(password);
+const token = user.generateAuthToken();
+
+================================================================================
+14. MONGOOSE STATIC METHODS
+================================================================================
+
+userSchema.statics.findByEmail = function(email) {
+    return this.findOne({ email: email.toLowerCase() });
+};
+
+userSchema.statics.findActive = function() {
+    return this.find({ isActive: true });
+};
+
+userSchema.statics.createUser = async function(userData) {
+    const user = new this(userData);
+    await user.save();
+    return user;
+};
+
+// Usage
+const user = await User.findByEmail('john@example.com');
+const activeUsers = await User.findActive();
+
+================================================================================
+15. MONGOOSE QUERIES
+================================================================================
+
+BASIC QUERIES:
+// Find
+const users = await User.find();
+const user = await User.findById(id);
+const user = await User.findOne({ email: 'john@example.com' });
+
+// Create
+const user = await User.create({ name: 'John', email: 'john@example.com' });
+const users = await User.insertMany([...]);
+
+// Update
+const user = await User.findByIdAndUpdate(id, { name: 'New Name' }, { new: true });
+const result = await User.updateOne({ email: 'john@example.com' }, { isActive: false });
+const result = await User.updateMany({ role: 'user' }, { $inc: { credits: 10 } });
+
+// Delete
+const user = await User.findByIdAndDelete(id);
+const result = await User.deleteOne({ email: 'john@example.com' });
+const result = await User.deleteMany({ isActive: false });
+
+QUERY CHAINING:
+const users = await User
+    .find({ age: { $gte: 18 } })
+    .select('name email age')
+    .sort({ age: -1 })
+    .skip(10)
+    .limit(5)
+    .lean()                        // Return plain JS objects
+    .exec();
+
+// Or with options
+const users = await User.find({ isActive: true }, 'name email', {
+    limit: 10,
+    skip: 0,
+    sort: { createdAt: -1 }
+});
+
+POPULATION:
+// Single reference
+const post = await Post
+    .findById(id)
+    .populate('author');
+
+// Selective population
+const post = await Post
+    .findById(id)
+    .populate('author', 'name email');
+
+// Multiple populations
+const post = await Post
+    .findById(id)
+    .populate('author', 'name')
+    .populate('comments');
+
+// Nested population
+const post = await Post
+    .findById(id)
+    .populate({
+        path: 'comments',
+        populate: {
+            path: 'author',
+            select: 'name'
+        }
+    });
+
+// Population with match
+const user = await User
+    .findById(id)
+    .populate({
+        path: 'posts',
+        match: { isPublished: true },
+        options: { sort: { createdAt: -1 }, limit: 5 }
+    });
+
+================================================================================
+16. MONGOOSE VALIDATION
+================================================================================
+
+BUILT-IN VALIDATORS:
+const productSchema = new Schema({
+    name: {
+        type: String,
+        required: [true, 'Name is required'],
+        minlength: [2, 'Min 2 characters'],
+        maxlength: [100, 'Max 100 characters'],
+        trim: true
+    },
+    price: {
+        type: Number,
+        required: true,
+        min: [0, 'Price cannot be negative'],
+        max: [1000000, 'Price too high']
+    },
+    category: {
+        type: String,
+        enum: {
+            values: ['electronics', 'clothing', 'food'],
+            message: '{VALUE} is not a valid category'
+        }
+    },
+    email: {
+        type: String,
+        match: [/^\S+@\S+\.\S+$/, 'Invalid email format']
+    }
+});
+
+CUSTOM VALIDATORS:
+const userSchema = new Schema({
+    phone: {
+        type: String,
+        validate: {
+            validator: function(v) {
+                return /\d{10}/.test(v);
+            },
+            message: props => `${props.value} is not a valid phone number`
+        }
+    },
+    website: {
+        type: String,
+        validate: {
+            validator: async function(url) {
+                // Async validation
+                const exists = await checkUrlExists(url);
+                return exists;
+            },
+            message: 'Website is not accessible'
+        }
+    },
+    password: {
+        type: String,
+        validate: [
+            {
+                validator: v => v.length >= 8,
+                message: 'Password must be at least 8 characters'
+            },
+            {
+                validator: v => /[A-Z]/.test(v),
+                message: 'Password must contain uppercase letter'
+            },
+            {
+                validator: v => /[0-9]/.test(v),
+                message: 'Password must contain a number'
+            }
+        ]
+    }
+});
+
+// Conditional validation
+const orderSchema = new Schema({
+    paymentMethod: {
+        type: String,
+        required: true
+    },
+    cardNumber: {
+        type: String,
+        required: function() {
+            return this.paymentMethod === 'credit_card';
+        }
+    }
+});
+
+HANDLING VALIDATION ERRORS:
+try {
+    const user = new User({ email: 'invalid' });
+    await user.save();
+} catch (error) {
+    if (error.name === 'ValidationError') {
+        const errors = Object.keys(error.errors).map(key => ({
+            field: key,
+            message: error.errors[key].message
+        }));
+        console.log(errors);
+    }
+}
+
+================================================================================
+17. MONGOOSE PLUGINS
+================================================================================
+
+// plugins/timestamp.js
+function timestampPlugin(schema) {
+    schema.add({
+        createdAt: Date,
+        updatedAt: Date
+    });
+    
+    schema.pre('save', function(next) {
+        const now = new Date();
+        this.updatedAt = now;
+        if (!this.createdAt) {
+            this.createdAt = now;
+        }
+        next();
+    });
+}
+
+// Usage
+userSchema.plugin(timestampPlugin);
+
+// Global plugin (applies to all schemas)
+mongoose.plugin(timestampPlugin);
+
+POPULAR PLUGINS:
+- mongoose-paginate-v2
+- mongoose-unique-validator
+- mongoose-autopopulate
+- mongoose-slug-updater
+
+// mongoose-paginate-v2
+npm install mongoose-paginate-v2
+
+const mongoosePaginate = require('mongoose-paginate-v2');
+userSchema.plugin(mongoosePaginate);
+
+const result = await User.paginate(
+    { isActive: true },
+    { page: 1, limit: 10, sort: { createdAt: -1 } }
+);
+// result.docs, result.totalDocs, result.totalPages, etc.
+
+================================================================================
+18. TRANSACTIONS
+================================================================================
+
+MongoDB transactions ensure atomicity across multiple operations.
+
+const session = await mongoose.startSession();
+
+try {
+    session.startTransaction();
+    
+    // Create order
+    const order = await Order.create([{
+        userId,
+        items,
+        total
+    }], { session });
+    
+    // Decrement stock
+    for (const item of items) {
+        await Product.updateOne(
+            { _id: item.productId },
+            { $inc: { stock: -item.quantity } },
+            { session }
+        );
+    }
+    
+    // Deduct from wallet
+    await User.updateOne(
+        { _id: userId },
+        { $inc: { balance: -total } },
+        { session }
+    );
+    
+    await session.commitTransaction();
+    console.log('Transaction committed');
+} catch (error) {
+    await session.abortTransaction();
+    console.log('Transaction aborted:', error);
+    throw error;
+} finally {
+    session.endSession();
+}
+
+// Using withTransaction helper
+await session.withTransaction(async () => {
+    await Order.create([{ ... }], { session });
+    await Product.updateOne({ ... }, { ... }, { session });
+});
+
+================================================================================
+19. MONGOOSE WITH EXPRESS
+================================================================================
+
+// config/db.js
+const mongoose = require('mongoose');
+
+const connectDB = async () => {
+    try {
+        const conn = await mongoose.connect(process.env.MONGO_URI);
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+    } catch (error) {
+        console.error(`Error: ${error.message}`);
+        process.exit(1);
+    }
+};
+
+module.exports = connectDB;
+
+// models/User.js
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+
+const userSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true }
+}, { timestamps: true });
+
+userSchema.pre('save', async function(next) {
+    if (!this.isModified('password')) return next();
+    this.password = await bcrypt.hash(this.password, 10);
+});
+
+userSchema.methods.matchPassword = async function(password) {
+    return bcrypt.compare(password, this.password);
+};
+
+module.exports = mongoose.model('User', userSchema);
+
+// controllers/userController.js
+const User = require('../models/User');
+
+exports.getUsers = async (req, res) => {
+    const users = await User.find().select('-password');
+    res.json(users);
+};
+
+exports.createUser = async (req, res) => {
+    const user = await User.create(req.body);
+    res.status(201).json({
+        id: user._id,
+        name: user.name,
+        email: user.email
+    });
+};
+
+// routes/userRoutes.js
+const express = require('express');
+const { getUsers, createUser } = require('../controllers/userController');
+const router = express.Router();
+
+router.route('/').get(getUsers).post(createUser);
+
+module.exports = router;
+
+// server.js
+const express = require('express');
+const connectDB = require('./config/db');
+const userRoutes = require('./routes/userRoutes');
+
+connectDB();
+
+const app = express();
+app.use(express.json());
+app.use('/api/users', userRoutes);
+
+app.listen(3000);
+
+================================================================================
+20. MONGODB ATLAS (CLOUD)
+================================================================================
+
+SETUP:
+1. Create account at mongodb.com/atlas
+2. Create cluster (free tier available)
+3. Create database user
+4. Whitelist IP addresses
+5. Get connection string
+
+CONNECTION STRING:
+mongodb+srv://<username>:<password>@cluster.xxxxx.mongodb.net/<dbname>?retryWrites=true&w=majority
+
+MONGOOSE CONNECTION:
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    retryWrites: true,
+    w: 'majority'
+});
+
+================================================================================
+21. BEST PRACTICES
+================================================================================
+
+1. SCHEMA DESIGN:
+   - Embed when data is accessed together
+   - Reference when data is large or frequently updated
+   - Avoid deep nesting
+
+2. INDEXES:
+   - Index frequently queried fields
+   - Use compound indexes for multiple field queries
+   - Monitor with explain()
+
+3. SECURITY:
+   - Use authentication
+   - Whitelist IPs in production
+   - Use TLS/SSL connections
+   - Sanitize user input
+
+4. PERFORMANCE:
+   - Use projection to limit fields
+   - Use lean() for read-only operations
+   - Use aggregation for complex queries
+   - Enable connection pooling
+
+5. ERROR HANDLING:
+   - Handle connection errors
+   - Use try-catch with async/await
+   - Validate data before saving
+
+6. ENVIRONMENT:
+   - Store connection strings in environment variables
+   - Use different databases for dev/test/prod
+
+================================================================================
+22. CHANGE STREAMS
+================================================================================
+
+BASIC CHANGE STREAM:
+// Watch for changes in a collection
+const changeStream = collection.watch();
+
+changeStream.on('change', (change) => {
+    console.log('Change detected:', change);
+    console.log('Operation:', change.operationType);
+    console.log('Document:', change.fullDocument);
+});
+
+// With async/await
+async function watchChanges() {
+    const changeStream = collection.watch();
+    
+    for await (const change of changeStream) {
+        console.log('Change:', change);
+    }
+}
+
+CHANGE STREAM OPTIONS:
+const pipeline = [
+    { $match: { operationType: { $in: ['insert', 'update'] } } },
+    { $match: { 'fullDocument.status': 'active' } }
+];
+
+const options = {
+    fullDocument: 'updateLookup'  // Include full document on updates
+};
+
+const changeStream = collection.watch(pipeline, options);
+
+OPERATION TYPES:
+// insert, update, replace, delete
+// drop, rename, dropDatabase
+// invalidate
+
+changeStream.on('change', (change) => {
+    switch (change.operationType) {
+        case 'insert':
+            console.log('New doc:', change.fullDocument);
+            break;
+        case 'update':
+            console.log('Updated fields:', change.updateDescription.updatedFields);
+            break;
+        case 'delete':
+            console.log('Deleted:', change.documentKey._id);
+            break;
+    }
+});
+
+RESUME TOKEN:
+// Save token to resume after disconnect
+let resumeToken;
+
+changeStream.on('change', (change) => {
+    resumeToken = change._id;
+    // Process change...
+});
+
+// Resume from token
+const resumedStream = collection.watch([], {
+    resumeAfter: resumeToken
+});
+
+================================================================================
+23. GRIDFS (Large File Storage)
+================================================================================
+
+SETUP:
+const { GridFSBucket } = require('mongodb');
+
+const bucket = new GridFSBucket(db, {
+    bucketName: 'uploads',
+    chunkSizeBytes: 255 * 1024  // 255KB chunks
+});
+
+UPLOAD FILE:
+const fs = require('fs');
+
+// Upload from file stream
+const uploadStream = bucket.openUploadStream('myfile.pdf', {
+    metadata: { type: 'document', author: 'John' }
+});
+
+fs.createReadStream('./myfile.pdf')
+    .pipe(uploadStream)
+    .on('finish', () => {
+        console.log('File uploaded, ID:', uploadStream.id);
+    });
+
+// Upload from buffer
+const { Readable } = require('stream');
+const buffer = Buffer.from('File content');
+const readableStream = Readable.from(buffer);
+
+readableStream.pipe(bucket.openUploadStream('text.txt'));
+
+DOWNLOAD FILE:
+// Download to file
+const downloadStream = bucket.openDownloadStream(fileId);
+
+downloadStream
+    .pipe(fs.createWriteStream('./downloaded.pdf'))
+    .on('finish', () => console.log('Download complete'));
+
+// Download by filename
+bucket.openDownloadStreamByName('myfile.pdf')
+    .pipe(res);  // Express response
+
+// Stream to client
+app.get('/files/:id', async (req, res) => {
+    const fileId = new ObjectId(req.params.id);
+    
+    const file = await bucket.find({ _id: fileId }).next();
+    if (!file) {
+        return res.status(404).send('File not found');
+    }
+    
+    res.set('Content-Type', file.contentType);
+    bucket.openDownloadStream(fileId).pipe(res);
+});
+
+DELETE FILE:
+await bucket.delete(fileId);
+
+LIST FILES:
+const files = await bucket.find({}).toArray();
+
+const cursor = bucket.find({ 'metadata.type': 'document' });
+for await (const file of cursor) {
+    console.log(file.filename, file.length);
+}
+
+================================================================================
+24. SHARDING
+================================================================================
+
+CONCEPTS:
+// Sharding = Horizontal scaling across multiple servers
+// Shard = Subset of data
+// Shard Key = Field(s) used to distribute data
+// Config Server = Stores cluster metadata
+// mongos = Query router
+
+ENABLE SHARDING:
+// Connect to mongos
+sh.enableSharding("mydb")
+
+// Shard a collection
+sh.shardCollection("mydb.users", { "userId": 1 })  // Range based
+sh.shardCollection("mydb.logs", { "userId": "hashed" })  // Hashed
+
+SHARD KEY SELECTION:
+// Good shard key:
+// - High cardinality (many unique values)
+// - Even distribution
+// - Query isolation (queries target specific shards)
+
+// Bad choices:
+// - Low cardinality (boolean, status codes)
+// - Monotonically increasing (_id, timestamp)
+
+// Example: Compound shard key
+sh.shardCollection("mydb.orders", { "customerId": 1, "orderDate": 1 })
+
+CHUNK OPERATIONS:
+// Check chunk distribution
+db.users.getShardDistribution()
+
+// Balance chunks
+sh.startBalancer()
+sh.stopBalancer()
+
+================================================================================
+25. REPLICA SETS
+================================================================================
+
+CONCEPTS:
+// Replica Set = Group of mongod instances with same data
+// Primary = Receives all writes
+// Secondary = Replicate from primary
+// Arbiter = Votes in elections (no data)
+
+SETUP:
+// Initialize replica set
+rs.initiate({
+    _id: "myReplicaSet",
+    members: [
+        { _id: 0, host: "mongodb1:27017" },
+        { _id: 1, host: "mongodb2:27017" },
+        { _id: 2, host: "mongodb3:27017" }
+    ]
+})
+
+rs.status()  // Check status
+rs.conf()    // Get configuration
+
+CONNECTION STRING:
+mongodb://mongodb1:27017,mongodb2:27017,mongodb3:27017/mydb?replicaSet=myReplicaSet
+
+READ PREFERENCES:
+// Where to route read operations
+const options = {
+    readPreference: 'secondary'  // Read from secondaries
+};
+
+// Options:
+// primary - Only primary (default)
+// primaryPreferred - Primary, or secondary if unavailable
+// secondary - Only secondaries
+// secondaryPreferred - Secondaries, or primary if unavailable
+// nearest - Lowest latency
+
+// In connection string
+mongodb://host/db?readPreference=secondaryPreferred
+
+WRITE CONCERN:
+// Acknowledgment level for writes
+db.users.insertOne(
+    { name: 'John' },
+    {
+        writeConcern: {
+            w: 'majority',    // Majority of nodes
+            j: true,          // Journaled
+            wtimeout: 5000    // Timeout in ms
+        }
+    }
+);
+
+// w options:
+// 0 - No acknowledgment
+// 1 - Primary only (default)
+// 'majority' - Majority of nodes
+// <number> - Specific number of nodes
+
+================================================================================
+26. TIME SERIES COLLECTIONS
+================================================================================
+
+CREATE TIME SERIES COLLECTION:
+db.createCollection("weather", {
+    timeseries: {
+        timeField: "timestamp",
+        metaField: "sensorId",
+        granularity: "minutes"  // seconds, minutes, hours
+    },
+    expireAfterSeconds: 86400 * 30  // Auto-delete after 30 days
+});
+
+INSERT DATA:
+db.weather.insertMany([
+    {
+        timestamp: new Date(),
+        sensorId: "sensor-001",
+        temperature: 22.5,
+        humidity: 65
+    },
+    {
+        timestamp: new Date(),
+        sensorId: "sensor-002",
+        temperature: 21.0,
+        humidity: 70
+    }
+]);
+
+QUERY TIME SERIES:
+// Get readings in time range
+db.weather.find({
+    timestamp: {
+        $gte: new Date("2024-01-01"),
+        $lt: new Date("2024-02-01")
+    }
+});
+
+// Aggregate by time window
+db.weather.aggregate([
+    {
+        $match: {
+            timestamp: { $gte: new Date("2024-01-01") }
+        }
+    },
+    {
+        $group: {
+            _id: {
+                sensor: "$sensorId",
+                day: { $dateToString: { format: "%Y-%m-%d", date: "$timestamp" } }
+            },
+            avgTemp: { $avg: "$temperature" },
+            maxTemp: { $max: "$temperature" },
+            minTemp: { $min: "$temperature" }
+        }
+    },
+    { $sort: { "_id.day": 1 } }
+]);
+
+// Window functions
+db.weather.aggregate([
+    {
+        $setWindowFields: {
+            partitionBy: "$sensorId",
+            sortBy: { timestamp: 1 },
+            output: {
+                movingAvg: {
+                    $avg: "$temperature",
+                    window: { documents: [-5, 0] }  // Last 5 documents
+                }
+            }
+        }
+    }
+]);
+
+================================================================================
+27. MONGODB ATLAS FEATURES
+================================================================================
+
+ATLAS SEARCH:
+// Create search index
+{
+    "mappings": {
+        "dynamic": true
+    }
+}
+
+// Full-text search
+db.products.aggregate([
+    {
+        $search: {
+            text: {
+                query: "wireless headphones",
+                path: ["name", "description"]
+            }
+        }
+    },
+    {
+        $project: {
+            name: 1,
+            score: { $meta: "searchScore" }
+        }
+    }
+]);
+
+// Autocomplete
+{
+    $search: {
+        autocomplete: {
+            query: "hea",
+            path: "name"
+        }
+    }
+}
+
+// Fuzzy search
+{
+    $search: {
+        text: {
+            query: "headfones",  // typo
+            path: "name",
+            fuzzy: { maxEdits: 2 }
+        }
+    }
+}
+
+ATLAS VECTOR SEARCH:
+// Create vector index
+{
+    "fields": [{
+        "type": "vector",
+        "path": "embedding",
+        "numDimensions": 1536,
+        "similarity": "cosine"
+    }]
+}
+
+// Search similar vectors
+db.products.aggregate([
+    {
+        $vectorSearch: {
+            index: "vector_index",
+            path: "embedding",
+            queryVector: [0.1, 0.2, ...],  // 1536 dimensions
+            numCandidates: 100,
+            limit: 10
+        }
+    }
+]);
+
+ATLAS DATA API:
+// REST API for data access
+POST https://data.mongodb-api.com/app/<app-id>/endpoint/data/v1/action/findOne
+
+{
+    "dataSource": "Cluster0",
+    "database": "mydb",
+    "collection": "users",
+    "filter": { "email": "john@email.com" }
+}
+
+================================================================================
+================================================================================

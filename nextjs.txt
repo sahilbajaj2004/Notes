@@ -1,0 +1,1885 @@
+================================================================================
+                          NEXT.JS - COMPLETE NOTES
+================================================================================
+
+================================================================================
+1. INTRODUCTION TO NEXT.JS
+================================================================================
+
+Next.js is:
+- React framework for production
+- Built on top of React
+- Provides SSR, SSG, and more
+- Created by Vercel
+
+KEY FEATURES:
+- Server-Side Rendering (SSR)
+- Static Site Generation (SSG)
+- Incremental Static Regeneration (ISR)
+- File-based routing
+- API routes
+- Built-in CSS and Sass support
+- Image optimization
+- Fast Refresh (HMR)
+- TypeScript support
+- Middleware
+
+INSTALLATION:
+npx create-next-app@latest my-app
+npx create-next-app@latest my-app --typescript
+
+cd my-app
+npm run dev
+
+================================================================================
+2. PROJECT STRUCTURE (APP ROUTER - Next.js 13+)
+================================================================================
+
+my-app/
+├── app/
+│   ├── layout.js          // Root layout
+│   ├── page.js            // Home page (/)
+│   ├── globals.css        // Global styles
+│   ├── about/
+│   │   └── page.js        // About page (/about)
+│   ├── blog/
+│   │   ├── page.js        // Blog index (/blog)
+│   │   └── [slug]/
+│   │       └── page.js    // Dynamic route (/blog/:slug)
+│   └── api/
+│       └── route.js       // API route
+├── public/                 // Static assets
+│   ├── images/
+│   └── favicon.ico
+├── components/             // React components
+├── lib/                    // Utility functions
+├── next.config.js          // Next.js configuration
+├── package.json
+└── .env.local              // Environment variables
+
+================================================================================
+3. PROJECT STRUCTURE (PAGES ROUTER - Legacy)
+================================================================================
+
+my-app/
+├── pages/
+│   ├── _app.js            // Custom App
+│   ├── _document.js       // Custom Document
+│   ├── index.js           // Home page (/)
+│   ├── about.js           // About page (/about)
+│   ├── blog/
+│   │   ├── index.js       // Blog index (/blog)
+│   │   └── [slug].js      // Dynamic route (/blog/:slug)
+│   └── api/
+│       └── hello.js       // API route (/api/hello)
+├── public/
+├── styles/
+│   ├── globals.css
+│   └── Home.module.css
+├── components/
+└── next.config.js
+
+================================================================================
+4. APP ROUTER - PAGES AND LAYOUTS
+================================================================================
+
+PAGE (app/page.js):
+// Server Component by default
+export default function Home() {
+    return (
+        <main>
+            <h1>Welcome to Next.js</h1>
+        </main>
+    );
+}
+
+// With metadata
+export const metadata = {
+    title: 'Home Page',
+    description: 'Welcome to my website'
+};
+
+export default function Home() {
+    return <h1>Home</h1>;
+}
+
+LAYOUT (app/layout.js):
+// Root layout (required)
+export const metadata = {
+    title: 'My App',
+    description: 'Created with Next.js'
+};
+
+export default function RootLayout({ children }) {
+    return (
+        <html lang="en">
+            <body>
+                <header>Navigation</header>
+                <main>{children}</main>
+                <footer>Footer</footer>
+            </body>
+        </html>
+    );
+}
+
+NESTED LAYOUT (app/blog/layout.js):
+export default function BlogLayout({ children }) {
+    return (
+        <div className="blog-container">
+            <aside>Sidebar</aside>
+            <article>{children}</article>
+        </div>
+    );
+}
+
+TEMPLATE (app/template.js):
+// Similar to layout but remounts on navigation
+export default function Template({ children }) {
+    return <div>{children}</div>;
+}
+
+LOADING UI (app/loading.js):
+export default function Loading() {
+    return <div>Loading...</div>;
+}
+
+// With Suspense
+import { Suspense } from 'react';
+
+export default function Page() {
+    return (
+        <Suspense fallback={<Loading />}>
+            <SlowComponent />
+        </Suspense>
+    );
+}
+
+ERROR UI (app/error.js):
+'use client';
+
+export default function Error({ error, reset }) {
+    return (
+        <div>
+            <h2>Something went wrong!</h2>
+            <p>{error.message}</p>
+            <button onClick={() => reset()}>Try again</button>
+        </div>
+    );
+}
+
+NOT FOUND (app/not-found.js):
+export default function NotFound() {
+    return (
+        <div>
+            <h2>404 - Page Not Found</h2>
+            <a href="/">Go Home</a>
+        </div>
+    );
+}
+
+// Trigger programmatically
+import { notFound } from 'next/navigation';
+
+async function getPost(id) {
+    const post = await fetchPost(id);
+    if (!post) notFound();
+    return post;
+}
+
+================================================================================
+5. ROUTING
+================================================================================
+
+FILE-BASED ROUTING:
+app/page.js                    → /
+app/about/page.js              → /about
+app/blog/page.js               → /blog
+app/blog/[slug]/page.js        → /blog/:slug
+app/shop/[...slug]/page.js     → /shop/* (catch-all)
+app/shop/[[...slug]]/page.js   → /shop/* (optional catch-all)
+app/(marketing)/about/page.js  → /about (route group, no URL impact)
+
+DYNAMIC ROUTES:
+// app/blog/[slug]/page.js
+export default function BlogPost({ params }) {
+    return <h1>Post: {params.slug}</h1>;
+}
+
+// Multiple dynamic segments
+// app/blog/[category]/[slug]/page.js
+export default function Post({ params }) {
+    return (
+        <div>
+            <p>Category: {params.category}</p>
+            <p>Slug: {params.slug}</p>
+        </div>
+    );
+}
+
+CATCH-ALL ROUTES:
+// app/docs/[...slug]/page.js
+// Matches /docs/a, /docs/a/b, /docs/a/b/c
+export default function Docs({ params }) {
+    // params.slug is an array
+    return <p>Path: {params.slug.join('/')}</p>;
+}
+
+// Optional catch-all: [[...slug]]
+// Also matches /docs (base path)
+
+ROUTE GROUPS:
+// Use (folder) syntax - doesn't affect URL
+app/(marketing)/about/page.js   → /about
+app/(marketing)/pricing/page.js → /pricing
+app/(shop)/products/page.js     → /products
+
+// Separate layouts for each group
+app/(marketing)/layout.js
+app/(shop)/layout.js
+
+PARALLEL ROUTES:
+// app/@modal/login/page.js
+// app/layout.js
+export default function Layout({ children, modal }) {
+    return (
+        <>
+            {children}
+            {modal}
+        </>
+    );
+}
+
+INTERCEPTING ROUTES:
+// (.) - same level
+// (..) - one level up
+// (...) - root
+
+// app/@modal/(.)photo/[id]/page.js
+// Intercepts /photo/[id] when navigating client-side
+
+================================================================================
+6. NAVIGATION
+================================================================================
+
+LINK COMPONENT:
+import Link from 'next/link';
+
+export default function Nav() {
+    return (
+        <nav>
+            <Link href="/">Home</Link>
+            <Link href="/about">About</Link>
+            <Link href="/blog/my-post">Blog Post</Link>
+            
+            {/* Dynamic href */}
+            <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+            
+            {/* Object syntax */}
+            <Link
+                href={{
+                    pathname: '/blog/[slug]',
+                    query: { slug: 'my-post' }
+                }}
+            >
+                Blog Post
+            </Link>
+            
+            {/* Prefetch disabled */}
+            <Link href="/heavy-page" prefetch={false}>
+                Heavy Page
+            </Link>
+            
+            {/* Replace instead of push */}
+            <Link href="/login" replace>
+                Login
+            </Link>
+            
+            {/* Scroll to top disabled */}
+            <Link href="/page2" scroll={false}>
+                Page 2
+            </Link>
+        </nav>
+    );
+}
+
+PROGRAMMATIC NAVIGATION:
+'use client';
+
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+
+export default function NavigationExample() {
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    
+    const handleClick = () => {
+        router.push('/dashboard');
+        // router.replace('/dashboard');
+        // router.back();
+        // router.forward();
+        // router.refresh();
+        // router.prefetch('/heavy-page');
+    };
+    
+    return (
+        <div>
+            <p>Current path: {pathname}</p>
+            <p>Query: {searchParams.get('search')}</p>
+            <button onClick={handleClick}>Go to Dashboard</button>
+        </div>
+    );
+}
+
+// Redirect in Server Components
+import { redirect } from 'next/navigation';
+
+async function checkAuth() {
+    const user = await getUser();
+    if (!user) {
+        redirect('/login');
+    }
+}
+
+================================================================================
+7. SERVER COMPONENTS VS CLIENT COMPONENTS
+================================================================================
+
+SERVER COMPONENTS (Default):
+// No 'use client' directive
+// Can use async/await
+// Can access backend resources directly
+// Cannot use hooks or browser APIs
+
+// app/page.js
+async function getData() {
+    const res = await fetch('https://api.example.com/data');
+    return res.json();
+}
+
+export default async function Page() {
+    const data = await getData();
+    return <div>{data.title}</div>;
+}
+
+CLIENT COMPONENTS:
+// Must add 'use client' at top
+// Can use hooks (useState, useEffect, etc.)
+// Can use browser APIs
+// Run in the browser
+
+'use client';
+
+import { useState, useEffect } from 'react';
+
+export default function Counter() {
+    const [count, setCount] = useState(0);
+    
+    useEffect(() => {
+        console.log('Count changed:', count);
+    }, [count]);
+    
+    return (
+        <button onClick={() => setCount(count + 1)}>
+            Count: {count}
+        </button>
+    );
+}
+
+COMPOSITION PATTERN:
+// Server Component (parent)
+import ClientComponent from './ClientComponent';
+
+async function ServerComponent() {
+    const data = await fetchData();
+    
+    return (
+        <div>
+            <h1>{data.title}</h1>
+            <ClientComponent initialData={data} />
+        </div>
+    );
+}
+
+// Pass server data to client components as props
+
+WHEN TO USE EACH:
+Server Components:
+- Fetch data
+- Access backend resources
+- Keep sensitive info on server
+- Large dependencies
+
+Client Components:
+- Interactivity (onClick, onChange)
+- State (useState)
+- Browser APIs (localStorage, window)
+- Effects (useEffect)
+- Custom hooks
+
+================================================================================
+8. DATA FETCHING
+================================================================================
+
+SERVER-SIDE FETCH:
+// In Server Components (default)
+async function getData() {
+    const res = await fetch('https://api.example.com/data', {
+        cache: 'no-store'  // SSR - always fresh
+    });
+    
+    if (!res.ok) throw new Error('Failed to fetch');
+    return res.json();
+}
+
+export default async function Page() {
+    const data = await getData();
+    return <div>{data.name}</div>;
+}
+
+CACHING OPTIONS:
+// Force cache (default) - SSG behavior
+fetch(url, { cache: 'force-cache' });
+
+// No caching - SSR behavior
+fetch(url, { cache: 'no-store' });
+
+// Revalidate after time - ISR behavior
+fetch(url, { next: { revalidate: 3600 } });  // Revalidate every hour
+
+// Revalidate with tags
+fetch(url, { next: { tags: ['posts'] } });
+
+// Revalidate by tag
+import { revalidateTag } from 'next/cache';
+revalidateTag('posts');
+
+// Revalidate by path
+import { revalidatePath } from 'next/cache';
+revalidatePath('/blog');
+
+SEGMENT CONFIG:
+// app/page.js
+export const dynamic = 'force-dynamic';  // SSR
+export const revalidate = 3600;          // ISR
+export const fetchCache = 'force-no-store';
+
+PARALLEL DATA FETCHING:
+async function Page() {
+    // Parallel fetching
+    const [posts, users] = await Promise.all([
+        getPosts(),
+        getUsers()
+    ]);
+    
+    return (
+        <div>
+            <Posts data={posts} />
+            <Users data={users} />
+        </div>
+    );
+}
+
+SEQUENTIAL DATA FETCHING:
+async function Page({ params }) {
+    const user = await getUser(params.id);
+    const posts = await getPosts(user.id);  // Depends on user
+    
+    return <Posts posts={posts} />;
+}
+
+CLIENT-SIDE FETCHING:
+'use client';
+
+import { useState, useEffect } from 'react';
+
+export default function ClientFetch() {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    
+    useEffect(() => {
+        fetch('/api/data')
+            .then(res => res.json())
+            .then(data => {
+                setData(data);
+                setLoading(false);
+            });
+    }, []);
+    
+    if (loading) return <div>Loading...</div>;
+    return <div>{data.name}</div>;
+}
+
+// With SWR (recommended)
+import useSWR from 'swr';
+
+const fetcher = url => fetch(url).then(res => res.json());
+
+export default function Profile() {
+    const { data, error, isLoading } = useSWR('/api/user', fetcher);
+    
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error!</div>;
+    return <div>Hello {data.name}!</div>;
+}
+
+================================================================================
+9. PAGES ROUTER - DATA FETCHING (LEGACY)
+================================================================================
+
+getStaticProps (SSG):
+// pages/posts.js
+export async function getStaticProps() {
+    const res = await fetch('https://api.example.com/posts');
+    const posts = await res.json();
+    
+    return {
+        props: { posts },
+        revalidate: 60  // ISR: Regenerate every 60 seconds
+    };
+}
+
+export default function Posts({ posts }) {
+    return (
+        <ul>
+            {posts.map(post => (
+                <li key={post.id}>{post.title}</li>
+            ))}
+        </ul>
+    );
+}
+
+getStaticPaths (Dynamic SSG):
+// pages/posts/[id].js
+export async function getStaticPaths() {
+    const res = await fetch('https://api.example.com/posts');
+    const posts = await res.json();
+    
+    const paths = posts.map(post => ({
+        params: { id: post.id.toString() }
+    }));
+    
+    return {
+        paths,
+        fallback: false  // 404 for unknown paths
+        // fallback: true  // Generate on demand
+        // fallback: 'blocking'  // SSR then cache
+    };
+}
+
+export async function getStaticProps({ params }) {
+    const res = await fetch(`https://api.example.com/posts/${params.id}`);
+    const post = await res.json();
+    
+    return {
+        props: { post }
+    };
+}
+
+export default function Post({ post }) {
+    return <h1>{post.title}</h1>;
+}
+
+getServerSideProps (SSR):
+// pages/profile.js
+export async function getServerSideProps(context) {
+    const { params, query, req, res } = context;
+    
+    // Check authentication
+    const session = await getSession(req);
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/login',
+                permanent: false
+            }
+        };
+    }
+    
+    const user = await getUser(session.userId);
+    
+    return {
+        props: { user }
+    };
+}
+
+export default function Profile({ user }) {
+    return <h1>Welcome, {user.name}</h1>;
+}
+
+================================================================================
+10. API ROUTES
+================================================================================
+
+APP ROUTER API (Route Handlers):
+// app/api/users/route.js
+import { NextResponse } from 'next/server';
+
+// GET
+export async function GET(request) {
+    const users = await getUsers();
+    return NextResponse.json(users);
+}
+
+// POST
+export async function POST(request) {
+    const body = await request.json();
+    const user = await createUser(body);
+    return NextResponse.json(user, { status: 201 });
+}
+
+// PUT
+export async function PUT(request) {
+    const body = await request.json();
+    const user = await updateUser(body);
+    return NextResponse.json(user);
+}
+
+// DELETE
+export async function DELETE(request) {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    await deleteUser(id);
+    return NextResponse.json({ message: 'Deleted' });
+}
+
+// Dynamic route: app/api/users/[id]/route.js
+export async function GET(request, { params }) {
+    const user = await getUser(params.id);
+    if (!user) {
+        return NextResponse.json(
+            { error: 'Not found' },
+            { status: 404 }
+        );
+    }
+    return NextResponse.json(user);
+}
+
+REQUEST HANDLING:
+export async function POST(request) {
+    // JSON body
+    const json = await request.json();
+    
+    // Form data
+    const formData = await request.formData();
+    const name = formData.get('name');
+    
+    // URL search params
+    const { searchParams } = new URL(request.url);
+    const query = searchParams.get('q');
+    
+    // Headers
+    const authHeader = request.headers.get('authorization');
+    
+    // Cookies
+    const token = request.cookies.get('token');
+}
+
+RESPONSE OPTIONS:
+// JSON response
+return NextResponse.json({ data: 'value' });
+
+// With status
+return NextResponse.json({ error: 'Bad request' }, { status: 400 });
+
+// With headers
+return NextResponse.json(data, {
+    headers: {
+        'Cache-Control': 'max-age=3600'
+    }
+});
+
+// Redirect
+return NextResponse.redirect(new URL('/login', request.url));
+
+// Set cookies
+const response = NextResponse.json({ success: true });
+response.cookies.set('token', 'value', {
+    httpOnly: true,
+    secure: true,
+    maxAge: 60 * 60 * 24  // 1 day
+});
+return response;
+
+PAGES ROUTER API (Legacy):
+// pages/api/users.js
+export default async function handler(req, res) {
+    if (req.method === 'GET') {
+        const users = await getUsers();
+        res.status(200).json(users);
+    } else if (req.method === 'POST') {
+        const user = await createUser(req.body);
+        res.status(201).json(user);
+    } else {
+        res.setHeader('Allow', ['GET', 'POST']);
+        res.status(405).end(`Method ${req.method} Not Allowed`);
+    }
+}
+
+================================================================================
+11. MIDDLEWARE
+================================================================================
+
+// middleware.js (root of project)
+import { NextResponse } from 'next/server';
+
+export function middleware(request) {
+    // Check authentication
+    const token = request.cookies.get('token');
+    
+    if (!token && request.nextUrl.pathname.startsWith('/dashboard')) {
+        return NextResponse.redirect(new URL('/login', request.url));
+    }
+    
+    // Add custom header
+    const response = NextResponse.next();
+    response.headers.set('x-custom-header', 'value');
+    
+    return response;
+}
+
+// Configure which paths middleware runs on
+export const config = {
+    matcher: [
+        '/dashboard/:path*',
+        '/api/:path*',
+        '/((?!_next/static|favicon.ico).*)'
+    ]
+};
+
+MIDDLEWARE EXAMPLES:
+// Geolocation-based redirect
+export function middleware(request) {
+    const country = request.geo?.country || 'US';
+    
+    if (country === 'UK') {
+        return NextResponse.redirect(new URL('/uk', request.url));
+    }
+}
+
+// Rate limiting
+const rateLimit = new Map();
+
+export function middleware(request) {
+    const ip = request.ip ?? '127.0.0.1';
+    const limit = 10;
+    const windowMs = 60 * 1000;
+    
+    const now = Date.now();
+    const windowStart = now - windowMs;
+    
+    const requestCount = (rateLimit.get(ip) || [])
+        .filter(time => time > windowStart);
+    
+    if (requestCount.length >= limit) {
+        return NextResponse.json(
+            { error: 'Too many requests' },
+            { status: 429 }
+        );
+    }
+    
+    requestCount.push(now);
+    rateLimit.set(ip, requestCount);
+    
+    return NextResponse.next();
+}
+
+================================================================================
+12. STYLING
+================================================================================
+
+CSS MODULES:
+// styles/Home.module.css
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.title {
+    color: blue;
+}
+
+// components/Home.js
+import styles from './Home.module.css';
+
+export default function Home() {
+    return (
+        <div className={styles.container}>
+            <h1 className={styles.title}>Hello</h1>
+        </div>
+    );
+}
+
+GLOBAL CSS:
+// app/globals.css
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+// app/layout.js
+import './globals.css';
+
+SASS/SCSS:
+npm install sass
+
+// styles/Home.module.scss
+$primary: #0070f3;
+
+.container {
+    .title {
+        color: $primary;
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+}
+
+TAILWIND CSS:
+npx create-next-app@latest --tailwind
+
+// tailwind.config.js
+module.exports = {
+    content: [
+        './app/**/*.{js,ts,jsx,tsx}',
+        './components/**/*.{js,ts,jsx,tsx}'
+    ],
+    theme: {
+        extend: {}
+    },
+    plugins: []
+};
+
+// Usage
+export default function Page() {
+    return (
+        <div className="max-w-4xl mx-auto p-4">
+            <h1 className="text-3xl font-bold text-blue-600">
+                Hello Tailwind
+            </h1>
+        </div>
+    );
+}
+
+CSS-IN-JS (styled-components):
+npm install styled-components
+
+'use client';
+
+import styled from 'styled-components';
+
+const Container = styled.div`
+    max-width: 1200px;
+    margin: 0 auto;
+`;
+
+const Title = styled.h1`
+    color: blue;
+    font-size: 2rem;
+`;
+
+export default function Page() {
+    return (
+        <Container>
+            <Title>Hello</Title>
+        </Container>
+    );
+}
+
+================================================================================
+13. IMAGE OPTIMIZATION
+================================================================================
+
+import Image from 'next/image';
+
+export default function Page() {
+    return (
+        <div>
+            {/* Local image */}
+            <Image
+                src="/images/hero.jpg"
+                alt="Hero image"
+                width={800}
+                height={600}
+            />
+            
+            {/* Remote image */}
+            <Image
+                src="https://example.com/image.jpg"
+                alt="Remote image"
+                width={400}
+                height={300}
+            />
+            
+            {/* Fill container */}
+            <div style={{ position: 'relative', width: '100%', height: '400px' }}>
+                <Image
+                    src="/images/banner.jpg"
+                    alt="Banner"
+                    fill
+                    style={{ objectFit: 'cover' }}
+                />
+            </div>
+            
+            {/* With priority (preload) */}
+            <Image
+                src="/images/logo.png"
+                alt="Logo"
+                width={200}
+                height={50}
+                priority
+            />
+            
+            {/* With placeholder blur */}
+            <Image
+                src="/images/photo.jpg"
+                alt="Photo"
+                width={600}
+                height={400}
+                placeholder="blur"
+                blurDataURL="data:image/jpeg;base64,..."
+            />
+            
+            {/* Responsive sizes */}
+            <Image
+                src="/images/responsive.jpg"
+                alt="Responsive"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+            />
+        </div>
+    );
+}
+
+// next.config.js (for remote images)
+module.exports = {
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'example.com',
+                pathname: '/images/**'
+            }
+        ]
+    }
+};
+
+================================================================================
+14. FONTS
+================================================================================
+
+import { Inter, Roboto_Mono } from 'next/font/google';
+
+// Variable font
+const inter = Inter({
+    subsets: ['latin'],
+    variable: '--font-inter'
+});
+
+// Non-variable font
+const roboto = Roboto_Mono({
+    weight: ['400', '700'],
+    subsets: ['latin'],
+    variable: '--font-roboto-mono'
+});
+
+// app/layout.js
+export default function RootLayout({ children }) {
+    return (
+        <html lang="en" className={`${inter.variable} ${roboto.variable}`}>
+            <body className={inter.className}>
+                {children}
+            </body>
+        </html>
+    );
+}
+
+// In CSS
+body {
+    font-family: var(--font-inter);
+}
+
+code {
+    font-family: var(--font-roboto-mono);
+}
+
+LOCAL FONTS:
+import localFont from 'next/font/local';
+
+const myFont = localFont({
+    src: './fonts/MyFont.woff2',
+    variable: '--font-my-font'
+});
+
+================================================================================
+15. METADATA & SEO
+================================================================================
+
+STATIC METADATA:
+// app/page.js
+export const metadata = {
+    title: 'My Page Title',
+    description: 'Page description for SEO',
+    keywords: ['Next.js', 'React', 'JavaScript'],
+    authors: [{ name: 'Author Name' }],
+    openGraph: {
+        title: 'OG Title',
+        description: 'OG Description',
+        images: ['/og-image.png']
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Twitter Title',
+        description: 'Twitter Description'
+    },
+    robots: {
+        index: true,
+        follow: true
+    }
+};
+
+DYNAMIC METADATA:
+// app/blog/[slug]/page.js
+export async function generateMetadata({ params }) {
+    const post = await getPost(params.slug);
+    
+    return {
+        title: post.title,
+        description: post.excerpt,
+        openGraph: {
+            title: post.title,
+            images: [post.coverImage]
+        }
+    };
+}
+
+METADATA TEMPLATE:
+// app/layout.js
+export const metadata = {
+    title: {
+        template: '%s | My Site',
+        default: 'My Site'
+    }
+};
+
+// app/about/page.js
+export const metadata = {
+    title: 'About'  // Results in: "About | My Site"
+};
+
+================================================================================
+16. SERVER ACTIONS
+================================================================================
+
+// app/actions.js
+'use server';
+
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+
+export async function createPost(formData) {
+    const title = formData.get('title');
+    const content = formData.get('content');
+    
+    // Validate
+    if (!title || !content) {
+        return { error: 'Missing fields' };
+    }
+    
+    // Save to database
+    await db.post.create({
+        data: { title, content }
+    });
+    
+    // Revalidate cache
+    revalidatePath('/posts');
+    
+    // Redirect
+    redirect('/posts');
+}
+
+export async function updatePost(id, formData) {
+    const title = formData.get('title');
+    
+    await db.post.update({
+        where: { id },
+        data: { title }
+    });
+    
+    revalidatePath('/posts');
+}
+
+export async function deletePost(id) {
+    await db.post.delete({ where: { id } });
+    revalidatePath('/posts');
+}
+
+USING SERVER ACTIONS:
+// Form submission
+// app/posts/new/page.js
+import { createPost } from '../actions';
+
+export default function NewPost() {
+    return (
+        <form action={createPost}>
+            <input name="title" placeholder="Title" required />
+            <textarea name="content" placeholder="Content" required />
+            <button type="submit">Create Post</button>
+        </form>
+    );
+}
+
+// With useFormStatus
+'use client';
+
+import { useFormStatus } from 'react-dom';
+
+function SubmitButton() {
+    const { pending } = useFormStatus();
+    
+    return (
+        <button type="submit" disabled={pending}>
+            {pending ? 'Submitting...' : 'Submit'}
+        </button>
+    );
+}
+
+// With useActionState
+'use client';
+
+import { useActionState } from 'react';
+import { createPost } from './actions';
+
+export default function Form() {
+    const [state, formAction] = useActionState(createPost, null);
+    
+    return (
+        <form action={formAction}>
+            <input name="title" />
+            {state?.error && <p>{state.error}</p>}
+            <button type="submit">Submit</button>
+        </form>
+    );
+}
+
+================================================================================
+17. ENVIRONMENT VARIABLES
+================================================================================
+
+// .env.local
+DATABASE_URL=mongodb://localhost:27017/mydb
+API_SECRET=mysecretkey
+
+// Public (accessible in browser)
+NEXT_PUBLIC_API_URL=https://api.example.com
+
+// Usage in Server Components/API
+const dbUrl = process.env.DATABASE_URL;
+
+// Usage in Client Components
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+// Different environments
+// .env.development
+// .env.production
+// .env.test
+
+================================================================================
+18. CONFIGURATION
+================================================================================
+
+// next.config.js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    // React strict mode
+    reactStrictMode: true,
+    
+    // Custom page extensions
+    pageExtensions: ['page.tsx', 'page.ts', 'page.jsx', 'page.js'],
+    
+    // Image optimization
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: '**.example.com'
+            }
+        ],
+        formats: ['image/avif', 'image/webp']
+    },
+    
+    // Redirects
+    async redirects() {
+        return [
+            {
+                source: '/old-page',
+                destination: '/new-page',
+                permanent: true
+            }
+        ];
+    },
+    
+    // Rewrites
+    async rewrites() {
+        return [
+            {
+                source: '/api/:path*',
+                destination: 'https://api.example.com/:path*'
+            }
+        ];
+    },
+    
+    // Headers
+    async headers() {
+        return [
+            {
+                source: '/(.*)',
+                headers: [
+                    {
+                        key: 'X-Frame-Options',
+                        value: 'DENY'
+                    }
+                ]
+            }
+        ];
+    },
+    
+    // Environment variables
+    env: {
+        CUSTOM_KEY: 'value'
+    },
+    
+    // Webpack customization
+    webpack: (config, { isServer }) => {
+        if (!isServer) {
+            config.resolve.fallback.fs = false;
+        }
+        return config;
+    },
+    
+    // Output options
+    output: 'standalone',  // For Docker
+    
+    // Experimental features
+    experimental: {
+        serverActions: true
+    }
+};
+
+module.exports = nextConfig;
+
+================================================================================
+19. AUTHENTICATION
+================================================================================
+
+NEXTAUTH.JS:
+npm install next-auth
+
+// app/api/auth/[...nextauth]/route.js
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
+
+const handler = NextAuth({
+    providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET
+        }),
+        CredentialsProvider({
+            name: 'Credentials',
+            credentials: {
+                email: { label: 'Email', type: 'email' },
+                password: { label: 'Password', type: 'password' }
+            },
+            async authorize(credentials) {
+                const user = await validateUser(
+                    credentials.email,
+                    credentials.password
+                );
+                if (user) return user;
+                return null;
+            }
+        })
+    ],
+    callbacks: {
+        async jwt({ token, user }) {
+            if (user) token.id = user.id;
+            return token;
+        },
+        async session({ session, token }) {
+            session.user.id = token.id;
+            return session;
+        }
+    },
+    pages: {
+        signIn: '/login',
+        error: '/auth/error'
+    }
+});
+
+export { handler as GET, handler as POST };
+
+// Usage in Server Component
+import { getServerSession } from 'next-auth';
+
+export default async function ProtectedPage() {
+    const session = await getServerSession();
+    
+    if (!session) {
+        redirect('/login');
+    }
+    
+    return <div>Welcome, {session.user.name}</div>;
+}
+
+// Usage in Client Component
+'use client';
+
+import { useSession, signIn, signOut } from 'next-auth/react';
+
+export default function AuthButton() {
+    const { data: session } = useSession();
+    
+    if (session) {
+        return (
+            <div>
+                <p>Signed in as {session.user.email}</p>
+                <button onClick={() => signOut()}>Sign out</button>
+            </div>
+        );
+    }
+    
+    return <button onClick={() => signIn()}>Sign in</button>;
+}
+
+// Wrap app with SessionProvider
+// app/providers.js
+'use client';
+
+import { SessionProvider } from 'next-auth/react';
+
+export function Providers({ children }) {
+    return <SessionProvider>{children}</SessionProvider>;
+}
+
+================================================================================
+20. DEPLOYMENT
+================================================================================
+
+VERCEL (Recommended):
+1. Push to GitHub
+2. Import project on vercel.com
+3. Configure environment variables
+4. Deploy
+
+// Or CLI
+npm i -g vercel
+vercel
+
+SELF-HOSTING:
+// Build
+npm run build
+
+// Start
+npm start
+
+// With PM2
+pm2 start npm --name "next-app" -- start
+
+DOCKER:
+# Dockerfile
+FROM node:18-alpine AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
+
+FROM node:18-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV production
+
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+EXPOSE 3000
+CMD ["node", "server.js"]
+
+// next.config.js
+module.exports = {
+    output: 'standalone'
+};
+
+STATIC EXPORT:
+// next.config.js
+module.exports = {
+    output: 'export'
+};
+
+// Build
+npm run build
+// Output in 'out' directory
+
+================================================================================
+21. BEST PRACTICES
+================================================================================
+
+1. USE SERVER COMPONENTS BY DEFAULT
+   - Only add 'use client' when needed
+   - Keep client components small
+
+2. OPTIMIZE DATA FETCHING
+   - Fetch in parallel when possible
+   - Use proper caching strategies
+   - Implement loading states
+
+3. CODE ORGANIZATION
+   - Colocate related files
+   - Use route groups for organization
+   - Keep components modular
+
+4. PERFORMANCE
+   - Use Image component
+   - Implement lazy loading
+   - Minimize client-side JavaScript
+
+5. SECURITY
+   - Validate all inputs
+   - Use environment variables for secrets
+   - Implement proper authentication
+
+6. SEO
+   - Use metadata API
+   - Implement structured data
+   - Create sitemap.xml
+
+================================================================================
+22. INTERNATIONALIZATION (i18n)
+================================================================================
+
+SETUP (App Router):
+// middleware.ts
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+const locales = ['en', 'fr', 'de'];
+const defaultLocale = 'en';
+
+function getLocale(request: NextRequest) {
+    const acceptLanguage = request.headers.get('accept-language');
+    // Parse and match against supported locales
+    return defaultLocale;
+}
+
+export function middleware(request: NextRequest) {
+    const pathname = request.nextUrl.pathname;
+    
+    // Check if locale is in pathname
+    const pathnameHasLocale = locales.some(
+        locale => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+    );
+    
+    if (!pathnameHasLocale) {
+        const locale = getLocale(request);
+        return NextResponse.redirect(
+            new URL(`/${locale}${pathname}`, request.url)
+        );
+    }
+}
+
+export const config = {
+    matcher: ['/((?!api|_next|.*\\..*).*)']
+};
+
+FOLDER STRUCTURE:
+app/
+  [locale]/
+    page.tsx
+    layout.tsx
+    about/
+      page.tsx
+dictionaries/
+  en.json
+  fr.json
+  de.json
+
+LOADING TRANSLATIONS:
+// dictionaries/en.json
+{
+    "navigation": {
+        "home": "Home",
+        "about": "About"
+    },
+    "greeting": "Hello, {name}!"
+}
+
+// lib/dictionaries.ts
+const dictionaries = {
+    en: () => import('@/dictionaries/en.json').then(m => m.default),
+    fr: () => import('@/dictionaries/fr.json').then(m => m.default),
+    de: () => import('@/dictionaries/de.json').then(m => m.default)
+};
+
+export const getDictionary = async (locale: string) => {
+    return dictionaries[locale]();
+};
+
+// app/[locale]/page.tsx
+export default async function Page({ params }: { params: { locale: string }}) {
+    const dict = await getDictionary(params.locale);
+    
+    return (
+        <div>
+            <h1>{dict.navigation.home}</h1>
+        </div>
+    );
+}
+
+NEXT-INTL (Popular Library):
+// npm install next-intl
+
+// i18n.ts
+import { getRequestConfig } from 'next-intl/server';
+
+export default getRequestConfig(async ({ locale }) => ({
+    messages: (await import(`./messages/${locale}.json`)).default
+}));
+
+// Using translations
+import { useTranslations } from 'next-intl';
+
+function MyComponent() {
+    const t = useTranslations('Navigation');
+    return <nav>{t('home')}</nav>;
+}
+
+================================================================================
+23. EDGE RUNTIME
+================================================================================
+
+EDGE FUNCTIONS:
+// Run at edge locations (closer to users)
+// Smaller runtime, limited APIs
+
+// page.tsx with edge runtime
+export const runtime = 'edge';
+
+// api/route.ts
+export const runtime = 'edge';
+
+export async function GET(request: Request) {
+    return new Response('Hello from the edge!');
+}
+
+// middleware.ts (always runs on edge)
+import { NextResponse } from 'next/server';
+
+export function middleware(request) {
+    // Runs on edge
+    return NextResponse.next();
+}
+
+LIMITATIONS:
+// Edge runtime does NOT support:
+// - Node.js APIs (fs, path, crypto module - partial support)
+// - npm packages that use Node.js APIs
+// - Dynamic code evaluation (eval)
+
+// Supported Web APIs:
+// - fetch, Request, Response
+// - TextEncoder, TextDecoder
+// - crypto.subtle (Web Crypto API)
+// - Headers, URL, URLSearchParams
+
+USE CASES:
+// 1. Geolocation-based content
+export function middleware(request: Request) {
+    const country = request.geo?.country || 'US';
+    return NextResponse.rewrite(new URL(`/${country}/home`, request.url));
+}
+
+// 2. A/B testing
+export function middleware(request: Request) {
+    const bucket = Math.random() < 0.5 ? 'a' : 'b';
+    const response = NextResponse.next();
+    response.cookies.set('bucket', bucket);
+    return response;
+}
+
+// 3. Authentication checks
+export function middleware(request: Request) {
+    const token = request.cookies.get('token');
+    if (!token) {
+        return NextResponse.redirect(new URL('/login', request.url));
+    }
+}
+
+================================================================================
+24. TESTING IN NEXT.JS
+================================================================================
+
+JEST SETUP:
+// jest.config.js
+const nextJest = require('next/jest');
+
+const createJestConfig = nextJest({
+    dir: './'
+});
+
+const customJestConfig = {
+    setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+    testEnvironment: 'jest-environment-jsdom'
+};
+
+module.exports = createJestConfig(customJestConfig);
+
+// jest.setup.js
+import '@testing-library/jest-dom';
+
+COMPONENT TESTING:
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import Home from '@/app/page';
+
+describe('Home', () => {
+    it('renders a heading', () => {
+        render(<Home />);
+        expect(screen.getByRole('heading')).toBeInTheDocument();
+    });
+    
+    it('handles button click', async () => {
+        render(<Home />);
+        await userEvent.click(screen.getByRole('button'));
+        expect(screen.getByText('Clicked!')).toBeInTheDocument();
+    });
+});
+
+TESTING SERVER COMPONENTS:
+// Need async rendering for Server Components
+import { render } from '@testing-library/react';
+
+// For async server components
+async function resolvedComponent(Component, props) {
+    const ComponentResolved = await Component(props);
+    return () => ComponentResolved;
+}
+
+it('renders server component', async () => {
+    const ResolvedComponent = await resolvedComponent(ServerComponent, {});
+    render(<ResolvedComponent />);
+});
+
+TESTING API ROUTES:
+import { GET, POST } from '@/app/api/users/route';
+
+describe('API /api/users', () => {
+    it('returns users on GET', async () => {
+        const response = await GET();
+        const data = await response.json();
+        
+        expect(response.status).toBe(200);
+        expect(data.users).toHaveLength(2);
+    });
+    
+    it('creates user on POST', async () => {
+        const request = new Request('http://localhost/api/users', {
+            method: 'POST',
+            body: JSON.stringify({ name: 'John' })
+        });
+        
+        const response = await POST(request);
+        expect(response.status).toBe(201);
+    });
+});
+
+PLAYWRIGHT E2E TESTING:
+// npm install -D @playwright/test
+
+// playwright.config.ts
+import { defineConfig } from '@playwright/test';
+
+export default defineConfig({
+    testDir: './e2e',
+    webServer: {
+        command: 'npm run dev',
+        port: 3000
+    }
+});
+
+// e2e/home.spec.ts
+import { test, expect } from '@playwright/test';
+
+test('homepage has title', async ({ page }) => {
+    await page.goto('/');
+    await expect(page).toHaveTitle(/My App/);
+});
+
+test('navigation works', async ({ page }) => {
+    await page.goto('/');
+    await page.click('text=About');
+    await expect(page).toHaveURL('/about');
+});
+
+================================================================================
+25. PARALLEL & INTERCEPTING ROUTES
+================================================================================
+
+PARALLEL ROUTES:
+// Render multiple pages in same layout simultaneously
+
+// app/layout.tsx
+export default function Layout({
+    children,
+    team,
+    analytics
+}: {
+    children: React.ReactNode;
+    team: React.ReactNode;
+    analytics: React.ReactNode;
+}) {
+    return (
+        <div>
+            {children}
+            <div className="sidebar">
+                {team}
+                {analytics}
+            </div>
+        </div>
+    );
+}
+
+// Folder structure:
+// app/
+//   @team/
+//     page.tsx
+//   @analytics/
+//     page.tsx
+//   layout.tsx
+//   page.tsx
+
+// Conditional rendering
+export default function Layout({ user, admin }) {
+    const isAdmin = checkAdmin();
+    return isAdmin ? admin : user;
+}
+
+INTERCEPTING ROUTES:
+// Show modal without full navigation
+
+// Folder structure:
+// app/
+//   feed/
+//     page.tsx
+//   photo/
+//     [id]/
+//       page.tsx
+//   @modal/
+//     (..)photo/
+//       [id]/
+//         page.tsx
+//         default.tsx
+
+// Intercept conventions:
+// (.) - Same level
+// (..) - One level up
+// (..)(..) - Two levels up
+// (...) - From root
+
+// Modal component
+// app/@modal/(.)photo/[id]/page.tsx
+export default function PhotoModal({ params }: { params: { id: string }}) {
+    return (
+        <Modal>
+            <Photo id={params.id} />
+        </Modal>
+    );
+}
+
+================================================================================
+26. PARTIAL PRERENDERING (PPR)
+================================================================================
+
+// Experimental feature (Next.js 14+)
+// Combine static shell with dynamic content
+
+// next.config.js
+module.exports = {
+    experimental: {
+        ppr: true
+    }
+};
+
+// page.tsx
+import { Suspense } from 'react';
+
+export default function Page() {
+    return (
+        <main>
+            {/* Static - Prerendered at build */}
+            <Header />
+            <StaticContent />
+            
+            {/* Dynamic - Streamed at request */}
+            <Suspense fallback={<Loading />}>
+                <DynamicUserData />
+            </Suspense>
+            
+            {/* Static footer */}
+            <Footer />
+        </main>
+    );
+}
+
+// Benefits:
+// - Fast initial load (static shell)
+// - Dynamic personalization
+// - Better cache efficiency
+
+================================================================================
+27. INSTRUMENTATION
+================================================================================
+
+// instrumentation.ts (root directory)
+export async function register() {
+    // Runs once when server starts
+    
+    if (process.env.NEXT_RUNTIME === 'nodejs') {
+        // Node.js specific initialization
+        await import('./instrumentation-node');
+    }
+    
+    if (process.env.NEXT_RUNTIME === 'edge') {
+        // Edge runtime initialization
+        await import('./instrumentation-edge');
+    }
+}
+
+// OpenTelemetry integration
+// npm install @vercel/otel
+
+// instrumentation.ts
+import { registerOTel } from '@vercel/otel';
+
+export function register() {
+    registerOTel({ serviceName: 'my-nextjs-app' });
+}
+
+// next.config.js
+module.exports = {
+    experimental: {
+        instrumentationHook: true
+    }
+};
+
+================================================================================
+================================================================================

@@ -1,0 +1,243 @@
+================================================================================
+						  CODING TIPS & SHORTCUTS - COMPLETE NOTES
+================================================================================
+
+================================================================================
+1. CODING MINDSET (BASICS)
+================================================================================
+
+1. Write code for humans first, computer second.
+2. Keep functions small and focused (one job per function).
+3. Use clear names: userName, isLoggedIn, totalPrice.
+4. Do not repeat yourself (DRY), but do not over-engineer.
+5. First make it work, then make it clean, then make it fast.
+6. Read errors carefully before changing code.
+7. Search from exact error message, not random guessing.
+
+Golden Rule:
+- Slow is smooth, smooth is fast.
+
+================================================================================
+2. CLEAN CODE TIPS
+================================================================================
+
+NAMING:
+- Variables/functions: camelCase
+- Classes/components: PascalCase
+- Constants: UPPER_SNAKE_CASE
+
+FORMATTING:
+- Keep consistent indentation and spacing.
+- Keep line length readable.
+- Use formatter (Prettier) and linter (ESLint).
+
+COMMENTS:
+- Explain "why", not obvious "what".
+- Remove outdated comments quickly.
+
+FUNCTIONS:
+- Prefer pure functions when possible.
+- Avoid too many parameters (3-4 max preferred).
+- Return early to reduce nested if-else blocks.
+
+ERROR HANDLING:
+- Wrap risky code in try/catch.
+- Show useful error messages.
+- Never silently ignore errors in production code.
+
+================================================================================
+3. DEBUGGING TIPS (SAVE HOURS)
+================================================================================
+
+1. Reproduce the bug consistently first.
+2. Check browser console / terminal logs.
+3. Use console.log smartly with labels:
+	console.log('userData:', userData);
+4. Use breakpoints instead of too many logs.
+5. Check network tab for API status, payload, and headers.
+6. Validate assumptions one by one.
+7. If stuck, reduce problem to smallest test case.
+8. Compare working code vs broken code (git diff).
+
+Debug Checklist:
+- Is the file saved?
+- Is the correct environment variable loaded?
+- Is backend running?
+- Is API URL correct?
+- Is data shape exactly what UI expects?
+
+================================================================================
+4. GIT TIPS (DAILY WORKFLOW)
+================================================================================
+
+BASIC FLOW:
+1. git pull origin main
+2. git checkout -b feature/short-name
+3. Make small focused changes
+4. git add .
+5. git commit -m "Add: concise change description"
+6. git push origin feature/short-name
+
+GOOD COMMIT MESSAGES:
+- Add: login form validation
+- Fix: navbar overlap on mobile
+- Refactor: simplify cart total calculation
+- Docs: update API usage notes
+
+USEFUL COMMANDS:
+- git status
+- git log --oneline --graph --decorate --all
+- git diff
+- git stash
+- git stash pop
+- git branch
+- git checkout branch-name
+
+BEST PRACTICES:
+- Commit small and often.
+- Do not commit secrets (.env).
+- Pull before pushing to avoid conflicts.
+- Resolve conflicts carefully, then test again.
+
+================================================================================
+5. VS CODE SHORTCUTS (WINDOWS/LINUX)
+================================================================================
+
+GENERAL:
+- Command Palette: Ctrl+Shift+P
+- Quick Open: Ctrl+P
+- New File: Ctrl+N
+- Open File: Ctrl+O
+- Save: Ctrl+S
+- Save All: Ctrl+K, S
+- Close Tab: Ctrl+W
+- Reopen Closed Tab: Ctrl+Shift+T
+- Toggle Sidebar: Ctrl+B
+- Toggle Panel: Ctrl+J
+
+EDITING:
+- Multi-cursor: Alt+Click
+- Select next same word: Ctrl+D
+- Select all same occurrences: Ctrl+Shift+L
+- Move line up/down: Alt+Up / Alt+Down
+- Copy line up/down: Shift+Alt+Up / Shift+Alt+Down
+- Delete line: Ctrl+Shift+K
+- Comment line: Ctrl+/
+- Block comment: Shift+Alt+A
+- Format document: Shift+Alt+F
+- Rename symbol: F2
+
+NAVIGATION:
+- Go to definition: F12
+- Peek definition: Alt+F12
+- Go to line: Ctrl+G
+- Find in file: Ctrl+F
+- Replace in file: Ctrl+H
+- Find in files: Ctrl+Shift+F
+- Replace in files: Ctrl+Shift+H
+
+TERMINAL:
+- Toggle terminal: Ctrl+`
+- New terminal: Ctrl+Shift+`
+- Kill terminal: Ctrl+Shift+W
+
+================================================================================
+6. BROWSER DEVTOOLS SHORTCUTS
+================================================================================
+
+CHROME/EDGE (COMMON):
+- Open DevTools: F12 or Ctrl+Shift+I
+- Inspect element: Ctrl+Shift+C
+- Open Console directly: Ctrl+Shift+J
+- Hard reload (bypass cache): Ctrl+Shift+R
+
+USEFUL TABS:
+- Console: JS errors, logs
+- Network: API requests, status codes, timing
+- Elements: HTML/CSS live edits
+- Application: localStorage, sessionStorage, cookies
+
+================================================================================
+7. TERMINAL TIPS (WINDOWS/POWERSHELL)
+================================================================================
+
+BASIC COMMANDS:
+- pwd                  (show current path)
+- ls                   (list files/folders)
+- cd folderName        (go into folder)
+- cd ..                (go back one level)
+- mkdir newFolder      (create folder)
+- ni file.txt          (create file)
+- rm file.txt          (remove file)
+- cls                  (clear terminal)
+
+PROJECT COMMANDS (COMMON):
+- npm install
+- npm run dev
+- npm start
+- npm test
+
+TIPS:
+- Read command output carefully.
+- Run one command at a time when debugging.
+- Keep separate terminals for frontend and backend.
+
+================================================================================
+8. MERN STACK QUICK TIPS
+================================================================================
+
+FRONTEND (REACT):
+- Keep components small and reusable.
+- Use controlled inputs for forms.
+- Lift state up only when needed.
+- Show loading and error states in UI.
+
+BACKEND (NODE/EXPRESS):
+- Validate request body on every endpoint.
+- Use middleware for auth and error handling.
+- Return consistent API response format.
+
+DATABASE (MONGODB):
+- Index frequently queried fields.
+- Validate schema properly.
+- Never trust client-side validation only.
+
+API INTEGRATION:
+- Keep base URL in env variables.
+- Use async/await with try/catch.
+- Handle 4xx and 5xx responses gracefully.
+
+================================================================================
+9. INTERVIEW + LEARNING TIPS
+================================================================================
+
+1. Practice daily (even 30-45 mins).
+2. Build small projects after each concept.
+3. Keep your own notes and code snippets.
+4. Revise frequently used patterns.
+5. Teach concepts to someone else (best learning method).
+6. Solve errors yourself before asking for help.
+
+================================================================================
+10. DAILY CODING CHECKLIST
+================================================================================
+
+Before coding:
+- Pull latest changes
+- Create/checkout correct branch
+- Run project and verify baseline
+
+During coding:
+- Write small chunks
+- Test after each small change
+- Commit meaningful progress
+
+Before pushing:
+- Remove debug logs
+- Run formatter/linter
+- Re-check edge cases
+- Write clear commit message
+
+================================================================================
+END OF NOTES
+================================================================================

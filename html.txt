@@ -1,0 +1,794 @@
+================================================================================
+                            HTML - COMPLETE NOTES
+================================================================================
+
+================================================================================
+1. INTRODUCTION TO HTML
+================================================================================
+
+HTML = HyperText Markup Language
+- Standard markup language for creating web pages
+- Describes the structure of a web page
+- Consists of a series of elements (tags)
+- Browsers use HTML to render content
+
+History:
+- Created by Tim Berners-Lee in 1991
+- HTML 2.0 (1995), HTML 4.01 (1999), XHTML (2000), HTML5 (2014)
+- Current version: HTML5 (Living Standard)
+
+================================================================================
+2. BASIC STRUCTURE OF HTML DOCUMENT
+================================================================================
+
+<!DOCTYPE html>           <!-- Declaration - defines HTML5 -->
+<html lang="en">          <!-- Root element -->
+<head>                    <!-- Meta information -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Page description">
+    <meta name="keywords" content="HTML, CSS, JavaScript">
+    <meta name="author" content="Your Name">
+    <title>Page Title</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>                    <!-- Visible content -->
+    <!-- Content goes here -->
+</body>
+</html>
+
+================================================================================
+3. HTML ELEMENTS & TAGS
+================================================================================
+
+Element = Opening Tag + Content + Closing Tag
+Example: <p>This is a paragraph</p>
+
+Self-Closing Tags (Void Elements):
+<br>        - Line break
+<hr>        - Horizontal rule
+<img>       - Image
+<input>     - Input field
+<meta>      - Metadata
+<link>      - External resource link
+<area>      - Image map area
+<base>      - Base URL
+<col>       - Table column
+<embed>     - External content
+<source>    - Media source
+<track>     - Text tracks
+<wbr>       - Word break opportunity
+
+================================================================================
+4. TEXT FORMATTING TAGS
+================================================================================
+
+HEADINGS:
+<h1> to <h6>  - Headings (h1 is largest, h6 is smallest)
+               Only one <h1> per page recommended (SEO)
+
+PARAGRAPHS & TEXT:
+<p>           - Paragraph
+<br>          - Line break
+<hr>          - Horizontal line/thematic break
+<pre>         - Preformatted text (preserves spaces/line breaks)
+
+TEXT STYLING:
+<b>           - Bold (no semantic meaning)
+<strong>      - Strong importance (bold + semantic)
+<i>           - Italic (no semantic meaning)
+<em>          - Emphasis (italic + semantic)
+<u>           - Underline
+<s>           - Strikethrough
+<del>         - Deleted text (strikethrough + semantic)
+<ins>         - Inserted text (underline + semantic)
+<mark>        - Highlighted/marked text
+<small>       - Smaller text
+<sub>         - Subscript (H₂O)
+<sup>         - Superscript (x²)
+
+QUOTATIONS:
+<blockquote>  - Block quotation (indented)
+<q>           - Inline quotation (adds quotes)
+<cite>        - Citation/title of work
+<abbr>        - Abbreviation (title attribute for full form)
+
+CODE & TECHNICAL:
+<code>        - Inline code
+<kbd>         - Keyboard input
+<samp>        - Sample output
+<var>         - Variable
+<pre><code>   - Code block (combination)
+
+================================================================================
+5. LISTS
+================================================================================
+
+UNORDERED LIST (Bullets):
+<ul>
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+</ul>
+
+Types: disc (default), circle, square, none
+<ul style="list-style-type: circle;">
+
+ORDERED LIST (Numbers):
+<ol>
+    <li>First</li>
+    <li>Second</li>
+    <li>Third</li>
+</ol>
+
+Attributes:
+- type="1" (default), "A", "a", "I", "i"
+- start="5" (start from specific number)
+- reversed (reverse order)
+
+DESCRIPTION LIST:
+<dl>
+    <dt>Term 1</dt>
+    <dd>Definition 1</dd>
+    <dt>Term 2</dt>
+    <dd>Definition 2</dd>
+</dl>
+
+NESTED LISTS:
+<ul>
+    <li>Item 1
+        <ul>
+            <li>Sub-item 1.1</li>
+            <li>Sub-item 1.2</li>
+        </ul>
+    </li>
+</ul>
+
+================================================================================
+6. LINKS (ANCHOR TAG)
+================================================================================
+
+Basic Syntax:
+<a href="url">Link Text</a>
+
+TYPES OF LINKS:
+
+External Link:
+<a href="https://www.google.com">Google</a>
+
+Internal Link (same page):
+<a href="#section-id">Go to Section</a>
+<section id="section-id">...</section>
+
+Internal Link (another page):
+<a href="about.html">About Page</a>
+<a href="pages/contact.html">Contact</a>
+
+Email Link:
+<a href="mailto:email@example.com">Send Email</a>
+<a href="mailto:email@example.com?subject=Hello&body=Message">Email with Subject</a>
+
+Phone Link:
+<a href="tel:+1234567890">Call Us</a>
+
+Download Link:
+<a href="file.pdf" download>Download PDF</a>
+<a href="file.pdf" download="custom-name.pdf">Download</a>
+
+ATTRIBUTES:
+- href         : URL destination
+- target       : Where to open link
+    _self      : Same window (default)
+    _blank     : New tab/window
+    _parent    : Parent frame
+    _top       : Full body of window
+- rel          : Relationship
+    noopener   : Security for _blank
+    noreferrer : No referrer info
+    nofollow   : Don't follow (SEO)
+- title        : Tooltip text
+
+Best Practice for external links:
+<a href="https://example.com" target="_blank" rel="noopener noreferrer">Link</a>
+
+================================================================================
+7. IMAGES
+================================================================================
+
+Basic Syntax:
+<img src="image.jpg" alt="Description">
+
+ATTRIBUTES:
+- src      : Image source (required)
+- alt      : Alternative text (required for accessibility)
+- width    : Width in pixels or %
+- height   : Height in pixels or %
+- loading  : lazy (lazy loading) | eager (immediate)
+- title    : Tooltip on hover
+
+Examples:
+<img src="photo.jpg" alt="A beautiful sunset" width="300" height="200">
+<img src="images/logo.png" alt="Company Logo" loading="lazy">
+
+IMAGE AS LINK:
+<a href="https://example.com">
+    <img src="logo.png" alt="Logo">
+</a>
+
+IMAGE FORMATS:
+- JPEG (.jpg, .jpeg) : Photos, complex images
+- PNG (.png)         : Transparency, graphics
+- GIF (.gif)         : Animations, simple graphics
+- SVG (.svg)         : Scalable vector graphics
+- WebP (.webp)       : Modern format, smaller size
+- AVIF (.avif)       : Newest, best compression
+
+RESPONSIVE IMAGES:
+<picture>
+    <source media="(min-width: 800px)" srcset="large.jpg">
+    <source media="(min-width: 400px)" srcset="medium.jpg">
+    <img src="small.jpg" alt="Responsive image">
+</picture>
+
+<img srcset="small.jpg 300w, medium.jpg 600w, large.jpg 900w"
+     sizes="(max-width: 600px) 300px, (max-width: 900px) 600px, 900px"
+     src="medium.jpg" alt="Responsive">
+
+FIGURE & FIGCAPTION:
+<figure>
+    <img src="photo.jpg" alt="Description">
+    <figcaption>Caption for the image</figcaption>
+</figure>
+
+================================================================================
+8. TABLES
+================================================================================
+
+BASIC TABLE STRUCTURE:
+<table>
+    <thead>
+        <tr>
+            <th>Header 1</th>
+            <th>Header 2</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Data 1</td>
+            <td>Data 2</td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>Footer 1</td>
+            <td>Footer 2</td>
+        </tr>
+    </tfoot>
+</table>
+
+TABLE ELEMENTS:
+<table>     - Table container
+<caption>   - Table title/caption
+<thead>     - Table header group
+<tbody>     - Table body group
+<tfoot>     - Table footer group
+<tr>        - Table row
+<th>        - Header cell (bold, centered by default)
+<td>        - Data cell
+<colgroup>  - Column group
+<col>       - Column properties
+
+SPANNING CELLS:
+<td colspan="2">Spans 2 columns</td>
+<td rowspan="3">Spans 3 rows</td>
+
+COLUMN STYLING:
+<table>
+    <colgroup>
+        <col style="background-color: yellow">
+        <col style="background-color: lightblue">
+    </colgroup>
+    ...
+</table>
+
+ATTRIBUTES:
+- border    : Border width (deprecated, use CSS)
+- cellpadding: Cell padding (deprecated)
+- cellspacing: Cell spacing (deprecated)
+
+ACCESSIBILITY:
+<th scope="col">Column Header</th>
+<th scope="row">Row Header</th>
+
+================================================================================
+9. FORMS
+================================================================================
+
+BASIC FORM STRUCTURE:
+<form action="/submit" method="POST">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name">
+    <button type="submit">Submit</button>
+</form>
+
+FORM ATTRIBUTES:
+- action    : Where to send form data
+- method    : GET or POST
+- enctype   : Encoding type
+    application/x-www-form-urlencoded (default)
+    multipart/form-data (file uploads)
+    text/plain
+- autocomplete: on/off
+- novalidate: Disable validation
+
+INPUT TYPES:
+<input type="text">          - Single-line text
+<input type="password">      - Password (hidden)
+<input type="email">         - Email validation
+<input type="number">        - Numeric input
+<input type="tel">           - Telephone number
+<input type="url">           - URL validation
+<input type="search">        - Search field
+<input type="date">          - Date picker
+<input type="time">          - Time picker
+<input type="datetime-local">- Date and time
+<input type="month">         - Month picker
+<input type="week">          - Week picker
+<input type="color">         - Color picker
+<input type="range">         - Slider
+<input type="file">          - File upload
+<input type="hidden">        - Hidden field
+<input type="checkbox">      - Checkbox
+<input type="radio">         - Radio button
+<input type="submit">        - Submit button
+<input type="reset">         - Reset button
+<input type="button">        - Generic button
+<input type="image">         - Image as submit
+
+INPUT ATTRIBUTES:
+- name          : Field name (sent to server)
+- id            : Unique identifier
+- value         : Default/initial value
+- placeholder   : Hint text
+- required      : Must be filled
+- disabled      : Cannot interact
+- readonly      : Cannot modify
+- autofocus     : Focus on page load
+- autocomplete  : on/off
+- min, max      : Number/date range
+- minlength, maxlength : Text length
+- pattern       : Regex validation
+- step          : Number increment
+- multiple      : Multiple values (file/email)
+- accept        : File types (.jpg, image/*, .pdf)
+- size          : Display size
+- list          : Datalist reference
+
+TEXTAREA:
+<textarea name="message" rows="5" cols="30" placeholder="Enter message">
+</textarea>
+
+SELECT (Dropdown):
+<select name="country" id="country">
+    <option value="">Select Country</option>
+    <option value="us">United States</option>
+    <option value="uk" selected>United Kingdom</option>
+    <option value="ca">Canada</option>
+</select>
+
+<select multiple>  <!-- Multiple selection -->
+<optgroup label="Group Name">  <!-- Option grouping -->
+
+DATALIST (Autocomplete suggestions):
+<input list="browsers" name="browser">
+<datalist id="browsers">
+    <option value="Chrome">
+    <option value="Firefox">
+    <option value="Safari">
+</datalist>
+
+RADIO BUTTONS:
+<input type="radio" id="male" name="gender" value="male">
+<label for="male">Male</label>
+<input type="radio" id="female" name="gender" value="female">
+<label for="female">Female</label>
+
+CHECKBOXES:
+<input type="checkbox" id="agree" name="agree" value="yes">
+<label for="agree">I agree to terms</label>
+
+FIELDSET & LEGEND:
+<fieldset>
+    <legend>Personal Information</legend>
+    <label for="fname">First Name:</label>
+    <input type="text" id="fname" name="fname">
+</fieldset>
+
+BUTTONS:
+<button type="submit">Submit</button>
+<button type="reset">Reset</button>
+<button type="button">Click Me</button>
+
+OUTPUT (calculation result):
+<output name="result" for="a b">0</output>
+
+METER (gauge):
+<meter value="70" min="0" max="100">70%</meter>
+
+PROGRESS:
+<progress value="70" max="100">70%</progress>
+
+================================================================================
+10. MULTIMEDIA - AUDIO & VIDEO
+================================================================================
+
+AUDIO:
+<audio controls>
+    <source src="audio.mp3" type="audio/mpeg">
+    <source src="audio.ogg" type="audio/ogg">
+    Your browser doesn't support audio.
+</audio>
+
+AUDIO ATTRIBUTES:
+- controls  : Show play controls
+- autoplay  : Auto start playing
+- loop      : Loop playback
+- muted     : Start muted
+- preload   : none | metadata | auto
+
+VIDEO:
+<video width="640" height="360" controls poster="thumbnail.jpg">
+    <source src="video.mp4" type="video/mp4">
+    <source src="video.webm" type="video/webm">
+    <track src="subtitles.vtt" kind="subtitles" srclang="en" label="English">
+    Your browser doesn't support video.
+</video>
+
+VIDEO ATTRIBUTES:
+- controls  : Show controls
+- autoplay  : Auto start
+- loop      : Loop video
+- muted     : Start muted
+- poster    : Thumbnail image
+- width     : Video width
+- height    : Video height
+- preload   : none | metadata | auto
+- playsinline: Play inline (mobile)
+
+TRACK KINDS:
+- subtitles   : Subtitles
+- captions    : Captions with sound descriptions
+- descriptions: Text descriptions
+- chapters    : Chapter titles
+- metadata    : Metadata track
+
+================================================================================
+11. IFRAME (Inline Frame)
+================================================================================
+
+<iframe src="https://example.com" 
+        width="600" 
+        height="400"
+        title="Description"
+        loading="lazy"
+        sandbox="allow-scripts allow-same-origin">
+</iframe>
+
+ATTRIBUTES:
+- src         : URL to embed
+- srcdoc      : HTML content to embed
+- width       : Frame width
+- height      : Frame height
+- name        : Frame name (for targeting)
+- title       : Accessibility title
+- loading     : lazy | eager
+- sandbox     : Security restrictions
+    allow-forms
+    allow-modals
+    allow-popups
+    allow-same-origin
+    allow-scripts
+    allow-top-navigation
+- allow       : Feature policy
+    camera
+    microphone
+    fullscreen
+    payment
+- referrerpolicy: Referrer info
+
+EMBED YOUTUBE:
+<iframe width="560" height="315" 
+        src="https://www.youtube.com/embed/VIDEO_ID" 
+        title="YouTube video"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+</iframe>
+
+EMBED GOOGLE MAPS:
+<iframe src="https://www.google.com/maps/embed?..." 
+        width="600" height="450" 
+        style="border:0;" 
+        allowfullscreen 
+        loading="lazy">
+</iframe>
+
+================================================================================
+12. SEMANTIC HTML5 ELEMENTS
+================================================================================
+
+STRUCTURAL:
+<header>      - Page/section header
+<nav>         - Navigation links
+<main>        - Main content (one per page)
+<article>     - Independent, self-contained content
+<section>     - Thematic grouping of content
+<aside>       - Sidebar content
+<footer>      - Page/section footer
+
+TYPICAL PAGE LAYOUT:
+<body>
+    <header>
+        <nav>...</nav>
+    </header>
+    <main>
+        <article>
+            <section>...</section>
+            <section>...</section>
+        </article>
+        <aside>...</aside>
+    </main>
+    <footer>...</footer>
+</body>
+
+OTHER SEMANTIC ELEMENTS:
+<figure>      - Self-contained content (images, diagrams)
+<figcaption>  - Caption for figure
+<details>     - Collapsible details
+<summary>     - Summary for details
+<time>        - Date/time
+<address>     - Contact information
+<dialog>      - Dialog box/modal
+<mark>        - Highlighted text
+<wbr>         - Word break opportunity
+
+DETAILS/SUMMARY (Accordion):
+<details>
+    <summary>Click to expand</summary>
+    <p>Hidden content revealed when clicked.</p>
+</details>
+
+TIME:
+<time datetime="2024-01-15">January 15, 2024</time>
+<time datetime="14:30">2:30 PM</time>
+<time datetime="2024-01-15T14:30">Jan 15, 2024 at 2:30 PM</time>
+
+DIALOG:
+<dialog id="myDialog">
+    <p>Dialog content</p>
+    <button onclick="document.getElementById('myDialog').close()">Close</button>
+</dialog>
+
+================================================================================
+13. DIV & SPAN
+================================================================================
+
+DIV (Block-level container):
+- Used for grouping elements
+- Takes full width available
+- Starts on new line
+
+<div class="container">
+    <h1>Title</h1>
+    <p>Content</p>
+</div>
+
+SPAN (Inline container):
+- Used for styling part of text
+- Takes only needed width
+- Stays inline with text
+
+<p>This is <span class="highlight">highlighted</span> text.</p>
+
+================================================================================
+14. HTML ENTITIES & SYMBOLS
+================================================================================
+
+COMMON ENTITIES:
+&lt;        <   (less than)
+&gt;        >   (greater than)
+&amp;       &   (ampersand)
+&quot;      "   (quotation mark)
+&apos;      '   (apostrophe)
+&nbsp;          (non-breaking space)
+&copy;      ©   (copyright)
+&reg;       ®   (registered trademark)
+&trade;     ™   (trademark)
+&euro;      €   (euro)
+&pound;     £   (pound)
+&yen;       ¥   (yen)
+&cent;      ¢   (cent)
+&deg;       °   (degree)
+&plusmn;    ±   (plus-minus)
+&times;     ×   (multiplication)
+&divide;    ÷   (division)
+&frac12;    ½   (half)
+&frac14;    ¼   (quarter)
+&frac34;    ¾   (three-quarters)
+&larr;      ←   (left arrow)
+&rarr;      →   (right arrow)
+&uarr;      ↑   (up arrow)
+&darr;      ↓   (down arrow)
+&hearts;    ♥   (heart)
+&spades;    ♠   (spade)
+&clubs;     ♣   (club)
+&diams;     ♦   (diamond)
+
+================================================================================
+15. META TAGS (HEAD Section)
+================================================================================
+
+ESSENTIAL META TAGS:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+SEO META TAGS:
+<meta name="description" content="Page description (150-160 chars)">
+<meta name="keywords" content="keyword1, keyword2, keyword3">
+<meta name="author" content="Author Name">
+<meta name="robots" content="index, follow">
+
+SOCIAL MEDIA (Open Graph):
+<meta property="og:title" content="Page Title">
+<meta property="og:description" content="Description">
+<meta property="og:image" content="https://example.com/image.jpg">
+<meta property="og:url" content="https://example.com/page">
+<meta property="og:type" content="website">
+
+TWITTER CARDS:
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Page Title">
+<meta name="twitter:description" content="Description">
+<meta name="twitter:image" content="image.jpg">
+
+OTHER:
+<meta http-equiv="refresh" content="30">  <!-- Refresh every 30 sec -->
+<meta http-equiv="refresh" content="5;url=newpage.html">  <!-- Redirect -->
+<meta name="theme-color" content="#3498db">  <!-- Mobile browser theme -->
+
+================================================================================
+16. GLOBAL ATTRIBUTES
+================================================================================
+
+Available on ALL HTML elements:
+
+- id          : Unique identifier
+- class       : CSS class(es)
+- style       : Inline CSS
+- title       : Tooltip text
+- lang        : Language
+- dir         : Text direction (ltr, rtl, auto)
+- hidden      : Hide element
+- tabindex    : Tab order
+- accesskey   : Keyboard shortcut
+- contenteditable : Editable content (true/false)
+- draggable   : Draggable element (true/false)
+- spellcheck  : Spell checking (true/false)
+- translate   : Should translate (yes/no)
+
+DATA ATTRIBUTES:
+<div data-user-id="123" data-role="admin">
+    Custom data storage
+</div>
+
+Access in JS: element.dataset.userId, element.dataset.role
+
+================================================================================
+17. BEST PRACTICES & ACCESSIBILITY
+================================================================================
+
+BEST PRACTICES:
+1. Always use DOCTYPE declaration
+2. Use lowercase for element names and attributes
+3. Always quote attribute values
+4. Use semantic elements where possible
+5. Include alt text for images
+6. Use meaningful link text
+7. Keep structure clean and indented
+8. Validate your HTML
+9. Use comments for complex sections
+10. Optimize for performance
+
+ACCESSIBILITY (A11Y):
+1. Use semantic HTML
+2. Add alt text to images
+3. Use ARIA attributes when needed
+4. Ensure proper heading hierarchy
+5. Provide labels for form fields
+6. Ensure sufficient color contrast
+7. Make content keyboard navigable
+8. Use skip links for navigation
+9. Provide captions for media
+10. Test with screen readers
+
+ARIA ATTRIBUTES:
+role="button"           - Element role
+aria-label="Close"      - Label for element
+aria-labelledby="id"    - Reference to label
+aria-describedby="id"   - Reference to description
+aria-hidden="true"      - Hide from screen readers
+aria-expanded="false"   - Expandable state
+aria-pressed="true"     - Toggle state
+aria-live="polite"      - Live region updates
+aria-required="true"    - Required field
+
+SKIP LINK:
+<a href="#main-content" class="skip-link">Skip to main content</a>
+...
+<main id="main-content">
+
+================================================================================
+18. HTML COMMENTS
+================================================================================
+
+Single-line:
+<!-- This is a comment -->
+
+Multi-line:
+<!-- 
+    This is a 
+    multi-line comment 
+-->
+
+Conditional Comments (IE only - deprecated):
+<!--[if IE]>
+    <p>You are using Internet Explorer.</p>
+<![endif]-->
+
+================================================================================
+19. LINKING EXTERNAL RESOURCES
+================================================================================
+
+CSS:
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="print.css" media="print">
+
+JavaScript:
+<script src="script.js"></script>
+<script src="script.js" defer></script>   <!-- Load after HTML parsed -->
+<script src="script.js" async></script>   <!-- Load asynchronously -->
+
+Favicon:
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+Fonts:
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+Preload/Prefetch:
+<link rel="preload" href="font.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="prefetch" href="next-page.html">
+<link rel="dns-prefetch" href="https://api.example.com">
+
+================================================================================
+20. HTML5 APIs (Requires JavaScript)
+================================================================================
+
+- Canvas API         : 2D/3D graphics
+- Geolocation API    : User location
+- Drag and Drop API  : Drag elements
+- Web Storage API    : localStorage/sessionStorage
+- Web Workers API    : Background scripts
+- WebSocket API      : Real-time communication
+- Fetch API          : HTTP requests
+- History API        : Browser history manipulation
+- Notification API   : Desktop notifications
+- File API           : File handling
+- Fullscreen API     : Fullscreen mode
+
+================================================================================
+                              END OF HTML NOTES
+================================================================================

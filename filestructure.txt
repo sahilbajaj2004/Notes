@@ -1,0 +1,1160 @@
+================================================================================
+                FILE STRUCTURE & PROJECT ORGANIZATION
+         (Every Framework - What Goes Where & Why)
+================================================================================
+
+================================================================================
+                       PART 1: FRONTEND PROJECTS
+================================================================================
+
+================================================================================
+1. REACT (Vite) - RECOMMENDED STRUCTURE
+================================================================================
+
+INITIALIZE:
+npm create vite@latest my-app -- --template react
+npm create vite@latest my-app -- --template react-ts       # TypeScript
+npm create vite@latest my-app -- --template react-swc-ts   # TypeScript + SWC
+cd my-app && npm install && npm run dev
+
+BASIC (Small Projects):
+my-app/
+├── public/
+│   ├── favicon.ico                # Browser tab icon
+│   └── robots.txt                 # SEO crawler rules
+├── src/
+│   ├── assets/                    # Images, fonts, SVGs
+│   │   ├── images/
+│   │   └── fonts/
+│   ├── components/                # Reusable UI components
+│   │   ├── Button.jsx
+│   │   ├── Navbar.jsx
+│   │   ├── Footer.jsx
+│   │   ├── Card.jsx
+│   │   └── Modal.jsx
+│   ├── pages/                     # Route-level pages
+│   │   ├── Home.jsx
+│   │   ├── About.jsx
+│   │   ├── Login.jsx
+│   │   └── NotFound.jsx
+│   ├── App.jsx                    # Root component + routes
+│   ├── App.css                    # App-level styles
+│   ├── main.jsx                   # Entry point (renders App)
+│   └── index.css                  # Global styles, CSS reset
+├── .env                           # Environment variables
+├── .env.example                   # Template (committed)
+├── .gitignore                     # Files to ignore in git
+├── index.html                     # HTML entry point
+├── package.json                   # Dependencies & scripts
+├── vite.config.js                 # Vite configuration
+└── README.md                      # Project documentation
+
+SCALABLE (Medium-Large Projects):
+my-app/
+├── public/
+│   ├── favicon.ico
+│   └── robots.txt
+├── src/
+│   ├── assets/                    # Static files
+│   │   ├── images/
+│   │   ├── icons/
+│   │   └── fonts/
+│   ├── components/                # Shared/reusable components
+│   │   ├── ui/                    # Generic UI primitives
+│   │   │   ├── Button.jsx
+│   │   │   ├── Input.jsx
+│   │   │   ├── Modal.jsx
+│   │   │   ├── Spinner.jsx
+│   │   │   └── index.js          # Barrel export
+│   │   ├── layout/                # Layout components
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Sidebar.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   └── Layout.jsx
+│   │   └── forms/                 # Form components
+│   │       ├── LoginForm.jsx
+│   │       └── SignupForm.jsx
+│   ├── pages/                     # Route-level pages
+│   │   ├── Home/
+│   │   │   ├── Home.jsx
+│   │   │   ├── Home.css
+│   │   │   └── index.js
+│   │   ├── Dashboard/
+│   │   │   ├── Dashboard.jsx
+│   │   │   └── components/       # Page-specific components
+│   │   │       ├── StatsCard.jsx
+│   │   │       └── Chart.jsx
+│   │   └── Auth/
+│   │       ├── Login.jsx
+│   │       ├── Register.jsx
+│   │       └── ForgotPassword.jsx
+│   ├── hooks/                     # Custom React hooks
+│   │   ├── useAuth.js
+│   │   ├── useFetch.js
+│   │   ├── useLocalStorage.js
+│   │   └── useDebounce.js
+│   ├── context/                   # React Context providers
+│   │   ├── AuthContext.jsx
+│   │   ├── ThemeContext.jsx
+│   │   └── index.js
+│   ├── services/                  # API calls & external services
+│   │   ├── api.js                # Axios/fetch instance
+│   │   ├── authService.js
+│   │   ├── userService.js
+│   │   └── productService.js
+│   ├── utils/                     # Helper/utility functions
+│   │   ├── formatDate.js
+│   │   ├── validators.js
+│   │   ├── constants.js
+│   │   └── helpers.js
+│   ├── styles/                    # Global styles
+│   │   ├── index.css             # Global reset & base
+│   │   ├── variables.css         # CSS custom properties
+│   │   └── animations.css        # Shared animations
+│   ├── routes/                    # Route definitions
+│   │   ├── AppRoutes.jsx
+│   │   └── ProtectedRoute.jsx
+│   ├── store/                     # State management (Zustand/Redux)
+│   │   ├── useAuthStore.js
+│   │   └── useCartStore.js
+│   ├── App.jsx
+│   └── main.jsx
+├── .env
+├── .env.example
+├── .eslintrc.cjs
+├── .prettierrc
+├── .gitignore
+├── index.html
+├── package.json
+├── vite.config.js
+└── README.md
+
+WHAT EACH FOLDER DOES:
+- public/         → Static files served as-is (not processed by Vite)
+- src/assets/     → Images/fonts imported in code (processed by Vite)
+- src/components/ → Reusable pieces used across multiple pages
+- src/pages/      → Full page components, one per route
+- src/hooks/      → Custom hooks for reusable logic
+- src/context/    → React Context for global state (theme, auth)
+- src/services/   → API call functions (keeps components clean)
+- src/utils/      → Pure helper functions (formatting, validation)
+- src/styles/     → Global CSS, variables, shared styles
+- src/routes/     → Route config, protected routes, lazy loading
+- src/store/      → Zustand/Redux state management files
+
+BARREL EXPORT PATTERN (index.js):
+// components/ui/index.js
+export { default as Button } from './Button';
+export { default as Input } from './Input';
+export { default as Modal } from './Modal';
+
+// Usage: import { Button, Input, Modal } from '@/components/ui';
+
+================================================================================
+2. NEXT.JS (App Router - v13+)
+================================================================================
+
+INITIALIZE:
+npx create-next-app@latest my-app
+npx create-next-app@latest my-app --typescript --eslint --app --src-dir --use-npm
+cd my-app && npm run dev
+
+RECOMMENDED STRUCTURE:
+my-app/
+├── src/
+│   ├── app/                       # App Router (file-based routing)
+│   │   ├── layout.tsx             # Root layout (wraps ALL pages)
+│   │   ├── page.tsx               # Home page → /
+│   │   ├── loading.tsx            # Global loading UI
+│   │   ├── error.tsx              # Global error UI
+│   │   ├── not-found.tsx          # 404 page
+│   │   ├── globals.css            # Global styles
+│   │   │
+│   │   ├── about/
+│   │   │   └── page.tsx           # → /about
+│   │   │
+│   │   ├── blog/
+│   │   │   ├── page.tsx           # → /blog (list)
+│   │   │   └── [slug]/
+│   │   │       ├── page.tsx       # → /blog/my-post (dynamic)
+│   │   │       └── loading.tsx    # Loading for this route
+│   │   │
+│   │   ├── dashboard/
+│   │   │   ├── layout.tsx         # Dashboard-specific layout
+│   │   │   ├── page.tsx           # → /dashboard
+│   │   │   ├── settings/
+│   │   │   │   └── page.tsx       # → /dashboard/settings
+│   │   │   └── analytics/
+│   │   │       └── page.tsx       # → /dashboard/analytics
+│   │   │
+│   │   ├── (auth)/                # Route group (no URL impact)
+│   │   │   ├── layout.tsx         # Auth-specific layout
+│   │   │   ├── login/
+│   │   │   │   └── page.tsx       # → /login
+│   │   │   └── register/
+│   │   │       └── page.tsx       # → /register
+│   │   │
+│   │   └── api/                   # API routes (Route Handlers)
+│   │       ├── users/
+│   │       │   ├── route.ts       # GET/POST → /api/users
+│   │       │   └── [id]/
+│   │       │       └── route.ts   # GET/PUT/DELETE → /api/users/:id
+│   │       └── auth/
+│   │           └── route.ts       # → /api/auth
+│   │
+│   ├── components/                # Shared components
+│   │   ├── ui/                    # Generic UI components
+│   │   │   ├── Button.tsx
+│   │   │   ├── Card.tsx
+│   │   │   └── Input.tsx
+│   │   ├── layout/                # Layout pieces
+│   │   │   ├── Header.tsx
+│   │   │   ├── Footer.tsx
+│   │   │   └── Sidebar.tsx
+│   │   └── forms/
+│   │       └── ContactForm.tsx
+│   │
+│   ├── lib/                       # Utilities & configurations
+│   │   ├── db.ts                  # Database connection
+│   │   ├── auth.ts                # Auth helpers
+│   │   ├── utils.ts               # General utilities
+│   │   └── validations.ts         # Zod schemas
+│   │
+│   ├── hooks/                     # Custom React hooks
+│   │   └── useAuth.ts
+│   │
+│   ├── types/                     # TypeScript types
+│   │   ├── index.ts
+│   │   └── user.ts
+│   │
+│   └── styles/                    # Additional styles
+│       └── dashboard.css
+│
+├── public/                        # Static assets
+│   ├── images/
+│   ├── favicon.ico
+│   └── robots.txt
+│
+├── prisma/                        # Prisma ORM (if used)
+│   ├── schema.prisma
+│   └── migrations/
+│
+├── .env.local                     # Environment variables
+├── .env.example
+├── .eslintrc.json
+├── .gitignore
+├── next.config.js                 # Next.js configuration
+├── package.json
+├── tsconfig.json                  # TypeScript config
+├── middleware.ts                  # Edge middleware (auth, redirects)
+└── README.md
+
+NEXT.JS SPECIAL FILES (App Router):
+layout.tsx      → Shared layout (persists across navigations)
+page.tsx        → Unique page content (the route itself)
+loading.tsx     → Loading UI (Suspense boundary)
+error.tsx       → Error UI (Error boundary)
+not-found.tsx   → 404 page
+template.tsx    → Like layout but remounts on navigation
+route.ts        → API endpoint (Route Handler)
+default.tsx     → Fallback for parallel routes
+middleware.ts   → Runs before requests (auth checks, redirects)
+
+ROUTING CONVENTIONS:
+app/page.tsx                    →  /
+app/about/page.tsx              →  /about
+app/blog/[slug]/page.tsx        →  /blog/:slug      (dynamic)
+app/shop/[...slug]/page.tsx     →  /shop/*           (catch-all)
+app/shop/[[...slug]]/page.tsx   →  /shop/*           (optional catch-all)
+app/(marketing)/pricing/page.tsx → /pricing          (route group)
+app/@modal/login/page.tsx       →  parallel route    (slots)
+app/(.)photo/[id]/page.tsx      →  intercepting route
+
+================================================================================
+3. ANGULAR
+================================================================================
+
+INITIALIZE:
+npm install -g @angular/cli
+ng new my-app --routing --style=scss
+cd my-app && ng serve
+
+STRUCTURE:
+my-app/
+├── src/
+│   ├── app/
+│   │   ├── core/                  # Singleton services, guards
+│   │   │   ├── services/
+│   │   │   │   ├── auth.service.ts
+│   │   │   │   ├── api.service.ts
+│   │   │   │   └── storage.service.ts
+│   │   │   ├── guards/
+│   │   │   │   └── auth.guard.ts
+│   │   │   ├── interceptors/
+│   │   │   │   └── auth.interceptor.ts
+│   │   │   └── models/
+│   │   │       └── user.model.ts
+│   │   │
+│   │   ├── shared/                # Shared across modules
+│   │   │   ├── components/
+│   │   │   │   ├── header/
+│   │   │   │   │   ├── header.component.ts
+│   │   │   │   │   ├── header.component.html
+│   │   │   │   │   └── header.component.css
+│   │   │   │   └── footer/
+│   │   │   ├── directives/
+│   │   │   ├── pipes/
+│   │   │   │   └── capitalize.pipe.ts
+│   │   │   └── shared.module.ts
+│   │   │
+│   │   ├── features/              # Feature modules (lazy-loaded)
+│   │   │   ├── home/
+│   │   │   │   ├── home.component.ts
+│   │   │   │   ├── home.component.html
+│   │   │   │   ├── home.component.css
+│   │   │   │   └── home.module.ts
+│   │   │   ├── dashboard/
+│   │   │   │   ├── dashboard.component.ts
+│   │   │   │   ├── components/
+│   │   │   │   └── dashboard.module.ts
+│   │   │   └── auth/
+│   │   │       ├── login/
+│   │   │       ├── register/
+│   │   │       └── auth.module.ts
+│   │   │
+│   │   ├── app.component.ts       # Root component
+│   │   ├── app.component.html
+│   │   ├── app.component.css
+│   │   ├── app.config.ts          # App configuration
+│   │   └── app.routes.ts          # Route definitions
+│   │
+│   ├── assets/                    # Static assets
+│   ├── environments/              # Env configs
+│   │   ├── environment.ts
+│   │   └── environment.prod.ts
+│   ├── index.html
+│   ├── main.ts                    # Bootstrap
+│   └── styles.css                 # Global styles
+│
+├── angular.json                   # Angular CLI config
+├── package.json
+├── tsconfig.json
+└── README.md
+
+ANGULAR NAMING CONVENTIONS:
+- Components: feature.component.ts
+- Services:   feature.service.ts
+- Modules:    feature.module.ts
+- Guards:     feature.guard.ts
+- Pipes:      feature.pipe.ts
+- Directives: feature.directive.ts
+- Interceptors: feature.interceptor.ts
+- Models:     feature.model.ts
+
+CORE vs SHARED vs FEATURES:
+- core/     → Used ONCE (auth service, http interceptor, app-wide guards)
+- shared/   → Used MANY TIMES (button component, pipes, directives)
+- features/ → Each feature/page module (lazy-loaded, self-contained)
+
+================================================================================
+4. VUE.JS 3
+================================================================================
+
+INITIALIZE:
+npm create vue@latest my-app
+npm create vite@latest my-app -- --template vue-ts          # Vite directly
+cd my-app && npm install && npm run dev
+
+STRUCTURE:
+my-app/
+├── src/
+│   ├── assets/                    # Processed static files
+│   │   ├── images/
+│   │   └── styles/
+│   │       └── main.css
+│   ├── components/                # Reusable components
+│   │   ├── ui/
+│   │   │   ├── BaseButton.vue
+│   │   │   ├── BaseInput.vue
+│   │   │   └── BaseModal.vue
+│   │   ├── layout/
+│   │   │   ├── TheHeader.vue     # "The" = singleton component
+│   │   │   ├── TheSidebar.vue
+│   │   │   └── TheFooter.vue
+│   │   └── AppCard.vue           # "App" prefix = app-specific
+│   ├── views/                     # Route-level components (pages)
+│   │   ├── HomeView.vue
+│   │   ├── AboutView.vue
+│   │   └── DashboardView.vue
+│   ├── composables/               # Composition API hooks (like React hooks)
+│   │   ├── useAuth.ts
+│   │   ├── useFetch.ts
+│   │   └── useTheme.ts
+│   ├── stores/                    # Pinia state management
+│   │   ├── auth.ts
+│   │   ├── cart.ts
+│   │   └── index.ts
+│   ├── router/                    # Vue Router
+│   │   └── index.ts
+│   ├── services/                  # API services
+│   │   ├── api.ts
+│   │   └── userService.ts
+│   ├── types/                     # TypeScript types
+│   │   └── index.ts
+│   ├── utils/                     # Helpers
+│   │   └── helpers.ts
+│   ├── plugins/                   # Vue plugins
+│   │   └── vuetify.ts
+│   ├── App.vue                    # Root component
+│   └── main.ts                    # Entry point
+├── public/
+├── index.html
+├── package.json
+├── vite.config.ts
+├── tsconfig.json
+└── README.md
+
+VUE NAMING CONVENTIONS:
+- Multi-word names: UserCard.vue (not Card.vue)
+- Singleton prefix: TheHeader.vue, TheSidebar.vue
+- Base prefix: BaseButton.vue, BaseInput.vue (generic)
+- App prefix: AppCard.vue (app-specific, used once)
+- Views suffix: HomeView.vue, AboutView.vue
+
+
+================================================================================
+                     PART 2: BACKEND PROJECTS
+================================================================================
+
+================================================================================
+5. NODE.JS + EXPRESS (REST API)
+================================================================================
+
+INITIALIZE:
+mkdir my-api && cd my-api
+npm init -y
+npm install express dotenv cors mongoose
+npm install -D nodemon
+# Add to package.json: "dev": "nodemon src/server.js"
+
+BASIC:
+my-api/
+├── src/
+│   ├── server.js                  # Entry point
+│   ├── routes/
+│   │   ├── userRoutes.js
+│   │   └── productRoutes.js
+│   ├── controllers/
+│   │   ├── userController.js
+│   │   └── productController.js
+│   └── models/
+│       ├── User.js
+│       └── Product.js
+├── .env
+├── .gitignore
+└── package.json
+
+PRODUCTION-READY (MVC Pattern):
+my-api/
+├── src/
+│   ├── config/                    # Configuration files
+│   │   ├── db.js                  # Database connection
+│   │   ├── cloudinary.js          # File upload config
+│   │   └── redis.js               # Cache config
+│   │
+│   ├── controllers/               # Request handlers (logic)
+│   │   ├── authController.js
+│   │   ├── userController.js
+│   │   └── productController.js
+│   │
+│   ├── models/                    # Database schemas/models
+│   │   ├── User.js
+│   │   ├── Product.js
+│   │   └── Order.js
+│   │
+│   ├── routes/                    # Route definitions
+│   │   ├── index.js               # Combines all routes
+│   │   ├── authRoutes.js
+│   │   ├── userRoutes.js
+│   │   └── productRoutes.js
+│   │
+│   ├── middleware/                 # Custom middleware
+│   │   ├── auth.js                # JWT verification
+│   │   ├── errorHandler.js        # Global error handler
+│   │   ├── validate.js            # Input validation
+│   │   ├── rateLimiter.js         # Rate limiting
+│   │   └── upload.js              # File upload (multer)
+│   │
+│   ├── services/                  # Business logic (optional layer)
+│   │   ├── authService.js
+│   │   ├── emailService.js
+│   │   └── paymentService.js
+│   │
+│   ├── utils/                     # Helper functions
+│   │   ├── AppError.js            # Custom error class
+│   │   ├── catchAsync.js          # Async error wrapper
+│   │   ├── generateToken.js       # JWT token generation
+│   │   ├── sendEmail.js           # Email sending
+│   │   └── constants.js           # App constants
+│   │
+│   ├── validators/                # Input validation schemas
+│   │   ├── authValidator.js
+│   │   └── userValidator.js
+│   │
+│   └── server.js                  # Entry point
+│
+├── tests/                         # Test files
+│   ├── unit/
+│   │   └── user.test.js
+│   └── integration/
+│       └── auth.test.js
+│
+├── logs/                          # Log files (gitignored)
+├── uploads/                       # Uploaded files (gitignored)
+│
+├── .env                           # Secret environment variables
+├── .env.example                   # Template
+├── .eslintrc.js
+├── .prettierrc
+├── .gitignore
+├── package.json
+└── README.md
+
+REQUEST FLOW:
+Client → Route → Middleware → Controller → Service → Model → Database
+                                                    ↓
+Client ← Response ← Controller ← Service ← Model ← Database
+
+WHAT EACH LAYER DOES:
+- Routes:       Define endpoints, attach middleware
+- Middleware:   Auth checks, validation, logging, rate limiting
+- Controllers:  Handle req/res, call services, send response
+- Services:     Business logic, reusable across controllers
+- Models:       Database schema, data validation, methods
+- Utils:        Pure helpers, no business logic
+- Config:       Connection setup, third-party config
+
+================================================================================
+6. EXPRESS + TYPESCRIPT
+================================================================================
+
+INITIALIZE:
+mkdir my-api && cd my-api
+npm init -y
+npm install express dotenv cors
+npm install -D typescript ts-node-dev @types/node @types/express @types/cors
+npx tsc --init
+# Add to package.json: "dev": "ts-node-dev --respawn src/server.ts"
+
+my-api/
+├── src/
+│   ├── config/
+│   │   └── db.ts
+│   ├── controllers/
+│   │   └── userController.ts
+│   ├── middleware/
+│   │   ├── auth.ts
+│   │   ├── errorHandler.ts
+│   │   └── validate.ts
+│   ├── models/
+│   │   └── User.ts
+│   ├── routes/
+│   │   ├── index.ts
+│   │   └── userRoutes.ts
+│   ├── services/
+│   │   └── userService.ts
+│   ├── types/                     # TypeScript types/interfaces
+│   │   ├── index.ts
+│   │   ├── user.types.ts
+│   │   └── express.d.ts          # Extend Express types
+│   ├── utils/
+│   │   ├── AppError.ts
+│   │   └── helpers.ts
+│   └── server.ts
+├── dist/                          # Compiled JS output (gitignored)
+├── tests/
+├── .env
+├── .gitignore
+├── package.json
+├── tsconfig.json
+└── README.md
+
+================================================================================
+7. NEST.JS (Enterprise Node.js)
+================================================================================
+
+INITIALIZE:
+npm install -g @nestjs/cli
+nest new my-api
+cd my-api && npm run start:dev
+
+my-api/
+├── src/
+│   ├── auth/                      # Feature module
+│   │   ├── auth.controller.ts
+│   │   ├── auth.service.ts
+│   │   ├── auth.module.ts
+│   │   ├── auth.guard.ts
+│   │   ├── dto/                   # Data Transfer Objects
+│   │   │   ├── login.dto.ts
+│   │   │   └── register.dto.ts
+│   │   └── strategies/
+│   │       └── jwt.strategy.ts
+│   │
+│   ├── users/                     # Feature module
+│   │   ├── users.controller.ts
+│   │   ├── users.service.ts
+│   │   ├── users.module.ts
+│   │   ├── dto/
+│   │   │   ├── create-user.dto.ts
+│   │   │   └── update-user.dto.ts
+│   │   └── entities/
+│   │       └── user.entity.ts
+│   │
+│   ├── common/                    # Shared resources
+│   │   ├── decorators/
+│   │   ├── filters/
+│   │   │   └── http-exception.filter.ts
+│   │   ├── guards/
+│   │   ├── interceptors/
+│   │   │   └── transform.interceptor.ts
+│   │   └── pipes/
+│   │       └── validation.pipe.ts
+│   │
+│   ├── config/
+│   │   └── database.config.ts
+│   │
+│   ├── app.module.ts              # Root module
+│   ├── app.controller.ts
+│   ├── app.service.ts
+│   └── main.ts                    # Entry point
+│
+├── test/
+├── .env
+├── nest-cli.json
+├── package.json
+├── tsconfig.json
+└── README.md
+
+NESTJS NAMING:
+feature.controller.ts   → Handles HTTP requests
+feature.service.ts      → Business logic
+feature.module.ts       → Wires it all together
+feature.entity.ts       → Database entity/model
+feature.dto.ts          → Input validation shape
+feature.guard.ts        → Authorization check
+feature.pipe.ts         → Data transformation
+feature.interceptor.ts  → Before/after request hook
+feature.filter.ts       → Exception handling
+
+================================================================================
+                    PART 3: FULL-STACK PROJECTS
+================================================================================
+
+================================================================================
+8. MERN STACK (Monorepo)
+================================================================================
+
+INITIALIZE:
+mkdir my-project && cd my-project
+
+# Frontend
+npm create vite@latest client -- --template react
+cd client && npm install axios react-router-dom && cd ..
+
+# Backend
+mkdir server && cd server && npm init -y
+npm install express dotenv cors mongoose jsonwebtoken bcryptjs
+npm install -D nodemon
+
+my-project/
+├── client/                        # React Frontend
+│   ├── public/
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── hooks/
+│   │   ├── context/
+│   │   ├── services/
+│   │   │   └── api.js            # Axios instance + API calls
+│   │   ├── utils/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── .env                      # VITE_API_URL=http://localhost:5000
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.js
+│
+├── server/                        # Express Backend
+│   ├── src/
+│   │   ├── config/
+│   │   │   └── db.js
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── utils/
+│   │   └── server.js
+│   ├── .env                      # MONGO_URI, JWT_SECRET, PORT
+│   └── package.json
+│
+├── .gitignore
+└── README.md
+
+================================================================================
+9. MERN STACK (Single Package - Heroku Style)
+================================================================================
+
+INITIALIZE:
+mkdir my-project && cd my-project && npm init -y
+npm install express dotenv cors mongoose jsonwebtoken bcryptjs
+npm create vite@latest client -- --template react
+
+my-project/
+├── client/                        # React Frontend
+│   ├── src/
+│   ├── public/
+│   ├── index.html
+│   └── package.json
+│
+├── config/                        # Backend config
+│   └── db.js
+├── controllers/                   # Backend controllers
+│   ├── authController.js
+│   └── userController.js
+├── middleware/                    # Backend middleware
+│   ├── auth.js
+│   └── errorHandler.js
+├── models/                        # Backend models
+│   └── User.js
+├── routes/                        # Backend routes
+│   ├── authRoutes.js
+│   └── userRoutes.js
+│
+├── server.js                      # Entry point (serves API + React build)
+├── .env
+├── .gitignore
+├── package.json                   # Single package.json
+└── README.md
+
+// server.js - Serve React in production
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, 'client/dist')));
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, 'client/dist/index.html'));
+    });
+}
+
+================================================================================
+10. NEXT.JS FULL-STACK (Everything in One)
+================================================================================
+
+INITIALIZE:
+npx create-next-app@latest my-app --typescript --eslint --app --src-dir
+cd my-app
+npm install prisma @prisma/client @supabase/supabase-js     # Database
+npm install zod next-auth                                    # Auth + Validation
+npx prisma init                                              # If using Prisma
+
+my-app/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx
+│   │   ├── page.tsx               # Home
+│   │   ├── globals.css
+│   │   │
+│   │   ├── (public)/              # Public pages
+│   │   │   ├── about/page.tsx
+│   │   │   ├── pricing/page.tsx
+│   │   │   └── blog/
+│   │   │       ├── page.tsx
+│   │   │       └── [slug]/page.tsx
+│   │   │
+│   │   ├── (auth)/                # Auth pages (shared layout)
+│   │   │   ├── layout.tsx
+│   │   │   ├── login/page.tsx
+│   │   │   └── register/page.tsx
+│   │   │
+│   │   ├── (dashboard)/           # Protected pages
+│   │   │   ├── layout.tsx         # Auth check layout
+│   │   │   ├── dashboard/page.tsx
+│   │   │   ├── settings/page.tsx
+│   │   │   └── profile/page.tsx
+│   │   │
+│   │   └── api/                   # Backend API
+│   │       ├── auth/
+│   │       │   ├── login/route.ts
+│   │       │   ├── register/route.ts
+│   │       │   └── logout/route.ts
+│   │       ├── users/
+│   │       │   ├── route.ts
+│   │       │   └── [id]/route.ts
+│   │       └── products/
+│   │           └── route.ts
+│   │
+│   ├── components/
+│   │   ├── ui/
+│   │   ├── layout/
+│   │   └── forms/
+│   ├── lib/
+│   │   ├── db.ts                  # Prisma/Supabase client
+│   │   ├── auth.ts
+│   │   └── utils.ts
+│   ├── hooks/
+│   ├── types/
+│   └── actions/                   # Server Actions
+│       ├── auth.ts
+│       └── users.ts
+│
+├── prisma/
+│   ├── schema.prisma
+│   └── seed.ts
+├── public/
+├── .env.local
+├── middleware.ts
+├── next.config.js
+├── package.json
+└── tsconfig.json
+
+================================================================================
+                   PART 4: MOBILE PROJECTS
+================================================================================
+
+================================================================================
+11. REACT NATIVE (Expo)
+================================================================================
+
+INITIALIZE:
+npx create-expo-app my-app --template tabs
+npx create-expo-app my-app --template blank-typescript
+cd my-app && npx expo start
+
+my-app/
+├── app/                           # Expo Router (file-based routing)
+│   ├── (tabs)/                    # Tab navigation group
+│   │   ├── _layout.tsx            # Tab bar configuration
+│   │   ├── index.tsx              # Home tab
+│   │   ├── explore.tsx            # Explore tab
+│   │   └── profile.tsx            # Profile tab
+│   ├── (auth)/                    # Auth screens group
+│   │   ├── _layout.tsx
+│   │   ├── login.tsx
+│   │   └── register.tsx
+│   ├── details/[id].tsx           # Dynamic route
+│   ├── _layout.tsx                # Root layout (navigation container)
+│   ├── +not-found.tsx             # 404 screen
+│   └── modal.tsx                  # Modal screen
+│
+├── assets/                        # Images, fonts, animations
+│   ├── fonts/
+│   │   └── SpaceMono-Regular.ttf
+│   └── images/
+│       ├── icon.png
+│       ├── splash.png
+│       └── adaptive-icon.png
+│
+├── components/                    # Reusable components
+│   ├── ui/
+│   │   ├── Button.tsx
+│   │   ├── Card.tsx
+│   │   └── Input.tsx
+│   ├── ThemedText.tsx
+│   └── ThemedView.tsx
+│
+├── constants/                     # App constants
+│   ├── Colors.ts                  # Color palette
+│   └── Fonts.ts
+│
+├── hooks/                         # Custom hooks
+│   ├── useAuth.ts
+│   └── useColorScheme.ts
+│
+├── services/                      # API calls
+│   └── api.ts
+│
+├── stores/                        # State management
+│   └── authStore.ts
+│
+├── types/                         # TypeScript types
+│   └── index.ts
+│
+├── app.json                       # Expo configuration
+├── babel.config.js
+├── package.json
+├── tsconfig.json
+└── README.md
+
+EXPO ROUTER SPECIAL FILES:
+_layout.tsx       → Navigation structure (Stack, Tabs, Drawer)
++not-found.tsx    → Unmatched routes
++html.tsx         → Custom HTML wrapper (web only)
+(group)/          → Route grouping (no URL impact)
+[param].tsx       → Dynamic route segment
+[...rest].tsx     → Catch-all route
+
+================================================================================
+12. FLUTTER
+================================================================================
+
+INITIALIZE:
+flutter create my_app
+flutter create --platforms=android,ios,web my_app            # Specific platforms
+flutter create --org com.mycompany my_app                    # Custom org
+cd my_app && flutter run
+
+my_app/
+├── android/                       # Android-specific code
+├── ios/                           # iOS-specific code
+├── web/                           # Web-specific code
+├── lib/                           # Main Dart code
+│   ├── main.dart                  # Entry point
+│   ├── app.dart                   # App widget & theme
+│   │
+│   ├── config/                    # Configuration
+│   │   ├── routes.dart
+│   │   ├── theme.dart
+│   │   └── constants.dart
+│   │
+│   ├── models/                    # Data classes
+│   │   ├── user.dart
+│   │   └── product.dart
+│   │
+│   ├── screens/                   # Full screens/pages
+│   │   ├── home/
+│   │   │   ├── home_screen.dart
+│   │   │   └── widgets/          # Screen-specific widgets
+│   │   │       └── product_card.dart
+│   │   ├── auth/
+│   │   │   ├── login_screen.dart
+│   │   │   └── register_screen.dart
+│   │   └── profile/
+│   │       └── profile_screen.dart
+│   │
+│   ├── widgets/                   # Shared/reusable widgets
+│   │   ├── custom_button.dart
+│   │   ├── loading_indicator.dart
+│   │   └── app_bar.dart
+│   │
+│   ├── services/                  # API & external services
+│   │   ├── api_service.dart
+│   │   ├── auth_service.dart
+│   │   └── storage_service.dart
+│   │
+│   ├── providers/                 # State management (Provider)
+│   │   ├── auth_provider.dart
+│   │   └── theme_provider.dart
+│   │
+│   └── utils/                     # Helpers
+│       ├── validators.dart
+│       └── helpers.dart
+│
+├── test/                          # Tests
+├── assets/                        # Assets (images, fonts)
+│   ├── images/
+│   └── fonts/
+├── pubspec.yaml                   # Dependencies (like package.json)
+├── pubspec.lock
+├── analysis_options.yaml          # Linting rules
+└── README.md
+
+FLUTTER NAMING:
+- Files: snake_case.dart (home_screen.dart, auth_service.dart)
+- Classes: PascalCase (HomeScreen, AuthService)
+- Variables/functions: camelCase (userName, fetchData)
+- Constants: camelCase or SCREAMING_SNAKE_CASE
+
+================================================================================
+                  PART 5: CONFIGURATION FILES
+================================================================================
+
+================================================================================
+14. COMMON CONFIG FILES EXPLAINED
+================================================================================
+
+FILE                    PURPOSE
+----------------------------------------------------------------------
+package.json            Dependencies, scripts, project metadata
+package-lock.json       Locked dependency versions (auto-generated)
+tsconfig.json           TypeScript compiler configuration
+.eslintrc.js/.json      ESLint linting rules
+.prettierrc             Prettier formatting rules
+.gitignore              Files/folders Git should ignore
+.env                    Secret environment variables (NEVER commit)
+.env.example            Template showing required env vars (commit this)
+.env.local              Local overrides (Next.js)
+.env.development        Dev-specific variables
+.env.production         Prod-specific variables
+vite.config.js          Vite bundler configuration
+next.config.js          Next.js configuration
+angular.json            Angular CLI configuration
+svelte.config.js        SvelteKit configuration
+tailwind.config.js      Tailwind CSS configuration
+postcss.config.js       PostCSS configuration
+babel.config.js         Babel transpiler configuration
+jest.config.js          Jest testing configuration
+vitest.config.ts        Vitest testing configuration
+docker-compose.yml      Multi-container Docker setup
+Dockerfile              Container image definition
+nginx.conf              Nginx web server configuration
+Procfile                Heroku process type declaration
+vercel.json             Vercel deployment configuration
+netlify.toml            Netlify deployment configuration
+render.yaml             Render deployment configuration
+fly.toml                Fly.io deployment configuration
+ecosystem.config.js     PM2 process manager configuration
+middleware.ts           Next.js edge middleware
+.nvmrc                  Node.js version specification
+.node-version           Node.js version specification
+.editorconfig           Editor formatting consistency
+
+================================================================================
+15. .GITIGNORE TEMPLATES
+================================================================================
+
+NODE.JS / REACT / NEXT.JS:
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Build output
+dist/
+build/
+.next/
+out/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+
+# Cache
+.cache/
+.parcel-cache/
+.turbo/
+
+# Misc
+*.tsbuildinfo
+
+FLUTTER:
+.dart_tool/
+.packages
+build/
+*.iml
+.idea/
+.android/
+.ios/
+.pub-cache/
+pubspec.lock
+
+================================================================================
+16. ENVIRONMENT VARIABLE NAMING
+================================================================================
+
+PATTERN:
+SERVICE_PROPERTY=value
+
+FRONTEND (Must be prefixed to expose to browser):
+VITE_API_URL=http://localhost:5000          # Vite (React/Vue/Svelte)
+NEXT_PUBLIC_API_URL=http://localhost:5000   # Next.js
+REACT_APP_API_URL=http://localhost:5000     # Create React App
+
+BACKEND (No prefix needed):
+NODE_ENV=development
+PORT=5000
+DATABASE_URL=postgresql://user:pass@host:5432/db
+MONGO_URI=mongodb+srv://user:pass@cluster/db
+JWT_SECRET=your-super-secret-key-here
+JWT_EXPIRE=30d
+CORS_ORIGIN=http://localhost:5173
+REDIS_URL=redis://localhost:6379
+
+THIRD-PARTY SERVICES:
+OPENAI_API_KEY=sk-...
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+CLOUDINARY_CLOUD_NAME=...
+CLOUDINARY_API_KEY=...
+CLOUDINARY_API_SECRET=...
+SENDGRID_API_KEY=SG....
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+AWS_REGION=us-east-1
+AWS_S3_BUCKET=my-bucket
+
+SUPABASE:
+NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+SUPABASE_SERVICE_ROLE_KEY=eyJ...       # Server-only!
+
+FIREBASE:
+NEXT_PUBLIC_FIREBASE_API_KEY=...
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=...
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=...
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=...
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=...
+NEXT_PUBLIC_FIREBASE_APP_ID=...
+
+================================================================================
+17. ORGANIZING RULES (GOLDEN RULES)
+================================================================================
+
+RULE 1: GROUP BY FEATURE, NOT BY TYPE (for large apps)
+  ❌ Bad:  components/Button.jsx, components/UserCard.jsx (all mixed)
+  ✅ Good: features/auth/LoginForm.jsx, features/dashboard/StatsCard.jsx
+
+RULE 2: KEEP COMPONENTS CLOSE TO WHERE THEY'RE USED
+  - Used everywhere? → src/components/
+  - Used in one page? → src/pages/Dashboard/components/
+
+RULE 3: ONE COMPONENT PER FILE
+  - Each .jsx/.tsx file exports one main component
+  - Small sub-components used only by parent can be in same file
+
+RULE 4: INDEX FILES FOR CLEAN IMPORTS
+  // components/ui/index.ts
+  export { Button } from './Button';
+  export { Input } from './Input';
+  // Import: import { Button, Input } from '@/components/ui';
+
+RULE 5: SEPARATE CONCERNS
+  - Components = UI rendering
+  - Hooks = Reusable logic
+  - Services = API communication
+  - Utils = Pure helper functions
+  - Context/Store = Global state
+
+RULE 6: CONSISTENT NAMING
+  - Files: kebab-case or PascalCase (pick one, stay consistent)
+  - Components: PascalCase (UserCard.jsx)
+  - Hooks: camelCase with "use" prefix (useAuth.ts)
+  - Utils: camelCase (formatDate.ts)
+  - CSS Modules: ComponentName.module.css
+  - Tests: ComponentName.test.tsx
+
+RULE 7: DON'T OVER-ENGINEER EARLY
+  - Start flat (components/, pages/)
+  - Add folders only when files pile up
+  - Refactor structure as project grows
+
+================================================================================
+                    END OF FILE STRUCTURE NOTES
+================================================================================

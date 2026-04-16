@@ -1,0 +1,1421 @@
+================================================================================
+                            CSS - COMPLETE NOTES
+================================================================================
+
+================================================================================
+1. INTRODUCTION TO CSS
+================================================================================
+
+CSS = Cascading Style Sheets
+- Used to style and layout web pages
+- Controls colors, fonts, spacing, positioning, animations, etc.
+- Separates presentation from content (HTML)
+
+CSS Versions:
+- CSS1 (1996), CSS2 (1998), CSS2.1 (2011)
+- CSS3 (Modular - ongoing, current standard)
+
+================================================================================
+2. WAYS TO ADD CSS
+================================================================================
+
+1. INLINE CSS (in HTML element):
+<p style="color: red; font-size: 16px;">Text</p>
+Priority: Highest (avoid for maintainability)
+
+2. INTERNAL CSS (in <head>):
+<head>
+    <style>
+        p {
+            color: red;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+3. EXTERNAL CSS (separate file):
+<head>
+    <link rel="stylesheet" href="styles.css">
+</head>
+Priority: Follows cascade rules (recommended)
+
+4. IMPORT (inside CSS):
+@import url('other-styles.css');
+@import 'print.css' print;
+
+================================================================================
+3. CSS SYNTAX & SELECTORS
+================================================================================
+
+BASIC SYNTAX:
+selector {
+    property: value;
+    property: value;
+}
+
+BASIC SELECTORS:
+*                   - Universal (all elements)
+element             - Type selector (p, div, h1)
+.class              - Class selector
+#id                 - ID selector (unique, use sparingly)
+element.class       - Element with class
+
+GROUPING:
+h1, h2, h3 {
+    color: blue;
+}
+
+COMBINATOR SELECTORS:
+div p               - Descendant (p inside div, any level)
+div > p             - Child (direct child only)
+div + p             - Adjacent sibling (immediately after)
+div ~ p             - General sibling (any sibling after)
+
+ATTRIBUTE SELECTORS:
+[attribute]              - Has attribute
+[attribute="value"]      - Exact value
+[attribute~="value"]     - Contains word
+[attribute|="value"]     - Starts with value or value-
+[attribute^="value"]     - Starts with value
+[attribute$="value"]     - Ends with value
+[attribute*="value"]     - Contains value
+
+Examples:
+a[href]                  - Links with href
+input[type="text"]       - Text inputs
+a[href^="https"]         - HTTPS links
+img[src$=".png"]         - PNG images
+div[class*="btn"]        - Classes containing "btn"
+
+PSEUDO-CLASS SELECTORS:
+:hover              - Mouse over
+:active             - Being clicked
+:focus              - Has focus
+:visited            - Visited link
+:link               - Unvisited link
+:first-child        - First child element
+:last-child         - Last child element
+:nth-child(n)       - nth child (1, 2, 3... or even, odd, 2n+1)
+:nth-last-child(n)  - nth child from end
+:only-child         - Only child
+:first-of-type      - First of its type
+:last-of-type       - Last of its type
+:nth-of-type(n)     - nth of its type
+:only-of-type       - Only one of its type
+:not(selector)      - Negation
+:empty              - No children
+:root               - Document root (html)
+:target             - Target of URL anchor
+:enabled            - Enabled form elements
+:disabled           - Disabled form elements
+:checked            - Checked inputs
+:required           - Required inputs
+:optional           - Optional inputs
+:valid              - Valid inputs
+:invalid            - Invalid inputs
+:in-range           - In range inputs
+:out-of-range       - Out of range inputs
+:read-only          - Read-only elements
+:read-write         - Editable elements
+:placeholder-shown  - Showing placeholder
+:focus-within       - Contains focused element
+:focus-visible      - Focus visible (keyboard)
+:is()               - Matches any selector in list
+:where()            - Like :is() but 0 specificity
+:has()              - Parent selector (contains)
+
+Examples:
+li:first-child { }
+li:nth-child(2n) { }       /* Even items */
+li:nth-child(odd) { }      /* Odd items */
+li:nth-child(3n+1) { }     /* 1, 4, 7, 10... */
+p:not(.intro) { }
+:is(h1, h2, h3):hover { }
+div:has(> img) { }         /* Div with direct img child */
+
+PSEUDO-ELEMENT SELECTORS:
+::before            - Insert before content
+::after             - Insert after content
+::first-letter      - First letter
+::first-line        - First line
+::selection         - Selected text
+::placeholder       - Placeholder text
+::marker            - List markers
+
+Examples:
+p::first-letter {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.quote::before {
+    content: '"';
+}
+
+.quote::after {
+    content: '"';
+}
+
+================================================================================
+4. SPECIFICITY & CASCADE
+================================================================================
+
+SPECIFICITY HIERARCHY (Weight):
+1. Inline styles              (1,0,0,0)
+2. IDs                        (0,1,0,0)
+3. Classes, attributes, pseudo-classes (0,0,1,0)
+4. Elements, pseudo-elements  (0,0,0,1)
+5. Universal selector         (0,0,0,0)
+
+CALCULATING SPECIFICITY:
+#nav .item a:hover    = 0,1,2,1 (1 ID + 1 class + 1 pseudo-class + 1 element)
+div#main p.intro      = 0,1,1,2 (1 ID + 1 class + 2 elements)
+ul li a               = 0,0,0,3 (3 elements)
+
+CASCADE ORDER (Last wins if same specificity):
+1. User agent styles (browser defaults)
+2. User styles
+3. Author styles (your CSS)
+4. Author !important
+5. User !important
+
+!IMPORTANT (avoid if possible):
+p {
+    color: red !important;
+}
+
+================================================================================
+5. CSS COLORS
+================================================================================
+
+COLOR FORMATS:
+
+Named Colors:
+color: red;
+color: blue;
+color: transparent;
+
+Hexadecimal:
+color: #ff0000;        /* Red */
+color: #f00;           /* Shorthand */
+color: #ff000080;      /* With alpha (50% transparent) */
+
+RGB:
+color: rgb(255, 0, 0);
+color: rgba(255, 0, 0, 0.5);  /* With alpha */
+
+HSL (Hue, Saturation, Lightness):
+color: hsl(0, 100%, 50%);      /* Red */
+color: hsla(0, 100%, 50%, 0.5); /* With alpha */
+
+Modern Syntax:
+color: rgb(255 0 0);
+color: rgb(255 0 0 / 50%);
+color: hsl(0 100% 50%);
+color: hsl(0 100% 50% / 50%);
+
+currentColor:
+color: blue;
+border: 1px solid currentColor;  /* Uses blue */
+
+COLOR FUNCTIONS (CSS Color Level 4):
+color-mix(in srgb, red 50%, blue);
+color: oklch(0.7 0.15 180);
+
+================================================================================
+6. CSS UNITS
+================================================================================
+
+ABSOLUTE UNITS:
+px      - Pixels (1/96 inch)
+pt      - Points (1/72 inch)
+pc      - Picas (12 points)
+in      - Inches
+cm      - Centimeters
+mm      - Millimeters
+
+RELATIVE UNITS:
+em      - Relative to parent font-size
+rem     - Relative to root (html) font-size
+%       - Percentage of parent
+vw      - 1% of viewport width
+vh      - 1% of viewport height
+vmin    - 1% of smaller viewport dimension
+vmax    - 1% of larger viewport dimension
+dvh     - Dynamic viewport height (mobile)
+svh     - Small viewport height
+lvh     - Large viewport height
+ch      - Width of "0" character
+ex      - x-height of font
+
+Examples:
+font-size: 16px;
+font-size: 1.5rem;
+width: 50%;
+height: 100vh;
+padding: 2em;
+
+================================================================================
+7. BOX MODEL
+================================================================================
+
+Every element is a rectangular box:
+
++------------------------------------------+
+|              MARGIN                       |
+|   +----------------------------------+   |
+|   |          BORDER                  |   |
+|   |   +--------------------------+   |   |
+|   |   |        PADDING           |   |   |
+|   |   |   +------------------+   |   |   |
+|   |   |   |    CONTENT       |   |   |   |
+|   |   |   +------------------+   |   |   |
+|   |   +--------------------------+   |   |
+|   +----------------------------------+   |
++------------------------------------------+
+
+BOX-SIZING:
+box-sizing: content-box;  /* Default: width = content only */
+box-sizing: border-box;   /* width = content + padding + border */
+
+Universal Reset:
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+WIDTH & HEIGHT:
+width: 300px;
+height: 200px;
+min-width: 100px;
+max-width: 500px;
+min-height: 100px;
+max-height: 400px;
+
+PADDING (inside border):
+padding: 10px;                    /* All sides */
+padding: 10px 20px;               /* Top/bottom, Left/right */
+padding: 10px 20px 15px;          /* Top, Left/right, Bottom */
+padding: 10px 20px 15px 25px;     /* Top, Right, Bottom, Left (clockwise) */
+padding-top: 10px;
+padding-right: 20px;
+padding-bottom: 15px;
+padding-left: 25px;
+
+MARGIN (outside border):
+margin: 10px;                     /* All sides */
+margin: 10px 20px;                /* Top/bottom, Left/right */
+margin: 10px 20px 15px;           /* Top, Left/right, Bottom */
+margin: 10px 20px 15px 25px;      /* Top, Right, Bottom, Left */
+margin-top: 10px;
+margin-right: auto;               /* Push to left */
+margin-bottom: 15px;
+margin-left: auto;                /* Push to right */
+margin: 0 auto;                   /* Center horizontally */
+
+MARGIN COLLAPSE:
+- Vertical margins collapse (largest wins)
+- Horizontal margins don't collapse
+- Prevented by: padding, border, flex/grid, overflow
+
+================================================================================
+8. BORDERS
+================================================================================
+
+BORDER SHORTHAND:
+border: 1px solid black;
+
+INDIVIDUAL PROPERTIES:
+border-width: 1px;
+border-style: solid;
+border-color: black;
+
+BORDER STYLES:
+none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset
+
+INDIVIDUAL SIDES:
+border-top: 2px dashed red;
+border-right: 1px solid blue;
+border-bottom: 3px dotted green;
+border-left: 1px solid black;
+
+border-top-width: 2px;
+border-top-style: solid;
+border-top-color: red;
+
+BORDER RADIUS:
+border-radius: 10px;                    /* All corners */
+border-radius: 10px 20px;               /* TL&BR, TR&BL */
+border-radius: 10px 20px 30px 40px;     /* TL, TR, BR, BL */
+border-radius: 50%;                     /* Circle/ellipse */
+
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+border-bottom-right-radius: 10px;
+border-bottom-left-radius: 10px;
+
+/* Elliptical corners */
+border-radius: 20px / 10px;             /* horizontal / vertical */
+
+BORDER IMAGE:
+border-image: url(border.png) 30 round;
+border-image-source: url(border.png);
+border-image-slice: 30;
+border-image-width: 10px;
+border-image-outset: 5px;
+border-image-repeat: round; /* stretch, repeat, round, space */
+
+================================================================================
+9. OUTLINE
+================================================================================
+
+Similar to border but doesn't take space:
+
+outline: 2px solid blue;
+outline-width: 2px;
+outline-style: solid;
+outline-color: blue;
+outline-offset: 5px;
+
+/* Remove focus outline (accessibility concern!) */
+button:focus {
+    outline: none;
+}
+
+/* Better: Custom focus style */
+button:focus {
+    outline: 2px solid blue;
+    outline-offset: 2px;
+}
+
+================================================================================
+10. BACKGROUND
+================================================================================
+
+BACKGROUND SHORTHAND:
+background: #ffffff url('bg.jpg') no-repeat center/cover fixed;
+
+INDIVIDUAL PROPERTIES:
+background-color: #fff;
+background-image: url('image.jpg');
+background-repeat: no-repeat; /* repeat, repeat-x, repeat-y, space, round */
+background-position: center center; /* top, bottom, left, right, 50% 50%, 10px 20px */
+background-size: cover; /* contain, cover, 100px 200px, 50% auto */
+background-attachment: fixed; /* scroll, fixed, local */
+background-origin: padding-box; /* border-box, padding-box, content-box */
+background-clip: border-box; /* border-box, padding-box, content-box, text */
+
+MULTIPLE BACKGROUNDS:
+background: 
+    url('top.png') no-repeat top,
+    url('bottom.png') no-repeat bottom,
+    linear-gradient(white, gray);
+
+GRADIENTS:
+
+Linear Gradient:
+background: linear-gradient(red, blue);
+background: linear-gradient(to right, red, blue);
+background: linear-gradient(45deg, red, yellow, green);
+background: linear-gradient(to bottom right, #fff 0%, #000 100%);
+background: linear-gradient(red 0%, blue 50%, green 100%);
+
+Radial Gradient:
+background: radial-gradient(red, blue);
+background: radial-gradient(circle, red, blue);
+background: radial-gradient(ellipse at center, red, blue);
+background: radial-gradient(circle at top left, red 0%, blue 100%);
+
+Conic Gradient:
+background: conic-gradient(red, yellow, green, blue, red);
+background: conic-gradient(from 45deg, red, blue);
+background: conic-gradient(at 50% 50%, red, blue);
+
+Repeating Gradients:
+background: repeating-linear-gradient(45deg, red, red 10px, blue 10px, blue 20px);
+background: repeating-radial-gradient(circle, red, red 10px, blue 10px, blue 20px);
+
+================================================================================
+11. TYPOGRAPHY
+================================================================================
+
+FONT FAMILY:
+font-family: Arial, Helvetica, sans-serif;
+font-family: "Times New Roman", Times, serif;
+font-family: "Courier New", Courier, monospace;
+
+Generic Font Families:
+serif, sans-serif, monospace, cursive, fantasy, system-ui, ui-serif, ui-sans-serif
+
+@font-face:
+@font-face {
+    font-family: 'CustomFont';
+    src: url('font.woff2') format('woff2'),
+         url('font.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+GOOGLE FONTS:
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+FONT SIZE:
+font-size: 16px;
+font-size: 1.5rem;
+font-size: 1.2em;
+font-size: larger; /* smaller, xx-small, x-small, small, medium, large, x-large, xx-large */
+
+FONT WEIGHT:
+font-weight: normal; /* 400 */
+font-weight: bold;   /* 700 */
+font-weight: 100 to 900;
+font-weight: lighter;
+font-weight: bolder;
+
+FONT STYLE:
+font-style: normal;
+font-style: italic;
+font-style: oblique;
+font-style: oblique 10deg;
+
+FONT VARIANT:
+font-variant: small-caps;
+font-variant: normal;
+
+FONT SHORTHAND:
+font: italic small-caps bold 16px/1.5 Arial, sans-serif;
+/* style variant weight size/line-height family */
+
+LINE HEIGHT:
+line-height: 1.5;      /* Unitless (recommended) */
+line-height: 24px;
+line-height: 150%;
+
+TEXT COLOR:
+color: #333;
+
+TEXT ALIGNMENT:
+text-align: left;
+text-align: right;
+text-align: center;
+text-align: justify;
+
+VERTICAL ALIGNMENT:
+vertical-align: baseline;
+vertical-align: top;
+vertical-align: middle;
+vertical-align: bottom;
+vertical-align: text-top;
+vertical-align: text-bottom;
+vertical-align: 10px;
+
+TEXT DECORATION:
+text-decoration: none;
+text-decoration: underline;
+text-decoration: overline;
+text-decoration: line-through;
+text-decoration: underline wavy red;
+
+text-decoration-line: underline;
+text-decoration-style: solid; /* double, dotted, dashed, wavy */
+text-decoration-color: red;
+text-decoration-thickness: 2px;
+
+text-underline-offset: 5px;
+
+TEXT TRANSFORM:
+text-transform: uppercase;
+text-transform: lowercase;
+text-transform: capitalize;
+text-transform: none;
+
+TEXT INDENT:
+text-indent: 50px;
+text-indent: 2em;
+
+LETTER & WORD SPACING:
+letter-spacing: 2px;
+letter-spacing: 0.1em;
+word-spacing: 5px;
+
+WHITE SPACE:
+white-space: normal;      /* Collapse spaces, wrap */
+white-space: nowrap;      /* No wrapping */
+white-space: pre;         /* Preserve all */
+white-space: pre-wrap;    /* Preserve, but wrap */
+white-space: pre-line;    /* Collapse spaces, preserve newlines, wrap */
+
+WORD BREAK:
+word-break: normal;
+word-break: break-all;    /* Break anywhere */
+word-break: keep-all;     /* Don't break CJK */
+word-break: break-word;   /* Deprecated, use overflow-wrap */
+
+OVERFLOW WRAP:
+overflow-wrap: normal;
+overflow-wrap: break-word;
+overflow-wrap: anywhere;
+
+TEXT OVERFLOW:
+text-overflow: clip;
+text-overflow: ellipsis;
+
+/* Truncate with ellipsis */
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Multi-line truncate */
+.truncate-multi {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+TEXT SHADOW:
+text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+text-shadow: 1px 1px 0 black, 2px 2px 0 gray;
+/* offset-x offset-y blur-radius color */
+
+================================================================================
+12. DISPLAY PROPERTY
+================================================================================
+
+display: block;        /* Full width, new line */
+display: inline;       /* Inline, no width/height */
+display: inline-block; /* Inline + width/height */
+display: none;         /* Remove from flow */
+display: flex;         /* Flexbox container */
+display: inline-flex;  /* Inline flexbox */
+display: grid;         /* Grid container */
+display: inline-grid;  /* Inline grid */
+display: table;        /* Table behavior */
+display: contents;     /* Remove container, keep children */
+
+VISIBILITY:
+visibility: visible;
+visibility: hidden;    /* Hidden but takes space */
+visibility: collapse;  /* For table rows/columns */
+
+OPACITY:
+opacity: 1;            /* Fully visible */
+opacity: 0.5;          /* 50% transparent */
+opacity: 0;            /* Invisible but takes space */
+
+================================================================================
+13. POSITIONING
+================================================================================
+
+POSITION PROPERTY:
+position: static;      /* Default, normal flow */
+position: relative;    /* Relative to normal position */
+position: absolute;    /* Relative to positioned ancestor */
+position: fixed;       /* Relative to viewport */
+position: sticky;      /* Hybrid relative/fixed */
+
+OFFSET PROPERTIES:
+top: 10px;
+right: 10px;
+bottom: 10px;
+left: 10px;
+inset: 10px;           /* Shorthand for all */
+inset: 10px 20px;      /* top/bottom, left/right */
+
+RELATIVE:
+.relative {
+    position: relative;
+    top: 10px;          /* Move down 10px from normal */
+    left: 20px;         /* Move right 20px from normal */
+}
+
+ABSOLUTE:
+.container {
+    position: relative; /* Creates positioning context */
+}
+.absolute {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+FIXED:
+.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+STICKY:
+.sticky-nav {
+    position: sticky;
+    top: 0;             /* Sticks when reaches top */
+}
+
+Z-INDEX (stacking order):
+z-index: 1;
+z-index: 999;
+z-index: -1;
+z-index: auto;
+
+/* Only works on positioned elements (not static) */
+
+================================================================================
+14. FLOAT & CLEAR
+================================================================================
+
+FLOAT:
+float: left;
+float: right;
+float: none;
+float: inline-start;
+float: inline-end;
+
+CLEAR:
+clear: left;
+clear: right;
+clear: both;
+clear: none;
+
+CLEARFIX (for containers with floated children):
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Modern alternative: use overflow or display: flow-root */
+.container {
+    overflow: auto;
+}
+/* or */
+.container {
+    display: flow-root;
+}
+
+================================================================================
+15. FLEXBOX
+================================================================================
+
+CONTAINER (display: flex):
+
+flex-direction: row;           /* Left to right (default) */
+flex-direction: row-reverse;   /* Right to left */
+flex-direction: column;        /* Top to bottom */
+flex-direction: column-reverse; /* Bottom to top */
+
+flex-wrap: nowrap;             /* Single line (default) */
+flex-wrap: wrap;               /* Multiple lines */
+flex-wrap: wrap-reverse;       /* Multiple lines, reversed */
+
+flex-flow: row wrap;           /* Shorthand */
+
+justify-content: flex-start;   /* Start of main axis (default) */
+justify-content: flex-end;     /* End of main axis */
+justify-content: center;       /* Center on main axis */
+justify-content: space-between; /* Equal space between items */
+justify-content: space-around;  /* Equal space around items */
+justify-content: space-evenly;  /* Equal space including edges */
+
+align-items: stretch;          /* Stretch to fill (default) */
+align-items: flex-start;       /* Start of cross axis */
+align-items: flex-end;         /* End of cross axis */
+align-items: center;           /* Center on cross axis */
+align-items: baseline;         /* Align baselines */
+
+align-content: flex-start;     /* For multiple lines */
+align-content: flex-end;
+align-content: center;
+align-content: space-between;
+align-content: space-around;
+align-content: stretch;
+
+gap: 10px;                     /* Gap between items */
+gap: 10px 20px;                /* row-gap column-gap */
+row-gap: 10px;
+column-gap: 20px;
+
+ITEMS (flex children):
+
+order: 0;                      /* Default order */
+order: -1;                     /* Before default */
+order: 1;                      /* After default */
+
+flex-grow: 0;                  /* Don't grow (default) */
+flex-grow: 1;                  /* Grow to fill space */
+flex-grow: 2;                  /* Grow twice as much */
+
+flex-shrink: 1;                /* Shrink if needed (default) */
+flex-shrink: 0;                /* Don't shrink */
+
+flex-basis: auto;              /* Based on content (default) */
+flex-basis: 200px;             /* Starting size */
+flex-basis: 50%;
+
+flex: 0 1 auto;                /* Shorthand: grow shrink basis */
+flex: 1;                       /* flex: 1 1 0 */
+flex: auto;                    /* flex: 1 1 auto */
+flex: none;                    /* flex: 0 0 auto */
+
+align-self: auto;              /* Inherit from container */
+align-self: flex-start;
+align-self: flex-end;
+align-self: center;
+align-self: stretch;
+align-self: baseline;
+
+CENTERING WITH FLEXBOX:
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+================================================================================
+16. CSS GRID
+================================================================================
+
+CONTAINER (display: grid):
+
+grid-template-columns: 100px 200px 100px;
+grid-template-columns: 1fr 2fr 1fr;          /* Fractional units */
+grid-template-columns: repeat(3, 1fr);       /* Repeat */
+grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+grid-template-rows: 100px 200px;
+grid-template-rows: auto 1fr auto;
+
+grid-template-areas:
+    "header header header"
+    "sidebar main main"
+    "footer footer footer";
+
+grid-template: 
+    "header header" 50px
+    "sidebar main" 1fr
+    "footer footer" 50px
+    / 200px 1fr;
+
+gap: 10px;
+gap: 10px 20px;
+row-gap: 10px;
+column-gap: 20px;
+
+justify-items: stretch;         /* Horizontal alignment of items */
+justify-items: start;
+justify-items: end;
+justify-items: center;
+
+align-items: stretch;           /* Vertical alignment of items */
+align-items: start;
+align-items: end;
+align-items: center;
+
+place-items: center;            /* align-items justify-items */
+
+justify-content: start;         /* Horizontal alignment of grid */
+justify-content: end;
+justify-content: center;
+justify-content: space-between;
+justify-content: space-around;
+justify-content: space-evenly;
+
+align-content: start;           /* Vertical alignment of grid */
+align-content: end;
+align-content: center;
+align-content: space-between;
+align-content: space-around;
+align-content: space-evenly;
+
+place-content: center;          /* align-content justify-content */
+
+grid-auto-rows: 100px;          /* Size of implicit rows */
+grid-auto-columns: 100px;       /* Size of implicit columns */
+grid-auto-flow: row;            /* row, column, row dense, column dense */
+
+ITEMS (grid children):
+
+grid-column-start: 1;
+grid-column-end: 3;
+grid-column: 1 / 3;             /* Start / end */
+grid-column: 1 / span 2;        /* Start / span count */
+grid-column: span 2;            /* Span 2 columns */
+
+grid-row-start: 1;
+grid-row-end: 3;
+grid-row: 1 / 3;
+grid-row: 1 / span 2;
+
+grid-area: header;              /* Named area */
+grid-area: 1 / 1 / 3 / 3;       /* row-start / col-start / row-end / col-end */
+
+justify-self: stretch;          /* Horizontal alignment */
+justify-self: start;
+justify-self: end;
+justify-self: center;
+
+align-self: stretch;            /* Vertical alignment */
+align-self: start;
+align-self: end;
+align-self: center;
+
+place-self: center;             /* align-self justify-self */
+
+GRID FUNCTIONS:
+minmax(100px, 1fr)              /* Min and max size */
+repeat(3, 1fr)                  /* Repeat pattern */
+fit-content(300px)              /* Fit content up to max */
+
+================================================================================
+17. TRANSFORMS
+================================================================================
+
+TRANSFORM PROPERTY:
+transform: translate(50px, 100px);
+transform: translateX(50px);
+transform: translateY(100px);
+transform: translateZ(50px);
+transform: translate3d(50px, 100px, 20px);
+
+transform: scale(1.5);
+transform: scaleX(2);
+transform: scaleY(0.5);
+transform: scale(2, 0.5);
+transform: scale3d(1, 2, 1);
+
+transform: rotate(45deg);
+transform: rotateX(45deg);
+transform: rotateY(45deg);
+transform: rotateZ(45deg);
+transform: rotate3d(1, 1, 0, 45deg);
+
+transform: skew(10deg, 20deg);
+transform: skewX(10deg);
+transform: skewY(20deg);
+
+transform: matrix(1, 0, 0, 1, 0, 0);
+transform: matrix3d(...);
+
+/* Multiple transforms */
+transform: translateX(50px) rotate(45deg) scale(1.5);
+
+TRANSFORM ORIGIN:
+transform-origin: center;        /* Default */
+transform-origin: top left;
+transform-origin: 50% 50%;
+transform-origin: 100px 100px;
+
+TRANSFORM STYLE (3D):
+transform-style: flat;           /* Default */
+transform-style: preserve-3d;    /* For 3D effects */
+
+PERSPECTIVE:
+perspective: 1000px;             /* On container */
+transform: perspective(1000px);  /* On element */
+
+perspective-origin: center;
+perspective-origin: 50% 50%;
+
+BACKFACE VISIBILITY:
+backface-visibility: visible;    /* Default */
+backface-visibility: hidden;     /* Hide back of 3D element */
+
+================================================================================
+18. TRANSITIONS
+================================================================================
+
+TRANSITION SHORTHAND:
+transition: property duration timing-function delay;
+transition: all 0.3s ease;
+transition: opacity 0.5s ease-in-out 0.2s;
+
+INDIVIDUAL PROPERTIES:
+transition-property: all;
+transition-property: opacity, transform;
+transition-property: none;
+
+transition-duration: 0.3s;
+transition-duration: 300ms;
+
+transition-timing-function: ease;        /* Default */
+transition-timing-function: linear;
+transition-timing-function: ease-in;
+transition-timing-function: ease-out;
+transition-timing-function: ease-in-out;
+transition-timing-function: step-start;
+transition-timing-function: step-end;
+transition-timing-function: steps(4, end);
+transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+
+transition-delay: 0.2s;
+
+/* Multiple transitions */
+transition: 
+    opacity 0.3s ease,
+    transform 0.5s ease-in-out 0.2s;
+
+EXAMPLE:
+.button {
+    background: blue;
+    transition: background 0.3s ease;
+}
+.button:hover {
+    background: darkblue;
+}
+
+================================================================================
+19. ANIMATIONS
+================================================================================
+
+@KEYFRAMES:
+@keyframes slidein {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0); }
+}
+
+@keyframes rainbow {
+    0% { color: red; }
+    33% { color: green; }
+    66% { color: blue; }
+    100% { color: red; }
+}
+
+ANIMATION SHORTHAND:
+animation: name duration timing-function delay iteration-count direction fill-mode play-state;
+animation: slidein 1s ease-in-out 0.5s infinite alternate forwards running;
+
+INDIVIDUAL PROPERTIES:
+animation-name: slidein;
+animation-duration: 1s;
+animation-timing-function: ease-in-out;
+animation-delay: 0.5s;
+animation-iteration-count: 3;
+animation-iteration-count: infinite;
+animation-direction: normal;          /* normal, reverse, alternate, alternate-reverse */
+animation-fill-mode: none;            /* none, forwards, backwards, both */
+animation-play-state: running;        /* running, paused */
+
+/* Multiple animations */
+animation: 
+    slidein 1s ease,
+    fadeIn 0.5s linear 0.5s;
+
+================================================================================
+20. MEDIA QUERIES (Responsive Design)
+================================================================================
+
+BASIC SYNTAX:
+@media screen and (max-width: 768px) {
+    /* Styles for screens up to 768px */
+}
+
+@media screen and (min-width: 769px) {
+    /* Styles for screens 769px and above */
+}
+
+MEDIA TYPES:
+all         - All devices
+screen      - Screens
+print       - Print preview/printing
+speech      - Screen readers
+
+COMMON BREAKPOINTS:
+/* Mobile First Approach */
+/* Default: Mobile styles */
+
+@media (min-width: 576px) {
+    /* Small devices (landscape phones) */
+}
+
+@media (min-width: 768px) {
+    /* Medium devices (tablets) */
+}
+
+@media (min-width: 992px) {
+    /* Large devices (desktops) */
+}
+
+@media (min-width: 1200px) {
+    /* Extra large devices */
+}
+
+@media (min-width: 1400px) {
+    /* Extra extra large devices */
+}
+
+/* Desktop First Approach */
+/* Default: Desktop styles */
+
+@media (max-width: 1199px) { }
+@media (max-width: 991px) { }
+@media (max-width: 767px) { }
+@media (max-width: 575px) { }
+
+MEDIA FEATURES:
+width, min-width, max-width
+height, min-height, max-height
+aspect-ratio, min-aspect-ratio, max-aspect-ratio
+orientation: portrait | landscape
+resolution: 2dppx
+hover: none | hover
+pointer: none | coarse | fine
+prefers-color-scheme: light | dark
+prefers-reduced-motion: no-preference | reduce
+prefers-contrast: no-preference | more | less
+
+EXAMPLES:
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    body { background: #1a1a1a; color: #fff; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+}
+
+/* High resolution screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    /* Retina display styles */
+}
+
+/* Print styles */
+@media print {
+    .no-print { display: none; }
+    body { font-size: 12pt; }
+}
+
+/* Combining queries */
+@media screen and (min-width: 768px) and (max-width: 1024px) { }
+@media (min-width: 768px), print { }
+
+================================================================================
+21. CSS VARIABLES (Custom Properties)
+================================================================================
+
+DEFINING VARIABLES:
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --font-size-base: 16px;
+    --spacing-unit: 8px;
+    --border-radius: 4px;
+}
+
+USING VARIABLES:
+.button {
+    background-color: var(--primary-color);
+    font-size: var(--font-size-base);
+    padding: calc(var(--spacing-unit) * 2);
+    border-radius: var(--border-radius);
+}
+
+FALLBACK VALUES:
+color: var(--text-color, black);
+font-size: var(--size, var(--default-size, 16px));
+
+SCOPED VARIABLES:
+.dark-theme {
+    --primary-color: #2980b9;
+    --background: #1a1a1a;
+    --text-color: #ffffff;
+}
+
+CHANGING WITH JAVASCRIPT:
+document.documentElement.style.setProperty('--primary-color', 'red');
+
+================================================================================
+22. CSS FUNCTIONS
+================================================================================
+
+CALC():
+width: calc(100% - 20px);
+font-size: calc(1rem + 1vw);
+padding: calc(var(--spacing) * 2);
+
+MIN(), MAX(), CLAMP():
+width: min(500px, 100%);
+width: max(300px, 50%);
+font-size: clamp(1rem, 2.5vw, 2rem);  /* min, preferred, max */
+
+ATTR():
+content: attr(data-tooltip);
+content: attr(href);
+
+URL():
+background-image: url('image.jpg');
+background-image: url(../images/bg.png);
+
+VAR():
+color: var(--primary-color);
+color: var(--color, blue);
+
+COUNTER():
+content: counter(section);
+content: counters(item, ".");
+
+================================================================================
+23. FILTERS
+================================================================================
+
+filter: blur(5px);
+filter: brightness(1.5);       /* 0 = black, 1 = normal, >1 = brighter */
+filter: contrast(200%);        /* 0 = gray, 100% = normal */
+filter: grayscale(100%);       /* 0% = normal, 100% = grayscale */
+filter: hue-rotate(90deg);     /* Rotate hue */
+filter: invert(100%);          /* Invert colors */
+filter: opacity(50%);          /* Like opacity property */
+filter: saturate(200%);        /* 0% = unsaturated, 100% = normal */
+filter: sepia(100%);           /* 0% = normal, 100% = sepia */
+filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.5));
+
+/* Multiple filters */
+filter: blur(2px) brightness(1.2) contrast(1.1);
+
+BACKDROP FILTER (blur behind element):
+backdrop-filter: blur(10px);
+backdrop-filter: brightness(0.8) blur(5px);
+
+================================================================================
+24. CLIP-PATH & MASK
+================================================================================
+
+CLIP-PATH:
+clip-path: circle(50%);
+clip-path: circle(100px at center);
+clip-path: ellipse(50% 30% at center);
+clip-path: inset(10px 20px 30px 40px);
+clip-path: inset(10px round 5px);
+clip-path: polygon(50% 0%, 100% 100%, 0% 100%);  /* Triangle */
+clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 50% 100%, 0% 75%);
+clip-path: path('M 0 0 L 100 0 L 100 100 Z');
+
+MASK:
+mask-image: url('mask.png');
+mask-image: linear-gradient(to bottom, black, transparent);
+mask-mode: alpha;              /* alpha, luminance */
+mask-repeat: no-repeat;
+mask-position: center;
+mask-size: cover;
+
+================================================================================
+25. OBJECT-FIT & OBJECT-POSITION
+================================================================================
+
+For replaced elements (img, video):
+
+object-fit: fill;              /* Stretch to fill (default) */
+object-fit: contain;           /* Fit inside, maintain ratio */
+object-fit: cover;             /* Cover container, maintain ratio */
+object-fit: none;              /* No resizing */
+object-fit: scale-down;        /* none or contain, whichever is smaller */
+
+object-position: center;
+object-position: top left;
+object-position: 50% 50%;
+
+EXAMPLE:
+img {
+    width: 300px;
+    height: 200px;
+    object-fit: cover;
+    object-position: center;
+}
+
+================================================================================
+26. ASPECT RATIO
+================================================================================
+
+aspect-ratio: 16 / 9;
+aspect-ratio: 1 / 1;           /* Square */
+aspect-ratio: 4 / 3;
+aspect-ratio: auto;
+
+.video-container {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+}
+
+================================================================================
+27. SCROLL BEHAVIOR & SCROLL SNAP
+================================================================================
+
+SCROLL BEHAVIOR:
+html {
+    scroll-behavior: smooth;    /* Smooth scrolling */
+}
+
+SCROLL SNAP (Container):
+.container {
+    scroll-snap-type: x mandatory;  /* x, y, both + mandatory/proximity */
+    overflow-x: scroll;
+}
+
+SCROLL SNAP (Items):
+.item {
+    scroll-snap-align: start;   /* start, center, end */
+    scroll-snap-stop: always;   /* normal, always */
+}
+
+SCROLLBAR STYLING:
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Standard (Firefox) */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+}
+
+================================================================================
+28. CONTAINER QUERIES
+================================================================================
+
+DEFINE CONTAINER:
+.card-container {
+    container-type: inline-size;
+    container-name: card;
+}
+
+/* Shorthand */
+.card-container {
+    container: card / inline-size;
+}
+
+QUERY CONTAINER:
+@container card (min-width: 400px) {
+    .card {
+        display: flex;
+    }
+}
+
+@container (min-width: 300px) {
+    .item {
+        font-size: 1.2rem;
+    }
+}
+
+CONTAINER UNITS:
+cqw - 1% of container width
+cqh - 1% of container height
+cqi - 1% of container inline size
+cqb - 1% of container block size
+cqmin - smaller of cqi/cqb
+cqmax - larger of cqi/cqb
+
+================================================================================
+29. CSS LOGICAL PROPERTIES
+================================================================================
+
+Instead of physical (left/right/top/bottom):
+
+MARGIN:
+margin-inline-start: 10px;     /* margin-left in LTR */
+margin-inline-end: 10px;       /* margin-right in LTR */
+margin-block-start: 10px;      /* margin-top */
+margin-block-end: 10px;        /* margin-bottom */
+margin-inline: 10px 20px;      /* start, end */
+margin-block: 10px 20px;       /* start, end */
+
+PADDING:
+padding-inline-start: 10px;
+padding-inline-end: 10px;
+padding-block-start: 10px;
+padding-block-end: 10px;
+
+BORDER:
+border-inline-start: 1px solid black;
+border-inline-end: 1px solid black;
+border-block-start: 1px solid black;
+border-block-end: 1px solid black;
+
+SIZE:
+inline-size: 300px;            /* width */
+block-size: 200px;             /* height */
+min-inline-size: 100px;
+max-inline-size: 500px;
+
+POSITION:
+inset-inline-start: 10px;      /* left in LTR */
+inset-inline-end: 10px;        /* right in LTR */
+inset-block-start: 10px;       /* top */
+inset-block-end: 10px;         /* bottom */
+
+================================================================================
+30. BEST PRACTICES
+================================================================================
+
+1. USE A CSS RESET/NORMALIZE:
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+2. MOBILE-FIRST APPROACH:
+Write base styles for mobile, then add breakpoints for larger screens.
+
+3. USE CSS VARIABLES:
+Define colors, fonts, spacing as variables for consistency.
+
+4. AVOID !important:
+Use specificity properly instead.
+
+5. USE MEANINGFUL CLASS NAMES:
+BEM methodology: .block__element--modifier
+.card__title--highlighted
+
+6. ORGANIZE CSS:
+/* Variables */
+/* Reset */
+/* Typography */
+/* Layout */
+/* Components */
+/* Utilities */
+
+7. MINIMIZE SPECIFICITY:
+Use classes over IDs, avoid deep nesting.
+
+8. USE SHORTHAND PROPERTIES:
+margin: 10px 20px instead of individual sides.
+
+9. PERFORMANCE:
+- Avoid expensive selectors
+- Use will-change sparingly
+- Optimize animations (transform, opacity)
+
+10. ACCESSIBILITY:
+- Ensure sufficient color contrast
+- Don't remove focus outlines without replacement
+- Use relative units (rem, em)
+
+================================================================================
+                              END OF CSS NOTES
+================================================================================

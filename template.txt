@@ -1,0 +1,1515 @@
+================================================================================
+                   PROJECT TEMPLATES & STARTER COMMANDS
+        (Web Dev, Mobile Dev, Desktop Dev - All Popular Frameworks)
+================================================================================
+
+================================================================================
+                         PART 1: WEB DEVELOPMENT
+================================================================================
+
+================================================================================
+1. REACT.JS (Vite - Recommended)
+================================================================================
+
+SETUP:
+npm create vite@latest my-app -- --template react
+cd my-app
+npm install
+npm run dev
+
+WITH TYPESCRIPT:
+npm create vite@latest my-app -- --template react-ts
+
+WITH SWC (Faster compiler):
+npm create vite@latest my-app -- --template react-swc
+npm create vite@latest my-app -- --template react-swc-ts
+
+FOLDER STRUCTURE:
+my-app/
+├── public/
+│   └── vite.svg
+├── src/
+│   ├── assets/
+│   ├── App.jsx
+│   ├── App.css
+│   ├── main.jsx
+│   └── index.css
+├── index.html
+├── package.json
+├── vite.config.js
+└── .gitignore
+
+COMMON DEPENDENCIES:
+npm install react-router-dom          # Routing
+npm install axios                     # HTTP requests
+npm install @tanstack/react-query     # Data fetching
+npm install zustand                   # State management
+npm install react-hook-form           # Forms
+npm install zod                       # Validation
+npm install framer-motion             # Animations
+npm install react-icons               # Icons
+npm install react-hot-toast           # Notifications
+
+STARTER CODE (main.jsx):
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
+import './index.css';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </React.StrictMode>
+);
+
+STARTER CODE (App.jsx):
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+
+function App() {
+    return (
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+        </Routes>
+    );
+}
+
+export default App;
+
+SCRIPTS:
+npm run dev            # Development server (localhost:5173)
+npm run build          # Production build
+npm run preview        # Preview production build
+
+================================================================================
+2. REACT.JS (Create React App - Legacy)
+================================================================================
+
+SETUP:
+npx create-react-app my-app
+cd my-app
+npm start
+
+WITH TYPESCRIPT:
+npx create-react-app my-app --template typescript
+
+NOTE: CRA is no longer recommended by React team.
+      Use Vite or Next.js instead for new projects.
+
+SCRIPTS:
+npm start              # Development server (localhost:3000)
+npm run build          # Production build
+npm test               # Run tests
+npm run eject          # Eject config (irreversible!)
+
+================================================================================
+3. NEXT.JS (Full-Stack React Framework)
+================================================================================
+
+SETUP:
+npx create-next-app@latest my-app
+cd my-app
+npm run dev
+
+INTERACTIVE PROMPTS:
+✔ Would you like to use TypeScript? Yes
+✔ Would you like to use ESLint? Yes
+✔ Would you like to use Tailwind CSS? Yes/No
+✔ Would you like to use `src/` directory? Yes
+✔ Would you like to use App Router? Yes (recommended)
+✔ Would you like to customize the import alias? No
+
+WITH ALL OPTIONS (Non-Interactive):
+npx create-next-app@latest my-app --typescript --eslint --app --src-dir --import-alias "@/*" --use-npm
+
+WITHOUT TAILWIND:
+npx create-next-app@latest my-app --typescript --eslint --app --src-dir --no-tailwind
+
+FOLDER STRUCTURE (App Router):
+my-app/
+├── src/
+│   └── app/
+│       ├── layout.tsx         # Root layout
+│       ├── page.tsx           # Home page (/)
+│       ├── globals.css        # Global styles
+│       ├── about/
+│       │   └── page.tsx       # /about
+│       ├── api/
+│       │   └── hello/
+│       │       └── route.ts   # API route
+│       └── dashboard/
+│           ├── layout.tsx     # Nested layout
+│           └── page.tsx       # /dashboard
+├── public/
+│   └── images/
+├── components/                # Shared components
+├── lib/                       # Utilities
+├── next.config.js
+├── package.json
+└── tsconfig.json
+
+STARTER FILES:
+
+// app/layout.tsx
+export const metadata = {
+    title: 'My App',
+    description: 'Built with Next.js',
+};
+
+export default function RootLayout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
+    return (
+        <html lang="en">
+            <body>{children}</body>
+        </html>
+    );
+}
+
+// app/page.tsx
+export default function Home() {
+    return (
+        <main>
+            <h1>Welcome to Next.js</h1>
+        </main>
+    );
+}
+
+// app/api/hello/route.ts
+import { NextResponse } from 'next/server';
+
+export async function GET() {
+    return NextResponse.json({ message: 'Hello from Next.js!' });
+}
+
+COMMON DEPENDENCIES:
+npm install @supabase/supabase-js     # Supabase client
+npm install prisma @prisma/client     # Prisma ORM
+npm install next-auth                 # Authentication
+npm install zod                       # Validation
+npm install axios                     # HTTP requests
+npm install framer-motion             # Animations
+npm install lucide-react              # Icons
+
+SCRIPTS:
+npm run dev            # Development (localhost:3000)
+npm run build          # Production build
+npm run start          # Start production server
+npm run lint           # Run ESLint
+
+================================================================================
+4. NODE.JS + EXPRESS (Backend API)
+================================================================================
+
+SETUP (FROM SCRATCH):
+mkdir my-api
+cd my-api
+npm init -y
+npm install express dotenv cors
+
+WITH TYPESCRIPT:
+npm init -y
+npm install express dotenv cors
+npm install -D typescript ts-node @types/node @types/express @types/cors nodemon
+npx tsc --init
+
+FOLDER STRUCTURE:
+my-api/
+├── src/
+│   ├── config/
+│   │   └── db.js              # Database connection
+│   ├── controllers/
+│   │   └── userController.js
+│   ├── middleware/
+│   │   ├── auth.js
+│   │   └── errorHandler.js
+│   ├── models/
+│   │   └── User.js
+│   ├── routes/
+│   │   └── userRoutes.js
+│   ├── utils/
+│   │   └── helpers.js
+│   └── server.js              # Entry point
+├── .env
+├── .env.example
+├── .gitignore
+└── package.json
+
+PACKAGE.JSON SCRIPTS:
+{
+    "scripts": {
+        "start": "node src/server.js",
+        "dev": "nodemon src/server.js"
+    }
+}
+
+STARTER CODE (server.js):
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Routes
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'OK', timestamp: new Date() });
+});
+
+// app.use('/api/users', require('./routes/userRoutes'));
+
+// Error Handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Something went wrong!' });
+});
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+
+.ENV TEMPLATE:
+NODE_ENV=development
+PORT=5000
+MONGO_URI=mongodb+srv://user:pass@cluster.mongodb.net/dbname
+JWT_SECRET=your-secret-key
+JWT_EXPIRE=30d
+CORS_ORIGIN=http://localhost:5173
+
+.GITIGNORE:
+node_modules/
+.env
+*.log
+dist/
+
+COMMON DEPENDENCIES:
+npm install mongoose               # MongoDB ODM
+npm install jsonwebtoken           # JWT auth
+npm install bcryptjs               # Password hashing
+npm install express-validator      # Input validation
+npm install multer                 # File uploads
+npm install morgan                 # Request logging
+npm install helmet                 # Security headers
+npm install express-rate-limit     # Rate limiting
+npm install cookie-parser          # Cookie handling
+npm install nodemailer             # Email sending
+npm install -D nodemon             # Auto-restart in dev
+
+================================================================================
+5. EXPRESS + TYPESCRIPT (Modern Backend)
+================================================================================
+
+SETUP:
+mkdir my-api && cd my-api
+npm init -y
+npm install express dotenv cors
+npm install -D typescript ts-node-dev @types/node @types/express @types/cors
+
+# Generate tsconfig.json
+npx tsc --init
+
+TSCONFIG.JSON (Key settings):
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "commonjs",
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "declaration": true
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "dist"]
+}
+
+PACKAGE.JSON:
+{
+    "scripts": {
+        "dev": "ts-node-dev --respawn src/server.ts",
+        "build": "tsc",
+        "start": "node dist/server.js"
+    }
+}
+
+STARTER CODE (src/server.ts):
+import express, { Request, Response, NextFunction } from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+app.use(cors());
+app.use(express.json());
+
+app.get('/api/health', (req: Request, res: Response) => {
+    res.json({ status: 'OK', timestamp: new Date() });
+});
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Internal Server Error' });
+});
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+
+================================================================================
+6. ANGULAR
+================================================================================
+
+INSTALL CLI:
+npm install -g @angular/cli
+
+SETUP:
+ng new my-app
+cd my-app
+ng serve
+
+OPTIONS:
+ng new my-app --routing --style=scss
+ng new my-app --routing --style=css --ssr=false --skip-tests
+
+FOLDER STRUCTURE:
+my-app/
+├── src/
+│   ├── app/
+│   │   ├── app.component.ts
+│   │   ├── app.component.html
+│   │   ├── app.component.css
+│   │   ├── app.component.spec.ts
+│   │   ├── app.config.ts
+│   │   └── app.routes.ts
+│   ├── assets/
+│   ├── index.html
+│   ├── main.ts
+│   └── styles.css
+├── angular.json
+├── package.json
+└── tsconfig.json
+
+GENERATE COMPONENTS:
+ng generate component components/header
+ng generate component pages/home
+ng generate service services/api
+ng generate module shared
+ng generate guard auth
+ng generate pipe capitalize
+ng generate interface models/user
+
+# Shorthand
+ng g c components/header
+ng g s services/api
+
+COMMON DEPENDENCIES:
+npm install @angular/material          # Material UI
+npm install @ngrx/store                # State management
+npm install rxjs                       # Reactive programming
+npm install ngx-toastr                 # Notifications
+
+SCRIPTS:
+ng serve               # Development (localhost:4200)
+ng build               # Production build
+ng test                # Run unit tests
+ng e2e                 # End-to-end tests
+ng lint                # Lint code
+
+================================================================================
+7. VUE.JS 3
+================================================================================
+
+SETUP (Vite):
+npm create vue@latest my-app
+cd my-app
+npm install
+npm run dev
+
+INTERACTIVE PROMPTS:
+✔ Add TypeScript? Yes/No
+✔ Add JSX Support? No
+✔ Add Vue Router? Yes
+✔ Add Pinia for state management? Yes
+✔ Add Vitest for unit testing? No
+✔ Add ESLint? Yes
+✔ Add Prettier? Yes
+
+ALTERNATIVE (Vite directly):
+npm create vite@latest my-app -- --template vue
+npm create vite@latest my-app -- --template vue-ts
+
+FOLDER STRUCTURE:
+my-app/
+├── src/
+│   ├── assets/
+│   ├── components/
+│   │   └── HelloWorld.vue
+│   ├── views/
+│   │   └── HomeView.vue
+│   ├── router/
+│   │   └── index.ts
+│   ├── stores/
+│   │   └── counter.ts
+│   ├── App.vue
+│   └── main.ts
+├── public/
+├── index.html
+├── package.json
+├── vite.config.ts
+└── tsconfig.json
+
+STARTER CODE (App.vue):
+<script setup>
+import { RouterView, RouterLink } from 'vue-router';
+</script>
+
+<template>
+    <header>
+        <nav>
+            <RouterLink to="/">Home</RouterLink>
+            <RouterLink to="/about">About</RouterLink>
+        </nav>
+    </header>
+    <main>
+        <RouterView />
+    </main>
+</template>
+
+<style scoped>
+/* styles */
+</style>
+
+COMMON DEPENDENCIES:
+npm install pinia                      # State management
+npm install vue-router                 # Routing
+npm install axios                      # HTTP requests
+npm install vueuse                     # Utility composables
+
+SCRIPTS:
+npm run dev            # Development (localhost:5173)
+npm run build          # Production build
+npm run preview        # Preview production
+
+================================================================================
+8. NUXT.JS 3 (Vue Full-Stack Framework)
+================================================================================
+
+SETUP:
+npx nuxi init my-app
+cd my-app
+npm install
+npm run dev
+
+FOLDER STRUCTURE:
+my-app/
+├── assets/                # Unprocessed assets
+├── components/            # Auto-imported components
+├── composables/           # Auto-imported composables
+├── layouts/               # Page layouts
+│   └── default.vue
+├── middleware/             # Route middleware
+├── pages/                 # File-based routing
+│   ├── index.vue          # /
+│   ├── about.vue          # /about
+│   └── blog/
+│       └── [id].vue       # /blog/:id
+├── plugins/               # Plugins
+├── public/                # Static files
+├── server/                # Server API routes
+│   ├── api/
+│   │   └── hello.ts       # /api/hello
+│   └── tsconfig.json
+├── app.vue                # Root component
+├── nuxt.config.ts
+└── package.json
+
+STARTER CODE (app.vue):
+<template>
+    <NuxtLayout>
+        <NuxtPage />
+    </NuxtLayout>
+</template>
+
+// server/api/hello.ts
+export default defineEventHandler((event) => {
+    return { message: 'Hello from Nuxt!' };
+});
+
+SCRIPTS:
+npm run dev            # Development (localhost:3000)
+npm run build          # Production build
+npm run preview        # Preview production
+npm run generate       # Static generation
+
+================================================================================
+9. SVELTE / SVELTEKIT
+================================================================================
+
+SVELTE (Component Framework):
+npm create vite@latest my-app -- --template svelte
+npm create vite@latest my-app -- --template svelte-ts
+cd my-app
+npm install
+npm run dev
+
+SVELTEKIT (Full-Stack Framework):
+npx sv create my-app
+cd my-app
+npm install
+npm run dev
+
+FOLDER STRUCTURE (SvelteKit):
+my-app/
+├── src/
+│   ├── lib/
+│   │   └── components/
+│   ├── routes/
+│   │   ├── +layout.svelte     # Root layout
+│   │   ├── +page.svelte       # Home page (/)
+│   │   ├── about/
+│   │   │   └── +page.svelte   # /about
+│   │   └── api/
+│   │       └── hello/
+│   │           └── +server.ts # API route
+│   └── app.html
+├── static/
+├── svelte.config.js
+├── vite.config.ts
+└── package.json
+
+STARTER CODE (+page.svelte):
+<script>
+    let count = 0;
+</script>
+
+<h1>Welcome to SvelteKit</h1>
+<button on:click={() => count++}>
+    Count: {count}
+</button>
+
+<style>
+    h1 { color: #333; }
+</style>
+
+SCRIPTS:
+npm run dev            # Development (localhost:5173)
+npm run build          # Production build
+npm run preview        # Preview production
+
+================================================================================
+10. ASTRO (Content-First Framework)
+================================================================================
+
+SETUP:
+npm create astro@latest my-app
+cd my-app
+npm run dev
+
+OPTIONS DURING SETUP:
+- Template: Blog, Portfolio, Minimal, etc.
+- TypeScript: Strict, Relaxed, or No
+- Install dependencies: Yes
+- Initialize git: Yes
+
+FOLDER STRUCTURE:
+my-app/
+├── src/
+│   ├── components/
+│   ├── layouts/
+│   │   └── Layout.astro
+│   ├── pages/
+│   │   ├── index.astro        # /
+│   │   └── about.astro        # /about
+│   └── styles/
+├── public/
+├── astro.config.mjs
+└── package.json
+
+ADD INTEGRATIONS:
+npx astro add react            # Add React support
+npx astro add vue              # Add Vue support
+npx astro add svelte           # Add Svelte support
+npx astro add tailwind         # Add Tailwind CSS
+
+SCRIPTS:
+npm run dev            # Development (localhost:4321)
+npm run build          # Production build
+npm run preview        # Preview production
+
+================================================================================
+11. REMIX (React Full-Stack)
+================================================================================
+
+SETUP:
+npx create-remix@latest my-app
+cd my-app
+npm run dev
+
+FOLDER STRUCTURE:
+my-app/
+├── app/
+│   ├── routes/
+│   │   ├── _index.tsx         # /
+│   │   ├── about.tsx          # /about
+│   │   └── api.hello.tsx      # /api/hello
+│   ├── root.tsx               # Root layout
+│   └── entry.client.tsx
+├── public/
+├── remix.config.js
+└── package.json
+
+SCRIPTS:
+npm run dev            # Development
+npm run build          # Build
+npm run start          # Start production
+
+================================================================================
+12. GATSBY (Static Site Generator)
+================================================================================
+
+SETUP:
+npm init gatsby my-app
+cd my-app
+npm run develop
+
+ALTERNATIVE:
+npx gatsby new my-app
+cd my-app
+gatsby develop
+
+SCRIPTS:
+npm run develop        # Development (localhost:8000)
+npm run build          # Production build
+npm run serve          # Serve production build
+
+================================================================================
+13. VITE (Vanilla JS / Any Framework)
+================================================================================
+
+ALL TEMPLATES:
+npm create vite@latest my-app -- --template vanilla
+npm create vite@latest my-app -- --template vanilla-ts
+npm create vite@latest my-app -- --template react
+npm create vite@latest my-app -- --template react-ts
+npm create vite@latest my-app -- --template react-swc
+npm create vite@latest my-app -- --template react-swc-ts
+npm create vite@latest my-app -- --template vue
+npm create vite@latest my-app -- --template vue-ts
+npm create vite@latest my-app -- --template svelte
+npm create vite@latest my-app -- --template svelte-ts
+npm create vite@latest my-app -- --template preact
+npm create vite@latest my-app -- --template preact-ts
+npm create vite@latest my-app -- --template lit
+npm create vite@latest my-app -- --template lit-ts
+npm create vite@latest my-app -- --template solid
+npm create vite@latest my-app -- --template solid-ts
+npm create vite@latest my-app -- --template qwik
+npm create vite@latest my-app -- --template qwik-ts
+
+================================================================================
+                      PART 2: MOBILE DEVELOPMENT
+================================================================================
+
+================================================================================
+14. REACT NATIVE (Cross-Platform Mobile)
+================================================================================
+
+OPTION 1 - EXPO (Recommended for Beginners):
+npx create-expo-app my-app
+cd my-app
+npx expo start
+
+WITH TEMPLATE:
+npx create-expo-app my-app --template blank
+npx create-expo-app my-app --template blank-typescript
+npx create-expo-app my-app --template tabs
+npx create-expo-app my-app --template navigation-typescript
+
+FOLDER STRUCTURE (Expo):
+my-app/
+├── app/                       # File-based routing (Expo Router)
+│   ├── (tabs)/
+│   │   ├── _layout.tsx
+│   │   ├── index.tsx          # Home tab
+│   │   └── explore.tsx        # Explore tab
+│   ├── _layout.tsx            # Root layout
+│   └── +not-found.tsx
+├── assets/
+│   ├── fonts/
+│   └── images/
+├── components/
+├── constants/
+├── hooks/
+├── app.json                   # Expo config
+├── package.json
+└── tsconfig.json
+
+OPTION 2 - REACT NATIVE CLI (Bare):
+npx @react-native-community/cli init MyApp
+cd MyApp
+
+# Run on Android
+npx react-native run-android
+
+# Run on iOS (Mac only)
+npx react-native run-ios
+
+STARTER CODE (Expo - app/index.tsx):
+import { View, Text, StyleSheet } from 'react-native';
+
+export default function HomeScreen() {
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>Welcome!</Text>
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+    },
+});
+
+COMMON DEPENDENCIES:
+npx expo install expo-router               # File-based routing
+npx expo install expo-camera               # Camera access
+npx expo install expo-location             # GPS location
+npx expo install expo-notifications        # Push notifications
+npx expo install expo-image-picker         # Image picking
+npx expo install expo-secure-store         # Secure storage
+npx expo install @react-navigation/native  # Navigation
+npx expo install react-native-reanimated   # Animations
+npx expo install expo-linear-gradient      # Gradients
+npm install @tanstack/react-query          # Data fetching
+npm install zustand                        # State management
+npm install nativewind                     # Tailwind for RN
+
+SCRIPTS (Expo):
+npx expo start             # Start dev server
+npx expo start --android   # Open on Android
+npx expo start --ios       # Open on iOS
+npx expo start --web       # Open in browser
+npx expo build:android     # Build Android APK
+npx expo build:ios         # Build iOS IPA
+
+EAS BUILD (Production):
+npm install -g eas-cli
+eas login
+eas build --platform android
+eas build --platform ios
+eas submit                  # Submit to stores
+
+================================================================================
+15. FLUTTER (Cross-Platform - by Google)
+================================================================================
+
+INSTALL:
+# Download Flutter SDK from flutter.dev
+# Add to PATH
+flutter doctor              # Check setup
+
+SETUP:
+flutter create my_app
+cd my_app
+flutter run
+
+WITH SPECIFIC PLATFORM:
+flutter create --platforms=android,ios,web my_app
+flutter create --org com.mycompany my_app
+
+FOLDER STRUCTURE:
+my_app/
+├── android/               # Android-specific
+├── ios/                   # iOS-specific
+├── lib/
+│   ├── main.dart          # Entry point
+│   ├── screens/
+│   ├── widgets/
+│   ├── models/
+│   ├── services/
+│   └── utils/
+├── test/
+├── pubspec.yaml           # Dependencies (like package.json)
+└── analysis_options.yaml
+
+STARTER CODE (lib/main.dart):
+import 'package:flutter/material.dart';
+
+void main() {
+    runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+    const MyApp({super.key});
+
+    @override
+    Widget build(BuildContext context) {
+        return MaterialApp(
+            title: 'My App',
+            theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+                useMaterial3: true,
+            ),
+            home: const HomeScreen(),
+        );
+    }
+}
+
+class HomeScreen extends StatelessWidget {
+    const HomeScreen({super.key});
+
+    @override
+    Widget build(BuildContext context) {
+        return Scaffold(
+            appBar: AppBar(title: const Text('Home')),
+            body: const Center(
+                child: Text('Hello Flutter!'),
+            ),
+        );
+    }
+}
+
+COMMON PACKAGES (pubspec.yaml):
+dependencies:
+    http: ^1.1.0                   # HTTP requests
+    provider: ^6.1.0               # State management
+    go_router: ^13.0.0             # Routing
+    shared_preferences: ^2.2.0     # Local storage
+    sqflite: ^2.3.0                # SQLite database
+    firebase_core: ^2.24.0         # Firebase
+    image_picker: ^1.0.0           # Image picking
+    google_fonts: ^6.1.0           # Google Fonts
+    flutter_riverpod: ^2.4.0       # Advanced state
+
+COMMANDS:
+flutter run                 # Run on connected device
+flutter run -d chrome       # Run on web
+flutter build apk           # Build Android APK
+flutter build ios           # Build iOS
+flutter build web           # Build web
+flutter pub get             # Install dependencies
+flutter pub add http        # Add package
+flutter clean               # Clean build
+flutter test                # Run tests
+
+================================================================================
+16. IONIC (Cross-Platform - Web Technologies)
+================================================================================
+
+INSTALL CLI:
+npm install -g @ionic/cli
+
+SETUP:
+ionic start my-app blank --type=react
+ionic start my-app tabs --type=angular
+ionic start my-app sidemenu --type=vue
+
+TEMPLATES:
+- blank      # Empty project
+- tabs       # Tab-based navigation
+- sidemenu   # Side menu navigation
+- list       # List-based layout
+
+FRAMEWORKS:
+- --type=react
+- --type=angular
+- --type=vue
+
+COMMANDS:
+ionic serve                 # Dev server (localhost:8100)
+ionic build                 # Production build
+ionic cap add android       # Add Android platform
+ionic cap add ios           # Add iOS platform
+ionic cap run android       # Run on Android
+ionic cap run ios           # Run on iOS
+ionic cap sync              # Sync web to native
+
+================================================================================
+17. KOTLIN (Native Android)
+================================================================================
+
+SETUP:
+1. Download Android Studio from developer.android.com
+2. Install Android SDK
+3. New Project → Empty Activity
+4. Language: Kotlin
+5. Minimum SDK: API 24 (Android 7.0)
+
+PROJECT STRUCTURE:
+MyApp/
+├── app/
+│   ├── src/
+│   │   └── main/
+│   │       ├── java/com/example/myapp/
+│   │       │   └── MainActivity.kt
+│   │       ├── res/
+│   │       │   ├── layout/
+│   │       │   │   └── activity_main.xml
+│   │       │   ├── values/
+│   │       │   └── drawable/
+│   │       └── AndroidManifest.xml
+│   └── build.gradle.kts
+├── build.gradle.kts
+└── settings.gradle.kts
+
+STARTER CODE (Jetpack Compose):
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MyAppTheme {
+                Surface {
+                    Greeting("Android")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun Greeting(name: String) {
+    Text(text = "Hello $name!")
+}
+
+BUILD:
+# In Android Studio
+Run → Run 'app'
+
+# Command line
+./gradlew assembleDebug
+./gradlew installDebug
+
+================================================================================
+18. SWIFT / SwiftUI (Native iOS)
+================================================================================
+
+SETUP:
+1. Download Xcode from Mac App Store
+2. Xcode → New Project
+3. iOS → App
+4. Interface: SwiftUI
+5. Language: Swift
+
+PROJECT STRUCTURE:
+MyApp/
+├── MyApp/
+│   ├── MyAppApp.swift         # Entry point
+│   ├── ContentView.swift      # Main view
+│   ├── Models/
+│   ├── Views/
+│   ├── ViewModels/
+│   ├── Services/
+│   └── Assets.xcassets
+├── MyAppTests/
+└── MyApp.xcodeproj
+
+STARTER CODE:
+// MyAppApp.swift
+import SwiftUI
+
+@main
+struct MyAppApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}
+
+// ContentView.swift
+import SwiftUI
+
+struct ContentView: View {
+    var body: some View {
+        VStack {
+            Text("Hello, World!")
+                .font(.title)
+                .padding()
+        }
+    }
+}
+
+BUILD:
+# In Xcode
+Product → Run (Cmd+R)
+Product → Build (Cmd+B)
+
+================================================================================
+                     PART 3: DESKTOP DEVELOPMENT
+================================================================================
+
+================================================================================
+19. ELECTRON (Cross-Platform Desktop - Web Tech)
+================================================================================
+
+SETUP:
+mkdir my-app && cd my-app
+npm init -y
+npm install electron --save-dev
+
+USING ELECTRON FORGE (Recommended):
+npm init electron-app@latest my-app
+cd my-app
+npm start
+
+WITH FRAMEWORK:
+npm init electron-app@latest my-app -- --template=vite
+npm init electron-app@latest my-app -- --template=webpack-typescript
+
+FOLDER STRUCTURE:
+my-app/
+├── src/
+│   ├── main.js                # Main process
+│   ├── preload.js             # Preload script
+│   ├── renderer.js            # Renderer process
+│   └── index.html             # UI
+├── package.json
+└── forge.config.js
+
+STARTER CODE (main.js):
+const { app, BrowserWindow } = require('electron');
+const path = require('path');
+
+function createWindow() {
+    const win = new BrowserWindow({
+        width: 1200,
+        height: 800,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+        },
+    });
+    win.loadFile('src/index.html');
+}
+
+app.whenReady().then(createWindow);
+
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') app.quit();
+});
+
+SCRIPTS:
+npm start              # Development
+npm run make           # Build installer
+npm run package        # Package app
+
+================================================================================
+20. TAURI (Lightweight Desktop - Rust Backend)
+================================================================================
+
+SETUP:
+npm create tauri-app@latest my-app
+cd my-app
+npm install
+npm run tauri dev
+
+FRONTEND OPTIONS:
+- Vanilla
+- Vue
+- React
+- Svelte
+- SvelteKit
+- Next.js
+- Angular
+
+FOLDER STRUCTURE:
+my-app/
+├── src/                   # Frontend (web)
+│   ├── main.ts
+│   └── App.tsx
+├── src-tauri/             # Backend (Rust)
+│   ├── src/
+│   │   └── main.rs
+│   ├── Cargo.toml
+│   └── tauri.conf.json
+├── package.json
+└── index.html
+
+COMMANDS:
+npm run tauri dev          # Development
+npm run tauri build        # Build production
+
+================================================================================
+                     PART 4: DATABASE SETUP
+================================================================================
+
+================================================================================
+21. MONGODB (with Mongoose)
+================================================================================
+
+INSTALL:
+npm install mongoose dotenv
+
+CONNECTION (config/db.js):
+const mongoose = require('mongoose');
+
+const connectDB = async () => {
+    try {
+        const conn = await mongoose.connect(process.env.MONGO_URI);
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+    } catch (error) {
+        console.error(`Error: ${error.message}`);
+        process.exit(1);
+    }
+};
+
+module.exports = connectDB;
+
+MODEL TEMPLATE (models/User.js):
+const mongoose = require('mongoose');
+
+const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: [true, 'Name is required'],
+        trim: true,
+    },
+    email: {
+        type: String,
+        required: [true, 'Email is required'],
+        unique: true,
+        lowercase: true,
+    },
+    password: {
+        type: String,
+        required: [true, 'Password is required'],
+        minlength: 6,
+        select: false,
+    },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user',
+    },
+}, {
+    timestamps: true,
+});
+
+module.exports = mongoose.model('User', userSchema);
+
+================================================================================
+22. POSTGRESQL (with Prisma ORM)
+================================================================================
+
+INSTALL:
+npm install prisma @prisma/client
+npx prisma init
+
+PRISMA SCHEMA (prisma/schema.prisma):
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id        Int      @id @default(autoincrement())
+    email     String   @unique
+    name      String?
+    password  String
+    posts     Post[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Post {
+    id        Int      @id @default(autoincrement())
+    title     String
+    content   String?
+    published Boolean  @default(false)
+    author    User     @relation(fields: [authorId], references: [id])
+    authorId  Int
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+COMMANDS:
+npx prisma migrate dev --name init     # Create migration
+npx prisma generate                    # Generate client
+npx prisma studio                      # Open GUI browser
+npx prisma db push                     # Push schema (no migration)
+npx prisma db seed                     # Run seed script
+
+USAGE:
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
+
+// Create
+const user = await prisma.user.create({
+    data: { email: 'john@email.com', name: 'John' }
+});
+
+// Read
+const users = await prisma.user.findMany();
+const user = await prisma.user.findUnique({ where: { id: 1 } });
+
+// Update
+await prisma.user.update({
+    where: { id: 1 },
+    data: { name: 'Jane' }
+});
+
+// Delete
+await prisma.user.delete({ where: { id: 1 } });
+
+================================================================================
+23. SUPABASE (PostgreSQL + Auth + Storage)
+================================================================================
+
+INSTALL:
+npm install @supabase/supabase-js
+
+SETUP:
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY
+);
+
+// CRUD
+const { data, error } = await supabase.from('users').select('*');
+const { data, error } = await supabase.from('users').insert({ name: 'John' });
+const { data, error } = await supabase.from('users').update({ name: 'Jane' }).eq('id', 1);
+const { data, error } = await supabase.from('users').delete().eq('id', 1);
+
+================================================================================
+24. FIREBASE (Firestore NoSQL)
+================================================================================
+
+INSTALL:
+npm install firebase
+
+SETUP:
+// lib/firebase.js
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+
+const firebaseConfig = {
+    apiKey: "your-api-key",
+    authDomain: "your-app.firebaseapp.com",
+    projectId: "your-project-id",
+    storageBucket: "your-app.appspot.com",
+    messagingSenderId: "123456",
+    appId: "your-app-id"
+};
+
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
+export const auth = getAuth(app);
+
+================================================================================
+                   PART 5: STYLING & UI LIBRARIES
+================================================================================
+
+================================================================================
+25. CSS FRAMEWORKS & UI LIBRARIES
+================================================================================
+
+TAILWIND CSS:
+npm install -D tailwindcss @tailwindcss/vite
+# Follow tailwindcss.com/docs/installation for full setup
+
+BOOTSTRAP:
+npm install bootstrap
+# Import: import 'bootstrap/dist/css/bootstrap.min.css';
+
+SHADCN/UI (React + Tailwind):
+npx shadcn@latest init
+npx shadcn@latest add button
+npx shadcn@latest add card
+npx shadcn@latest add dialog
+
+MATERIAL UI (React):
+npm install @mui/material @emotion/react @emotion/styled
+
+CHAKRA UI (React):
+npm install @chakra-ui/react @emotion/react @emotion/styled framer-motion
+
+MANTINE (React):
+npm install @mantine/core @mantine/hooks
+
+ANT DESIGN (React):
+npm install antd
+
+DAISY UI (Tailwind Components):
+npm install daisyui
+# Add to tailwind.config.js plugins
+
+RADIX UI (React Primitives):
+npm install @radix-ui/react-dialog
+npm install @radix-ui/react-dropdown-menu
+
+HEADLESS UI (React/Vue):
+npm install @headlessui/react
+
+================================================================================
+26. ANIMATION LIBRARIES
+================================================================================
+
+FRAMER MOTION (React):
+npm install framer-motion
+
+GSAP:
+npm install gsap
+
+ANIME.JS:
+npm install animejs
+
+LOTTIE (JSON animations):
+npm install lottie-react      # React
+npm install lottie-web         # Vanilla JS
+
+AOS (Animate On Scroll):
+npm install aos
+
+================================================================================
+                    PART 6: TESTING FRAMEWORKS
+================================================================================
+
+================================================================================
+27. TESTING SETUP
+================================================================================
+
+JEST (Unit Testing):
+npm install -D jest
+npm install -D @testing-library/react @testing-library/jest-dom    # React
+
+VITEST (Vite-based testing):
+npm install -D vitest
+npm install -D @testing-library/react                              # React
+
+CYPRESS (E2E Testing):
+npm install -D cypress
+npx cypress open
+
+PLAYWRIGHT (E2E Testing):
+npm init playwright@latest
+
+================================================================================
+                    PART 7: QUICK REFERENCE
+================================================================================
+
+================================================================================
+28. QUICK START CHEATSHEET
+================================================================================
+
+WHAT TO BUILD          COMMAND
+-------------------------------------------------------------------
+React SPA              npm create vite@latest . -- --template react
+React + TypeScript     npm create vite@latest . -- --template react-ts
+Next.js Full-Stack     npx create-next-app@latest .
+Vue SPA                npm create vite@latest . -- --template vue
+Nuxt Full-Stack        npx nuxi init .
+Svelte SPA             npm create vite@latest . -- --template svelte
+SvelteKit Full-Stack   npx sv create .
+Angular SPA            ng new my-app
+Astro Content Site     npm create astro@latest .
+Remix Full-Stack       npx create-remix@latest .
+Gatsby Static Site     npx gatsby new .
+Express API            npm init -y && npm i express
+React Native App       npx create-expo-app my-app
+Flutter App            flutter create my_app
+Electron Desktop       npm init electron-app@latest .
+Tauri Desktop          npm create tauri-app@latest .
+
+AFTER EVERY SETUP:
+cd my-app
+npm install            # (if not done automatically)
+npm run dev            # Start development server
+
+================================================================================
+29. PACKAGE MANAGER ALTERNATIVES
+================================================================================
+
+NPM (Default):
+npm install            # Install all deps
+npm install package    # Add dependency
+npm install -D package # Add dev dependency
+npm run dev            # Run script
+npm init -y            # Initialize project
+
+YARN:
+yarn                   # Install all deps
+yarn add package       # Add dependency
+yarn add -D package    # Add dev dependency
+yarn dev               # Run script
+yarn init -y           # Initialize project
+
+# Install yarn
+npm install -g yarn
+
+PNPM (Fastest, saves disk space):
+pnpm install           # Install all deps
+pnpm add package       # Add dependency
+pnpm add -D package    # Add dev dependency
+pnpm dev               # Run script
+pnpm init              # Initialize project
+
+# Install pnpm
+npm install -g pnpm
+
+BUN (Fastest JS runtime):
+bun install            # Install all deps
+bun add package        # Add dependency
+bun add -D package     # Add dev dependency
+bun run dev            # Run script
+bun init               # Initialize project
+
+# Install bun (Windows)
+powershell -c "irm bun.sh/install.ps1 | iex"
+
+================================================================================
+30. MONOREPO TOOLS
+================================================================================
+
+TURBOREPO:
+npx create-turbo@latest my-monorepo
+
+NX:
+npx create-nx-workspace@latest my-workspace
+
+FOLDER STRUCTURE (Turborepo):
+my-monorepo/
+├── apps/
+│   ├── web/               # Next.js frontend
+│   └── api/               # Express backend
+├── packages/
+│   ├── ui/                # Shared components
+│   ├── config/            # Shared configs
+│   └── types/             # Shared types
+├── turbo.json
+├── package.json
+└── pnpm-workspace.yaml
+
+================================================================================
+                   END OF TEMPLATE NOTES
+================================================================================

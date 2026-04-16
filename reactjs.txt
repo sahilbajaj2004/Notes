@@ -1,0 +1,3507 @@
+================================================================================
+                          REACT.JS - COMPLETE NOTES
+================================================================================
+
+================================================================================
+1. INTRODUCTION TO REACT
+================================================================================
+
+React is:
+- A JavaScript library for building user interfaces
+- Created by Facebook (Meta) in 2013
+- Component-based architecture
+- Uses Virtual DOM for efficient updates
+- Declarative and efficient
+
+Key Concepts:
+- Components (building blocks)
+- JSX (JavaScript XML)
+- Virtual DOM
+- One-way data flow
+- State and Props
+
+WHY REACT?
+- Reusable components
+- Fast rendering (Virtual DOM)
+- Rich ecosystem
+- Strong community
+- React Native for mobile
+
+================================================================================
+2. SETTING UP REACT
+================================================================================
+
+CREATE REACT APP (CRA):
+npx create-react-app my-"app"
+cd my-app
+npm start
+
+VITE (Faster, recommended):
+npm create vite@latest my-app -- --template react
+cd my-app
+npm install
+npm run dev
+
+PROJECT STRUCTURE:
+my-app/
+├── node_modules/
+├── public/
+│   └── index.html
+├── src/
+│   ├── App.js (or App.jsx)
+│   ├── App.css
+│   ├── index.js
+│   └── index.css
+├── package.json
+└── README.md
+
+CDN (For quick testing):
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+================================================================================
+3. JSX (JavaScript XML)
+================================================================================
+
+JSX allows writing HTML-like syntax in JavaScript.
+
+BASIC JSX:
+const element = <h1>Hello, World!</h1>;
+
+EMBEDDING EXPRESSIONS:
+const name = "John";
+const element = <h1>Hello, {name}!</h1>;
+
+// Any JavaScript expression works
+const element = <p>{2 + 2}</p>;
+const element = <p>{user.firstName}</p>;
+const element = <p>{formatName(user)}</p>;
+
+JSX ATTRIBUTES:
+// Use camelCase for attributes
+<div className="container">           // class → className
+<label htmlFor="name">                // for → htmlFor
+<input tabIndex="1" />
+<img src={user.avatarUrl} alt="Avatar" />
+
+// Inline styles (object with camelCase)
+<div style={{ backgroundColor: 'blue', fontSize: '16px' }}>
+
+JSX RULES:
+1. Must return single parent element
+   // Use fragment to avoid extra div
+   return (
+       <>
+           <h1>Title</h1>
+           <p>Content</p>
+       </>
+   );
+
+2. Close all tags
+   <br />
+   <img src="..." alt="..." />
+
+3. Use camelCase for attributes
+   className, onClick, onChange, htmlFor
+
+
+CONDITIONAL RENDERING:
+// If statement (outside return)
+if (isLoggedIn) {
+    return <Dashboard />;
+}
+return <Login />;
+
+// Ternary operator
+{isLoggedIn ? <Dashboard /> : <Login />}
+
+// Logical AND (show if true)
+{isLoggedIn && <Dashboard />}
+
+// Logical OR (fallback)
+{user || <p>Loading...</p>}
+
+RENDERING LISTS:
+const items = ['Apple', 'Banana', 'Orange'];
+
+{items.map((item, index) => (
+    <li key={index}>{item}</li>
+))}
+
+// Better: Use unique id as key
+{items.map(item => (
+    <li key={item.id}>{item.name}</li>
+))}
+
+COMMENTS IN JSX:
+{/* This is a comment */}
+
+================================================================================
+4. COMPONENTS
+================================================================================
+
+FUNCTIONAL COMPONENTS (Modern, recommended):
+function Welcome(props) {
+    return <h1>Hello, {props.name}</h1>;
+}
+
+// Arrow function
+const Welcome = (props) => {
+    return <h1>Hello, {props.name}</h1>;
+};
+
+// With destructuring
+const Welcome = ({ name, age }) => {
+    return <h1>Hello, {name}! You are {age}.</h1>;
+};
+
+CLASS COMPONENTS (Legacy):
+import React, { Component } from 'react';
+
+class Welcome extends Component {
+    render() {
+        return <h1>Hello, {this.props.name}</h1>;
+    }
+}
+
+USING COMPONENTS:
+// Import
+import Welcome from './Welcome';
+
+// Use like HTML tag
+<Welcome name="John" />
+<Welcome name="Jane" age={25} />
+
+COMPONENT COMPOSITION:
+function App() {
+    return (
+        <div>
+            <Header />
+            <Main>
+                <Sidebar />
+                <Content />
+            </Main>
+            <Footer />
+        </div>
+    );
+}
+
+CHILDREN PROP:
+function Card({ children, title }) {
+    return (
+        <div className="card">
+            <h2>{title}</h2>
+            {children}
+        </div>
+    );
+}
+
+<Card title="Welcome">
+    <p>This is the card content</p>
+</Card>
+
+================================================================================
+5. PROPS
+================================================================================
+
+Props = Properties (read-only data passed to components)
+
+PASSING PROPS:
+<UserCard name="John" age={30} isAdmin={true} />
+<UserCard user={{ name: "John", age: 30 }} />
+<UserCard items={['a', 'b', 'c']} />
+<UserCard onClick={handleClick} />
+
+RECEIVING PROPS:
+// Destructuring (recommended)
+function UserCard({ name, age, isAdmin }) {
+    return (
+        <div>
+            <h2>{name}</h2>
+            <p>Age: {age}</p>
+            {isAdmin && <span>Admin</span>}
+        </div>
+    );
+}
+
+// Using props object
+function UserCard(props) {
+    return <h2>{props.name}</h2>;
+}
+
+DEFAULT PROPS:
+// Method 1: Default parameters
+function Button({ text = "Click me", color = "blue" }) {
+    return <button style={{ color }}>{text}</button>;
+}
+
+// Method 2: defaultProps (legacy)
+Button.defaultProps = {
+    text: "Click me",
+    color: "blue"
+};
+
+PROP TYPES (Type checking):
+import PropTypes from 'prop-types';
+
+function User({ name, age, email }) {
+    return <div>{name}</div>;
+}
+
+User.propTypes = {
+    name: PropTypes.string.isRequired,
+    age: PropTypes.number,
+    email: PropTypes.string,
+    items: PropTypes.arrayOf(PropTypes.string),
+    user: PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string
+    }),
+    onClick: PropTypes.func,
+    children: PropTypes.node,
+    status: PropTypes.oneOf(['active', 'inactive']),
+    data: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+};
+
+SPREADING PROPS:
+const props = { name: "John", age: 30 };
+<UserCard {...props} />
+
+================================================================================
+6. STATE WITH useState
+================================================================================
+
+State = Component's private, mutable data
+
+BASIC useState:
+import { useState } from 'react';
+
+function Counter() {
+    const [count, setCount] = useState(0);
+    
+    return (
+        <div>
+            <p>Count: {count}</p>
+            <button onClick={() => setCount(count + 1)}>
+                Increment
+            </button>
+        </div>
+    );
+}
+
+UPDATING STATE:
+// Direct value
+setCount(5);
+
+// Based on previous state (recommended for updates)
+setCount(prevCount => prevCount + 1);
+
+// Object state
+const [user, setUser] = useState({ name: '', age: 0 });
+setUser({ ...user, name: 'John' });      // Spread to keep other properties
+setUser(prev => ({ ...prev, name: 'John' }));
+
+// Array state
+const [items, setItems] = useState([]);
+setItems([...items, newItem]);           // Add item
+setItems(items.filter(item => item.id !== id));  // Remove item
+setItems(items.map(item => 
+    item.id === id ? { ...item, name: 'New' } : item
+));  // Update item
+
+MULTIPLE STATE VARIABLES:
+const [name, setName] = useState('');
+const [age, setAge] = useState(0);
+const [isLoading, setIsLoading] = useState(false);
+
+STATE RULES:
+1. Only call hooks at the top level
+2. Only call hooks in React functions
+3. State updates are asynchronous
+4. State updates trigger re-render
+
+LAZY INITIALIZATION:
+// For expensive initial values
+const [data, setData] = useState(() => {
+    return expensiveComputation();
+});
+
+================================================================================
+7. HOOKS OVERVIEW
+================================================================================
+
+Hooks let you use state and other React features in functional components.
+
+BUILT-IN HOOKS:
+
+State Hooks:
+- useState          - Add state to component
+- useReducer        - Complex state logic
+
+Effect Hooks:
+- useEffect         - Side effects
+- useLayoutEffect   - Synchronous effects
+
+Context Hooks:
+- useContext        - Access context value
+
+Ref Hooks:
+- useRef            - Mutable reference
+- useImperativeHandle - Customize ref
+
+Performance Hooks:
+- useMemo           - Memoize value
+- useCallback       - Memoize function
+
+Other Hooks:
+- useId             - Generate unique IDs
+- useTransition     - Non-blocking state updates
+- useDeferredValue  - Defer updating value
+- useSyncExternalStore - Subscribe to external store
+
+RULES OF HOOKS:
+1. Only call at top level (not in loops, conditions, nested functions)
+2. Only call in React function components or custom hooks
+3. Start custom hook names with "use"
+
+================================================================================
+8. useEffect
+================================================================================
+
+useEffect handles side effects (data fetching, subscriptions, DOM changes).
+
+BASIC SYNTAX:
+import { useEffect } from 'react';
+
+useEffect(() => {
+    // Side effect code
+    console.log('Effect ran');
+    
+    return () => {
+        // Cleanup function (optional)
+        console.log('Cleanup');
+    };
+}, [dependencies]);
+
+DEPENDENCY ARRAY:
+
+// Runs after every render
+useEffect(() => {
+    console.log('Runs every render');
+});
+
+// Runs only on mount
+useEffect(() => {
+    console.log('Runs once on mount');
+}, []);
+
+// Runs when dependencies change
+useEffect(() => {
+    console.log('Count changed:', count);
+}, [count]);
+
+// Multiple dependencies
+useEffect(() => {
+    console.log('Name or age changed');
+}, [name, age]);
+
+DATA FETCHING:
+useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const response = await fetch('/api/data');
+            const data = await response.json();
+            setData(data);
+        } catch (error) {
+            setError(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+    fetchData();
+}, []);
+
+CLEANUP (subscriptions, timers):
+useEffect(() => {
+    const subscription = api.subscribe(data => {
+        setData(data);
+    });
+    
+    return () => {
+        subscription.unsubscribe();  // Cleanup
+    };
+}, []);
+
+useEffect(() => {
+    const timer = setInterval(() => {
+        setCount(c => c + 1);
+    }, 1000);
+    
+    return () => clearInterval(timer);  // Cleanup
+}, []);
+
+DOCUMENT TITLE:
+useEffect(() => {
+    document.title = `Count: ${count}`;
+}, [count]);
+
+EVENT LISTENERS:
+useEffect(() => {
+    const handleResize = () => {
+        setWidth(window.innerWidth);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+        window.removeEventListener('resize', handleResize);
+    };
+}, []);
+
+================================================================================
+9. useRef
+================================================================================
+
+useRef creates a mutable reference that persists across renders.
+
+ACCESSING DOM ELEMENTS:
+import { useRef } from 'react';
+
+function TextInput() {
+    const inputRef = useRef(null);
+    
+    const focusInput = () => {
+        inputRef.current.focus();
+    };
+    
+    return (
+        <div>
+            <input ref={inputRef} type="text" />
+            <button onClick={focusInput}>Focus</button>
+        </div>
+    );
+}
+
+STORING MUTABLE VALUES (doesn't trigger re-render):
+function Timer() {
+    const countRef = useRef(0);
+    const intervalRef = useRef(null);
+    
+    const startTimer = () => {
+        intervalRef.current = setInterval(() => {
+            countRef.current += 1;
+            console.log(countRef.current);
+        }, 1000);
+    };
+    
+    const stopTimer = () => {
+        clearInterval(intervalRef.current);
+    };
+    
+    return (
+        <div>
+            <button onClick={startTimer}>Start</button>
+            <button onClick={stopTimer}>Stop</button>
+        </div>
+    );
+}
+
+PREVIOUS VALUE:
+function Counter() {
+    const [count, setCount] = useState(0);
+    const prevCountRef = useRef();
+    
+    useEffect(() => {
+        prevCountRef.current = count;
+    });
+    
+    return (
+        <div>
+            <p>Current: {count}, Previous: {prevCountRef.current}</p>
+        </div>
+    );
+}
+
+CALLBACK REF:
+const setRef = useCallback(node => {
+    if (node !== null) {
+        // Do something with node
+    }
+}, []);
+
+<div ref={setRef}>...</div>
+
+================================================================================
+10. useContext
+================================================================================
+
+useContext provides a way to pass data through component tree without props.
+
+CREATE CONTEXT:
+import { createContext, useContext, useState } from 'react';
+
+// Create context with default value
+const ThemeContext = createContext('light');
+
+PROVIDE CONTEXT:
+function App() {
+    const [theme, setTheme] = useState('light');
+    
+    return (
+        <ThemeContext.Provider value={{ theme, setTheme }}>
+            <Header />
+            <Main />
+            <Footer />
+        </ThemeContext.Provider>
+    );
+}
+
+CONSUME CONTEXT:
+function ThemedButton() {
+    const { theme, setTheme } = useContext(ThemeContext);
+    
+    return (
+        <button 
+            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+            className={theme}
+        >
+            Toggle Theme
+        </button>
+    );
+}
+
+CONTEXT WITH CUSTOM HOOK:
+// ThemeContext.js
+const ThemeContext = createContext();
+
+export function ThemeProvider({ children }) {
+    const [theme, setTheme] = useState('light');
+    
+    const toggleTheme = () => {
+        setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    };
+    
+    return (
+        <ThemeContext.Provider value={{ theme, toggleTheme }}>
+            {children}
+        </ThemeContext.Provider>
+    );
+}
+
+export function useTheme() {
+    const context = useContext(ThemeContext);
+    if (!context) {
+        throw new Error('useTheme must be used within ThemeProvider');
+    }
+    return context;
+}
+
+// Usage
+import { ThemeProvider, useTheme } from './ThemeContext';
+
+function App() {
+    return (
+        <ThemeProvider>
+            <ThemedComponent />
+        </ThemeProvider>
+    );
+}
+
+function ThemedComponent() {
+    const { theme, toggleTheme } = useTheme();
+    return <button onClick={toggleTheme}>{theme}</button>;
+}
+
+================================================================================
+11. useReducer
+================================================================================
+
+useReducer is an alternative to useState for complex state logic.
+
+BASIC SYNTAX:
+import { useReducer } from 'react';
+
+// Reducer function
+function reducer(state, action) {
+    switch (action.type) {
+        case 'increment':
+            return { count: state.count + 1 };
+        case 'decrement':
+            return { count: state.count - 1 };
+        case 'reset':
+            return { count: 0 };
+        case 'set':
+            return { count: action.payload };
+        default:
+            throw new Error('Unknown action');
+    }
+}
+
+// Component
+function Counter() {
+    const [state, dispatch] = useReducer(reducer, { count: 0 });
+    
+    return (
+        <div>
+            <p>Count: {state.count}</p>
+            <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+            <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+            <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
+            <button onClick={() => dispatch({ type: 'set', payload: 10 })}>
+                Set to 10
+            </button>
+        </div>
+    );
+}
+
+LAZY INITIALIZATION:
+function init(initialCount) {
+    return { count: initialCount };
+}
+
+const [state, dispatch] = useReducer(reducer, initialArg, init);
+
+COMPLEX STATE EXAMPLE:
+const initialState = {
+    items: [],
+    loading: false,
+    error: null
+};
+
+function reducer(state, action) {
+    switch (action.type) {
+        case 'FETCH_START':
+            return { ...state, loading: true, error: null };
+        case 'FETCH_SUCCESS':
+            return { ...state, loading: false, items: action.payload };
+        case 'FETCH_ERROR':
+            return { ...state, loading: false, error: action.payload };
+        case 'ADD_ITEM':
+            return { ...state, items: [...state.items, action.payload] };
+        case 'REMOVE_ITEM':
+            return { 
+                ...state, 
+                items: state.items.filter(item => item.id !== action.payload) 
+            };
+        default:
+            return state;
+    }
+}
+
+================================================================================
+12. useMemo & useCallback
+================================================================================
+
+useMemo memoizes computed values.
+useCallback memoizes functions.
+
+useMemo:
+import { useMemo } from 'react';
+
+function ExpensiveComponent({ items, filter }) {
+    const filteredItems = useMemo(() => {
+        console.log('Filtering...');
+        return items.filter(item => item.includes(filter));
+    }, [items, filter]);  // Only recalculate when items or filter change
+    
+    return (
+        <ul>
+            {filteredItems.map(item => <li key={item}>{item}</li>)}
+        </ul>
+    );
+}
+
+useCallback:
+import { useCallback } from 'react';
+
+function Parent() {
+    const [count, setCount] = useState(0);
+    
+    // Without useCallback, handleClick is recreated every render
+    const handleClick = useCallback(() => {
+        setCount(c => c + 1);
+    }, []);  // Empty deps = same function reference
+    
+    return <Child onClick={handleClick} />;
+}
+
+// Useful when passing to memoized child
+const Child = React.memo(({ onClick }) => {
+    console.log('Child rendered');
+    return <button onClick={onClick}>Click</button>;
+});
+
+WHEN TO USE:
+- useMemo: Expensive calculations, referential equality for objects/arrays
+- useCallback: Passing callbacks to optimized child components
+- Don't overuse - adds complexity, premature optimization
+
+================================================================================
+13. CUSTOM HOOKS
+================================================================================
+
+Custom hooks extract reusable logic from components.
+
+NAMING: Must start with "use"
+
+EXAMPLE - useLocalStorage:
+function useLocalStorage(key, initialValue) {
+    const [value, setValue] = useState(() => {
+        const stored = localStorage.getItem(key);
+        return stored ? JSON.parse(stored) : initialValue;
+    });
+    
+    useEffect(() => {
+        localStorage.setItem(key, JSON.stringify(value));
+    }, [key, value]);
+    
+    return [value, setValue];
+}
+
+// Usage
+const [name, setName] = useLocalStorage('name', '');
+
+EXAMPLE - useFetch:
+function useFetch(url) {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Failed to fetch');
+                const json = await response.json();
+                setData(json);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+        fetchData();
+    }, [url]);
+    
+    return { data, loading, error };
+}
+
+// Usage
+const { data, loading, error } = useFetch('/api/users');
+
+EXAMPLE - useToggle:
+function useToggle(initialValue = false) {
+    const [value, setValue] = useState(initialValue);
+    
+    const toggle = useCallback(() => {
+        setValue(v => !v);
+    }, []);
+    
+    return [value, toggle];
+}
+
+// Usage
+const [isOpen, toggleOpen] = useToggle();
+
+EXAMPLE - useWindowSize:
+function useWindowSize() {
+    const [size, setSize] = useState({
+        width: window.innerWidth,
+        height: window.innerHeight
+    });
+    
+    useEffect(() => {
+        const handleResize = () => {
+            setSize({
+                width: window.innerWidth,
+                height: window.innerHeight
+            });
+        };
+        
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    
+    return size;
+}
+
+EXAMPLE - useDebounce:
+function useDebounce(value, delay) {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+    
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedValue(value);
+        }, delay);
+        
+        return () => clearTimeout(timer);
+    }, [value, delay]);
+    
+    return debouncedValue;
+}
+
+// Usage
+const debouncedSearch = useDebounce(searchTerm, 500);
+
+================================================================================
+14. EVENT HANDLING
+================================================================================
+
+BASIC EVENTS:
+function Button() {
+    const handleClick = () => {
+        console.log('Clicked!');
+    };
+    
+    return <button onClick={handleClick}>Click Me</button>;
+}
+
+// Inline (avoid for complex logic)
+<button onClick={() => console.log('Clicked!')}>Click</button>
+
+EVENT OBJECT:
+function Input() {
+    const handleChange = (event) => {
+        console.log(event.target.value);
+    };
+    
+    const handleSubmit = (event) => {
+        event.preventDefault();  // Prevent form submission
+        // Handle form data
+    };
+    
+    return (
+        <form onSubmit={handleSubmit}>
+            <input onChange={handleChange} />
+            <button type="submit">Submit</button>
+        </form>
+    );
+}
+
+PASSING ARGUMENTS:
+function ItemList() {
+    const handleClick = (id, event) => {
+        console.log('Clicked item:', id);
+    };
+    
+    return (
+        <ul>
+            {items.map(item => (
+                <li key={item.id} onClick={(e) => handleClick(item.id, e)}>
+                    {item.name}
+                </li>
+            ))}
+        </ul>
+    );
+}
+
+COMMON EVENTS:
+onClick          - Click
+onDoubleClick    - Double click
+onChange         - Input change
+onSubmit         - Form submit
+onFocus          - Focus
+onBlur           - Lose focus
+onKeyDown        - Key pressed
+onKeyUp          - Key released
+onMouseEnter     - Mouse enter
+onMouseLeave     - Mouse leave
+onMouseMove      - Mouse move
+onScroll         - Scroll
+onDrag           - Drag
+onDrop           - Drop
+
+KEYBOARD EVENTS:
+const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+        // Submit
+    }
+    if (event.key === 'Escape') {
+        // Close
+    }
+    if (event.ctrlKey && event.key === 's') {
+        event.preventDefault();
+        // Save
+    }
+};
+
+================================================================================
+15. FORMS
+================================================================================
+
+CONTROLLED COMPONENTS:
+function Form() {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log({ name, email });
+    };
+    
+    return (
+        <form onSubmit={handleSubmit}>
+            <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Name"
+            />
+            <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+            />
+            <button type="submit">Submit</button>
+        </form>
+    );
+}
+
+SINGLE HANDLER FOR MULTIPLE INPUTS:
+function Form() {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        message: ''
+    });
+    
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+    
+    return (
+        <form>
+            <input name="name" value={formData.name} onChange={handleChange} />
+            <input name="email" value={formData.email} onChange={handleChange} />
+            <textarea name="message" value={formData.message} onChange={handleChange} />
+        </form>
+    );
+}
+
+CHECKBOX:
+const [isChecked, setIsChecked] = useState(false);
+<input
+    type="checkbox"
+    checked={isChecked}
+    onChange={(e) => setIsChecked(e.target.checked)}
+/>
+
+RADIO BUTTONS:
+const [gender, setGender] = useState('');
+<input
+    type="radio"
+    name="gender"
+    value="male"
+    checked={gender === 'male'}
+    onChange={(e) => setGender(e.target.value)}
+/> Male
+<input
+    type="radio"
+    name="gender"
+    value="female"
+    checked={gender === 'female'}
+    onChange={(e) => setGender(e.target.value)}
+/> Female
+
+SELECT:
+const [country, setCountry] = useState('');
+<select value={country} onChange={(e) => setCountry(e.target.value)}>
+    <option value="">Select Country</option>
+    <option value="us">United States</option>
+    <option value="uk">United Kingdom</option>
+</select>
+
+UNCONTROLLED COMPONENTS (useRef):
+function Form() {
+    const inputRef = useRef();
+    
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(inputRef.current.value);
+    };
+    
+    return (
+        <form onSubmit={handleSubmit}>
+            <input ref={inputRef} defaultValue="initial" />
+            <button type="submit">Submit</button>
+        </form>
+    );
+}
+
+FORM VALIDATION:
+const [errors, setErrors] = useState({});
+
+const validate = () => {
+    const newErrors = {};
+    if (!formData.name) newErrors.name = 'Name is required';
+    if (!formData.email) newErrors.email = 'Email is required';
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+        newErrors.email = 'Email is invalid';
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+};
+
+const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate()) {
+        // Submit form
+    }
+};
+
+================================================================================
+16. CONDITIONAL RENDERING
+================================================================================
+
+IF STATEMENT:
+function Greeting({ isLoggedIn }) {
+    if (isLoggedIn) {
+        return <UserGreeting />;
+    }
+    return <GuestGreeting />;
+}
+
+TERNARY OPERATOR:
+{isLoggedIn ? <LogoutButton /> : <LoginButton />}
+
+LOGICAL && (Short-circuit):
+{isLoggedIn && <Dashboard />}
+{messages.length > 0 && <MessageList messages={messages} />}
+
+LOGICAL || (Fallback):
+{user || <p>Loading...</p>}
+
+NULLISH COALESCING:
+{user?.name ?? 'Anonymous'}
+
+SWITCH STATEMENT:
+function StatusIcon({ status }) {
+    switch (status) {
+        case 'success':
+            return <SuccessIcon />;
+        case 'error':
+            return <ErrorIcon />;
+        case 'loading':
+            return <LoadingIcon />;
+        default:
+            return null;
+    }
+}
+
+OBJECT LOOKUP:
+const icons = {
+    success: <SuccessIcon />,
+    error: <ErrorIcon />,
+    loading: <LoadingIcon />
+};
+
+function StatusIcon({ status }) {
+    return icons[status] || null;
+}
+
+EARLY RETURN:
+function UserProfile({ user }) {
+    if (!user) return <Loading />;
+    if (user.error) return <Error message={user.error} />;
+    return <Profile user={user} />;
+}
+
+================================================================================
+17. LISTS & KEYS
+================================================================================
+
+RENDERING LISTS:
+function TodoList({ todos }) {
+    return (
+        <ul>
+            {todos.map(todo => (
+                <li key={todo.id}>
+                    {todo.text}
+                </li>
+            ))}
+        </ul>
+    );
+}
+
+KEY RULES:
+1. Keys must be unique among siblings
+2. Keys should be stable (not random)
+3. Don't use index as key if list can change
+4. Keys are not passed as props
+
+GOOD KEYS:
+- Database IDs: key={item.id}
+- Unique strings: key={item.email}
+- UUID: key={generateUUID()}
+
+BAD KEYS (avoid if list changes):
+- Array index: key={index}
+- Random: key={Math.random()}
+
+EXTRACTING COMPONENTS:
+// Instead of inline JSX
+{todos.map(todo => (
+    <TodoItem key={todo.id} todo={todo} />
+))}
+
+function TodoItem({ todo }) {
+    return <li>{todo.text}</li>;
+}
+
+================================================================================
+18. STYLING IN REACT
+================================================================================
+
+INLINE STYLES:
+const styles = {
+    container: {
+        backgroundColor: 'blue',
+        padding: '20px',
+        borderRadius: '5px'
+    }
+};
+
+<div style={styles.container}>Content</div>
+<div style={{ color: 'red', fontSize: '16px' }}>Text</div>
+
+CSS CLASSES:
+import './App.css';
+
+<div className="container">Content</div>
+<div className={`btn ${isActive ? 'active' : ''}`}>Button</div>
+
+// Multiple classes
+<div className={['btn', 'primary', isDisabled && 'disabled'].filter(Boolean).join(' ')}>
+
+CSS MODULES:
+// Button.module.css
+.button { background: blue; }
+.primary { color: white; }
+
+// Button.jsx
+import styles from './Button.module.css';
+<button className={styles.button}>Click</button>
+<button className={`${styles.button} ${styles.primary}`}>Primary</button>
+
+STYLED-COMPONENTS:
+npm install styled-components
+
+import styled from 'styled-components';
+
+const Button = styled.button`
+    background: ${props => props.primary ? 'blue' : 'white'};
+    color: ${props => props.primary ? 'white' : 'blue'};
+    padding: 10px 20px;
+    border: 2px solid blue;
+    border-radius: 5px;
+    
+    &:hover {
+        opacity: 0.8;
+    }
+`;
+
+<Button>Normal</Button>
+<Button primary>Primary</Button>
+
+TAILWIND CSS:
+npm install tailwindcss
+
+<button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+    Click Me
+</button>
+
+================================================================================
+19. COMPONENT LIFECYCLE (Class Components)
+================================================================================
+
+MOUNTING:
+constructor(props)           - Initialize state
+static getDerivedStateFromProps(props, state)
+render()                     - Return JSX
+componentDidMount()          - After first render (fetch data, subscriptions)
+
+UPDATING:
+static getDerivedStateFromProps(props, state)
+shouldComponentUpdate(nextProps, nextState)  - Performance optimization
+render()
+getSnapshotBeforeUpdate(prevProps, prevState)
+componentDidUpdate(prevProps, prevState, snapshot)  - After update
+
+UNMOUNTING:
+componentWillUnmount()       - Cleanup (timers, subscriptions)
+
+ERROR HANDLING:
+static getDerivedStateFromError(error)
+componentDidCatch(error, info)
+
+FUNCTIONAL EQUIVALENT WITH HOOKS:
+// componentDidMount
+useEffect(() => {
+    // Code runs after mount
+}, []);
+
+// componentDidUpdate (for specific prop/state)
+useEffect(() => {
+    // Code runs when count changes
+}, [count]);
+
+// componentWillUnmount
+useEffect(() => {
+    return () => {
+        // Cleanup code
+    };
+}, []);
+
+================================================================================
+20. ERROR BOUNDARIES
+================================================================================
+
+Error boundaries catch JavaScript errors in child components.
+
+CLASS COMPONENT (required):
+class ErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false };
+    }
+    
+    static getDerivedStateFromError(error) {
+        return { hasError: true };
+    }
+    
+    componentDidCatch(error, errorInfo) {
+        console.error('Error:', error, errorInfo);
+        // Log to error reporting service
+    }
+    
+    render() {
+        if (this.state.hasError) {
+            return <h1>Something went wrong.</h1>;
+        }
+        return this.props.children;
+    }
+}
+
+// Usage
+<ErrorBoundary>
+    <MyComponent />
+</ErrorBoundary>
+
+REACT-ERROR-BOUNDARY PACKAGE:
+npm install react-error-boundary
+
+import { ErrorBoundary } from 'react-error-boundary';
+
+function ErrorFallback({ error, resetErrorBoundary }) {
+    return (
+        <div>
+            <p>Something went wrong: {error.message}</p>
+            <button onClick={resetErrorBoundary}>Try again</button>
+        </div>
+    );
+}
+
+<ErrorBoundary
+    FallbackComponent={ErrorFallback}
+    onReset={() => {
+        // Reset state
+    }}
+>
+    <MyComponent />
+</ErrorBoundary>
+
+================================================================================
+21. REACT ROUTER
+================================================================================
+
+npm install react-router-dom
+
+BASIC SETUP:
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+
+function App() {
+    return (
+        <BrowserRouter>
+            <nav>
+                <Link to="/">Home</Link>
+                <Link to="/about">About</Link>
+                <Link to="/users">Users</Link>
+            </nav>
+            
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/users" element={<Users />} />
+                <Route path="/users/:userId" element={<UserProfile />} />
+                <Route path="*" element={<NotFound />} />
+            </Routes>
+        </BrowserRouter>
+    );
+}
+
+NAVIGATION:
+import { useNavigate, Link, NavLink } from 'react-router-dom';
+
+// Link
+<Link to="/about">About</Link>
+<Link to="/users/123">User 123</Link>
+
+// NavLink (for active styling)
+<NavLink to="/about" className={({ isActive }) => isActive ? 'active' : ''}>
+    About
+</NavLink>
+
+// Programmatic navigation
+function Component() {
+    const navigate = useNavigate();
+    
+    const handleClick = () => {
+        navigate('/about');
+        navigate(-1);           // Go back
+        navigate('/login', { replace: true });  // Replace history
+    };
+}
+
+URL PARAMETERS:
+import { useParams } from 'react-router-dom';
+
+function UserProfile() {
+    const { userId } = useParams();
+    return <div>User ID: {userId}</div>;
+}
+
+// Route: <Route path="/users/:userId" element={<UserProfile />} />
+
+QUERY PARAMETERS:
+import { useSearchParams } from 'react-router-dom';
+
+function SearchPage() {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const query = searchParams.get('q');
+    
+    return (
+        <div>
+            <input
+                value={query || ''}
+                onChange={(e) => setSearchParams({ q: e.target.value })}
+            />
+        </div>
+    );
+}
+
+NESTED ROUTES:
+<Route path="/dashboard" element={<Dashboard />}>
+    <Route index element={<DashboardHome />} />
+    <Route path="settings" element={<Settings />} />
+    <Route path="profile" element={<Profile />} />
+</Route>
+
+// Dashboard.jsx
+import { Outlet } from 'react-router-dom';
+
+function Dashboard() {
+    return (
+        <div>
+            <h1>Dashboard</h1>
+            <Outlet />  {/* Renders nested route */}
+        </div>
+    );
+}
+
+PROTECTED ROUTES:
+function ProtectedRoute({ children }) {
+    const { user } = useAuth();
+    
+    if (!user) {
+        return <Navigate to="/login" replace />;
+    }
+    
+    return children;
+}
+
+<Route 
+    path="/dashboard" 
+    element={
+        <ProtectedRoute>
+            <Dashboard />
+        </ProtectedRoute>
+    } 
+/>
+
+================================================================================
+22. STATE MANAGEMENT
+================================================================================
+
+LIFTING STATE UP:
+// When sibling components need to share state,
+// lift state to common parent
+
+function Parent() {
+    const [count, setCount] = useState(0);
+    
+    return (
+        <div>
+            <ChildA count={count} />
+            <ChildB setCount={setCount} />
+        </div>
+    );
+}
+
+CONTEXT API:
+// For global state without prop drilling
+// See useContext section above
+
+REDUX TOOLKIT:
+npm install @reduxjs/toolkit react-redux
+
+// store.js
+import { configureStore, createSlice } from '@reduxjs/toolkit';
+
+const counterSlice = createSlice({
+    name: 'counter',
+    initialState: { value: 0 },
+    reducers: {
+        increment: state => { state.value += 1; },
+        decrement: state => { state.value -= 1; },
+        incrementByAmount: (state, action) => {
+            state.value += action.payload;
+        }
+    }
+});
+
+export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+
+export const store = configureStore({
+    reducer: {
+        counter: counterSlice.reducer
+    }
+});
+
+// main.jsx
+import { Provider } from 'react-redux';
+import { store } from './store';
+
+<Provider store={store}>
+    <App />
+</Provider>
+
+// Component.jsx
+import { useSelector, useDispatch } from 'react-redux';
+import { increment, decrement } from './store';
+
+function Counter() {
+    const count = useSelector(state => state.counter.value);
+    const dispatch = useDispatch();
+    
+    return (
+        <div>
+            <p>{count}</p>
+            <button onClick={() => dispatch(increment())}>+</button>
+            <button onClick={() => dispatch(decrement())}>-</button>
+        </div>
+    );
+}
+
+ZUSTAND (Simpler alternative):
+npm install zustand
+
+import { create } from 'zustand';
+
+const useStore = create(set => ({
+    count: 0,
+    increment: () => set(state => ({ count: state.count + 1 })),
+    decrement: () => set(state => ({ count: state.count - 1 }))
+}));
+
+function Counter() {
+    const { count, increment, decrement } = useStore();
+    return (
+        <div>
+            <p>{count}</p>
+            <button onClick={increment}>+</button>
+            <button onClick={decrement}>-</button>
+        </div>
+    );
+}
+
+================================================================================
+23. DATA FETCHING
+================================================================================
+
+FETCH WITH useEffect:
+function Users() {
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
+    useEffect(() => {
+        fetch('/api/users')
+            .then(res => {
+                if (!res.ok) throw new Error('Failed to fetch');
+                return res.json();
+            })
+            .then(data => setUsers(data))
+            .catch(err => setError(err.message))
+            .finally(() => setLoading(false));
+    }, []);
+    
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
+    return <ul>{users.map(u => <li key={u.id}>{u.name}</li>)}</ul>;
+}
+
+REACT QUERY (TanStack Query):
+npm install @tanstack/react-query
+
+// main.jsx
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
+
+<QueryClientProvider client={queryClient}>
+    <App />
+</QueryClientProvider>
+
+// Component.jsx
+import { useQuery, useMutation } from '@tanstack/react-query';
+
+function Users() {
+    const { data, isLoading, error } = useQuery({
+        queryKey: ['users'],
+        queryFn: () => fetch('/api/users').then(res => res.json())
+    });
+    
+    if (isLoading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error.message}</p>;
+    return <ul>{data.map(u => <li key={u.id}>{u.name}</li>)}</ul>;
+}
+
+// Mutation
+function AddUser() {
+    const mutation = useMutation({
+        mutationFn: (newUser) => 
+            fetch('/api/users', {
+                method: 'POST',
+                body: JSON.stringify(newUser)
+            }).then(res => res.json()),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['users'] });
+        }
+    });
+    
+    return (
+        <button onClick={() => mutation.mutate({ name: 'New User' })}>
+            Add User
+        </button>
+    );
+}
+
+SWR:
+npm install swr
+
+import useSWR from 'swr';
+
+const fetcher = url => fetch(url).then(res => res.json());
+
+function Users() {
+    const { data, error, isLoading } = useSWR('/api/users', fetcher);
+    
+    if (isLoading) return <p>Loading...</p>;
+    if (error) return <p>Error</p>;
+    return <ul>{data.map(u => <li key={u.id}>{u.name}</li>)}</ul>;
+}
+
+================================================================================
+24. PERFORMANCE OPTIMIZATION
+================================================================================
+
+React.memo (Prevent re-renders):
+const MyComponent = React.memo(function MyComponent({ name }) {
+    console.log('Rendered');
+    return <div>{name}</div>;
+});
+
+// Only re-renders when props change
+
+// Custom comparison
+const MyComponent = React.memo(Component, (prevProps, nextProps) => {
+    return prevProps.id === nextProps.id;  // Return true to skip render
+});
+
+useMemo (Memoize values):
+const expensiveValue = useMemo(() => {
+    return computeExpensiveValue(a, b);
+}, [a, b]);
+
+useCallback (Memoize functions):
+const handleClick = useCallback(() => {
+    doSomething(a, b);
+}, [a, b]);
+
+LAZY LOADING:
+import { lazy, Suspense } from 'react';
+
+const LazyComponent = lazy(() => import('./LazyComponent'));
+
+function App() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <LazyComponent />
+        </Suspense>
+    );
+}
+
+// Route-based code splitting
+const Dashboard = lazy(() => import('./Dashboard'));
+
+<Route 
+    path="/dashboard" 
+    element={
+        <Suspense fallback={<Loading />}>
+            <Dashboard />
+        </Suspense>
+    } 
+/>
+
+VIRTUALIZATION (for long lists):
+npm install @tanstack/react-virtual
+
+import { useVirtualizer } from '@tanstack/react-virtual';
+
+function VirtualList({ items }) {
+    const parentRef = useRef(null);
+    
+    const virtualizer = useVirtualizer({
+        count: items.length,
+        getScrollElement: () => parentRef.current,
+        estimateSize: () => 35
+    });
+    
+    return (
+        <div ref={parentRef} style={{ height: '400px', overflow: 'auto' }}>
+            <div style={{ height: virtualizer.getTotalSize() }}>
+                {virtualizer.getVirtualItems().map(virtualRow => (
+                    <div
+                        key={virtualRow.key}
+                        style={{
+                            position: 'absolute',
+                            top: virtualRow.start,
+                            height: virtualRow.size
+                        }}
+                    >
+                        {items[virtualRow.index]}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+================================================================================
+25. TESTING
+================================================================================
+
+JEST + REACT TESTING LIBRARY:
+npm install @testing-library/react @testing-library/jest-dom
+
+// Button.test.jsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import Button from './Button';
+
+describe('Button', () => {
+    test('renders button with text', () => {
+        render(<Button>Click me</Button>);
+        expect(screen.getByText('Click me')).toBeInTheDocument();
+    });
+    
+    test('calls onClick when clicked', () => {
+        const handleClick = jest.fn();
+        render(<Button onClick={handleClick}>Click</Button>);
+        
+        fireEvent.click(screen.getByText('Click'));
+        expect(handleClick).toHaveBeenCalledTimes(1);
+    });
+    
+    test('is disabled when disabled prop is true', () => {
+        render(<Button disabled>Click</Button>);
+        expect(screen.getByText('Click')).toBeDisabled();
+    });
+});
+
+QUERIES:
+screen.getByText('text')       // Throws if not found
+screen.queryByText('text')     // Returns null if not found
+screen.findByText('text')      // Returns promise (for async)
+screen.getAllByText('text')    // Returns array
+
+// By role
+screen.getByRole('button')
+screen.getByRole('button', { name: 'Submit' })
+
+// By label
+screen.getByLabelText('Username')
+
+// By placeholder
+screen.getByPlaceholderText('Enter name')
+
+// By test id
+<div data-testid="custom-element">
+screen.getByTestId('custom-element')
+
+USER EVENTS:
+import userEvent from '@testing-library/user-event';
+
+test('types in input', async () => {
+    render(<Input />);
+    const input = screen.getByRole('textbox');
+    
+    await userEvent.type(input, 'Hello');
+    expect(input).toHaveValue('Hello');
+});
+
+================================================================================
+26. DEPLOYMENT
+================================================================================
+
+BUILD FOR PRODUCTION:
+npm run build
+
+Creates optimized build in /build or /dist folder.
+
+DEPLOYMENT OPTIONS:
+
+Vercel:
+npm install -g vercel
+vercel
+
+Netlify:
+npm install -g netlify-cli
+netlify deploy --prod
+
+GitHub Pages:
+npm install gh-pages
+// package.json
+"homepage": "https://username.github.io/repo-name",
+"scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+}
+npm run deploy
+
+Firebase:
+npm install -g firebase-tools
+firebase login
+firebase init
+firebase deploy
+
+================================================================================
+27. BEST PRACTICES
+================================================================================
+
+1. Component Structure:
+   - One component per file
+   - Keep components small and focused
+   - Use PascalCase for component names
+
+2. File Organization:
+   src/
+   ├── components/
+   │   ├── common/
+   │   └── features/
+   ├── hooks/
+   ├── context/
+   ├── pages/
+   ├── services/
+   ├── utils/
+   └── styles/
+
+3. State Management:
+   - Keep state as local as possible
+   - Lift state up when needed
+   - Use Context for global state
+   - Consider Redux/Zustand for complex apps
+
+4. Performance:
+   - Use React.memo for expensive components
+   - Use useMemo and useCallback appropriately
+   - Lazy load routes and heavy components
+   - Virtualize long lists
+
+5. Code Quality:
+   - Use PropTypes or TypeScript
+   - Write tests
+   - Use ESLint and Prettier
+   - Follow consistent naming conventions
+
+6. Hooks:
+   - Follow Rules of Hooks
+   - Extract reusable logic to custom hooks
+   - Keep hooks simple and focused
+
+7. Security:
+   - Sanitize user input
+   - Use HTTPS
+   - Don't store sensitive data in localStorage
+   - Validate on server side too
+
+================================================================================
+28. AXIOS (HTTP CLIENT)
+================================================================================
+
+AXIOS:
+- Promise-based HTTP client
+- Works in browser and Node.js
+- Automatic JSON transformation
+- Request/response interceptors
+- Better error handling than fetch
+
+INSTALLATION:
+npm install axios
+
+BASIC USAGE:
+import axios from 'axios';
+
+// GET request
+axios.get('/api/users')
+    .then(response => console.log(response.data))
+    .catch(error => console.error(error));
+
+// POST request
+axios.post('/api/users', {
+    name: 'John',
+    email: 'john@example.com'
+})
+    .then(response => console.log(response.data))
+    .catch(error => console.error(error));
+
+// Using async/await
+async function getUsers() {
+    try {
+        const response = await axios.get('/api/users');
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error.message);
+        throw error;
+    }
+}
+
+ALL HTTP METHODS:
+axios.get(url, config)
+axios.post(url, data, config)
+axios.put(url, data, config)
+axios.patch(url, data, config)
+axios.delete(url, config)
+axios.head(url, config)
+axios.options(url, config)
+
+REQUEST CONFIG:
+axios({
+    method: 'post',
+    url: '/api/users',
+    data: { name: 'John' },
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer token123'
+    },
+    timeout: 5000,
+    params: { page: 1, limit: 10 },  // Query params
+    withCredentials: true  // Send cookies
+});
+
+AXIOS INSTANCE (Recommended):
+// services/api.js
+import axios from 'axios';
+
+const api = axios.create({
+    baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
+    timeout: 10000,
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
+
+// Request interceptor - Add auth token
+api.interceptors.request.use(
+    config => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    error => Promise.reject(error)
+);
+
+// Response interceptor - Handle errors globally
+api.interceptors.response.use(
+    response => response,
+    error => {
+        if (error.response?.status === 401) {
+            localStorage.removeItem('token');
+            window.location.href = '/login';
+        }
+        return Promise.reject(error);
+    }
+);
+
+export default api;
+
+// Usage in component
+import api from '../services/api';
+
+function UserList() {
+    const [users, setUsers] = useState([]);
+    
+    useEffect(() => {
+        api.get('/users')
+            .then(res => setUsers(res.data))
+            .catch(err => console.error(err));
+    }, []);
+    
+    return <ul>{users.map(u => <li key={u.id}>{u.name}</li>)}</ul>;
+}
+
+AXIOS WITH CUSTOM HOOKS:
+// hooks/useAxios.js
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+function useAxios(url) {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(url);
+                setData(response.data);
+            } catch (err) {
+                setError(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+        fetchData();
+    }, [url]);
+    
+    return { data, loading, error };
+}
+
+// Usage
+function Users() {
+    const { data, loading, error } = useAxios('/api/users');
+    
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error.message}</p>;
+    return <ul>{data.map(u => <li key={u.id}>{u.name}</li>)}</ul>;
+}
+
+CANCEL REQUESTS:
+function SearchComponent() {
+    const [results, setResults] = useState([]);
+    
+    useEffect(() => {
+        const controller = new AbortController();
+        
+        axios.get('/api/search', {
+            params: { q: query },
+            signal: controller.signal
+        })
+            .then(res => setResults(res.data))
+            .catch(err => {
+                if (axios.isCancel(err)) {
+                    console.log('Request cancelled');
+                }
+            });
+        
+        return () => controller.abort();
+    }, [query]);
+}
+
+================================================================================
+29. REDUX THUNK & REDUX SAGA
+================================================================================
+
+REDUX THUNK:
+- Middleware for async Redux actions
+- Allows action creators to return functions
+- Built into Redux Toolkit
+
+INSTALLATION:
+npm install @reduxjs/toolkit react-redux
+# Thunk is included in Redux Toolkit
+
+REDUX TOOLKIT WITH THUNK:
+// features/users/usersSlice.js
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
+
+// Async thunk action
+export const fetchUsers = createAsyncThunk(
+    'users/fetchUsers',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axios.get('/api/users');
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const createUser = createAsyncThunk(
+    'users/createUser',
+    async (userData, { rejectWithValue }) => {
+        try {
+            const response = await axios.post('/api/users', userData);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+const usersSlice = createSlice({
+    name: 'users',
+    initialState: {
+        users: [],
+        loading: false,
+        error: null
+    },
+    reducers: {
+        clearError: state => { state.error = null; }
+    },
+    extraReducers: builder => {
+        builder
+            // Fetch users
+            .addCase(fetchUsers.pending, state => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchUsers.fulfilled, (state, action) => {
+                state.loading = false;
+                state.users = action.payload;
+            })
+            .addCase(fetchUsers.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            // Create user
+            .addCase(createUser.fulfilled, (state, action) => {
+                state.users.push(action.payload);
+            });
+    }
+});
+
+export const { clearError } = usersSlice.actions;
+export default usersSlice.reducer;
+
+// Component usage
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUsers, createUser } from './usersSlice';
+
+function UserList() {
+    const dispatch = useDispatch();
+    const { users, loading, error } = useSelector(state => state.users);
+    
+    useEffect(() => {
+        dispatch(fetchUsers());
+    }, [dispatch]);
+    
+    const handleAddUser = () => {
+        dispatch(createUser({ name: 'New User' }));
+    };
+    
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
+    
+    return (
+        <div>
+            <button onClick={handleAddUser}>Add User</button>
+            <ul>{users.map(u => <li key={u.id}>{u.name}</li>)}</ul>
+        </div>
+    );
+}
+
+LEGACY REDUX THUNK (without Toolkit):
+// actions/userActions.js
+export const fetchUsers = () => {
+    return async (dispatch) => {
+        dispatch({ type: 'USERS_LOADING' });
+        
+        try {
+            const response = await axios.get('/api/users');
+            dispatch({ 
+                type: 'USERS_SUCCESS', 
+                payload: response.data 
+            });
+        } catch (error) {
+            dispatch({ 
+                type: 'USERS_ERROR', 
+                payload: error.message 
+            });
+        }
+    };
+};
+
+// With mapDispatchToProps (legacy)
+const mapStateToProps = state => ({
+    users: state.users.users,
+    loading: state.users.loading
+});
+
+const mapDispatchToProps = dispatch => ({
+    fetchUsers: () => dispatch(fetchUsers())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserList);
+
+--------------------------------------------------------------------------------
+
+REDUX SAGA:
+- More powerful side effect handling
+- Uses generator functions
+- Better for complex async flows
+- Easier testing
+
+INSTALLATION:
+npm install redux-saga
+
+SETUP:
+// store.js
+import { configureStore } from '@reduxjs/toolkit';
+import createSagaMiddleware from 'redux-saga';
+import rootReducer from './rootReducer';
+import rootSaga from './sagas';
+
+const sagaMiddleware = createSagaMiddleware();
+
+const store = configureStore({
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware)
+});
+
+sagaMiddleware.run(rootSaga);
+
+export default store;
+
+SAGA EXAMPLE:
+// sagas/userSaga.js
+import { call, put, takeEvery, takeLatest, all } from 'redux-saga/effects';
+import axios from 'axios';
+
+// Worker saga
+function* fetchUsersSaga() {
+    try {
+        yield put({ type: 'USERS_LOADING' });
+        const response = yield call(axios.get, '/api/users');
+        yield put({ type: 'USERS_SUCCESS', payload: response.data });
+    } catch (error) {
+        yield put({ type: 'USERS_ERROR', payload: error.message });
+    }
+}
+
+function* createUserSaga(action) {
+    try {
+        const response = yield call(axios.post, '/api/users', action.payload);
+        yield put({ type: 'USER_CREATED', payload: response.data });
+        yield put({ type: 'FETCH_USERS' });  // Refetch users
+    } catch (error) {
+        yield put({ type: 'USER_CREATE_ERROR', payload: error.message });
+    }
+}
+
+// Watcher saga
+function* watchUsersSaga() {
+    yield takeEvery('FETCH_USERS', fetchUsersSaga);
+    yield takeLatest('CREATE_USER', createUserSaga);
+}
+
+// Root saga
+export default function* rootSaga() {
+    yield all([
+        watchUsersSaga()
+    ]);
+}
+
+SAGA EFFECTS:
+call(fn, ...args)    - Call function (blocking)
+put(action)          - Dispatch action
+take(pattern)        - Wait for action
+takeEvery(pattern, saga)   - Run saga for every action
+takeLatest(pattern, saga)  - Run saga for latest action only
+all([...effects])    - Run effects in parallel
+race({...effects})   - Race between effects
+select(selector)     - Get state
+fork(fn, ...args)    - Non-blocking call
+delay(ms)            - Wait for time
+
+ADVANCED SAGA PATTERNS:
+// Debounce
+function* watchSearch() {
+    yield debounce(500, 'SEARCH', searchSaga);
+}
+
+// Throttle
+function* watchScroll() {
+    yield throttle(1000, 'SCROLL', scrollSaga);
+}
+
+// Channel for WebSocket
+function* watchWebSocket() {
+    const channel = yield call(createWebSocketChannel, socket);
+    while (true) {
+        const message = yield take(channel);
+        yield put({ type: 'MESSAGE_RECEIVED', payload: message });
+    }
+}
+
+================================================================================
+30. MATERIAL UI (MUI)
+================================================================================
+
+MATERIAL UI:
+- Popular React UI component library
+- Google's Material Design
+- Customizable theming
+- Accessible components
+
+INSTALLATION:
+npm install @mui/material @emotion/react @emotion/styled
+npm install @mui/icons-material  # Icons
+
+BASIC USAGE:
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+
+function MyComponent() {
+    return (
+        <Box sx={{ p: 2 }}>
+            <TextField 
+                label="Name" 
+                variant="outlined" 
+                fullWidth 
+                margin="normal"
+            />
+            <Button variant="contained" color="primary">
+                Submit
+            </Button>
+        </Box>
+    );
+}
+
+COMMON COMPONENTS:
+import {
+    Button,
+    TextField,
+    Typography,
+    Box,
+    Container,
+    Grid,
+    Card,
+    CardContent,
+    CardActions,
+    AppBar,
+    Toolbar,
+    IconButton,
+    Drawer,
+    List,
+    ListItem,
+    ListItemText,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Snackbar,
+    Alert,
+    CircularProgress,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Pagination,
+    Tabs,
+    Tab,
+    Chip,
+    Avatar,
+    Badge,
+    Tooltip
+} from '@mui/material';
+
+LAYOUT EXAMPLE:
+import { Container, Grid, Card, CardContent, Typography } from '@mui/material';
+
+function Dashboard() {
+    return (
+        <Container maxWidth="lg" sx={{ mt: 4 }}>
+            <Grid container spacing={3}>
+                <Grid item xs={12} md={4}>
+                    <Card>
+                        <CardContent>
+                            <Typography variant="h5">Users</Typography>
+                            <Typography variant="h2">150</Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                    <Card>
+                        <CardContent>
+                            <Typography variant="h5">Orders</Typography>
+                            <Typography variant="h2">45</Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                    <Card>
+                        <CardContent>
+                            <Typography variant="h5">Revenue</Typography>
+                            <Typography variant="h2">$12,500</Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+            </Grid>
+        </Container>
+    );
+}
+
+THEMING:
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const theme = createTheme({
+    palette: {
+        mode: 'light',  // or 'dark'
+        primary: {
+            main: '#1976d2',
+            light: '#42a5f5',
+            dark: '#1565c0'
+        },
+        secondary: {
+            main: '#9c27b0'
+        },
+        background: {
+            default: '#f5f5f5'
+        }
+    },
+    typography: {
+        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+        h1: {
+            fontSize: '2.5rem',
+            fontWeight: 500
+        }
+    },
+    shape: {
+        borderRadius: 8
+    },
+    components: {
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    textTransform: 'none'
+                }
+            }
+        }
+    }
+});
+
+function App() {
+    return (
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <MyApp />
+        </ThemeProvider>
+    );
+}
+
+SX PROP (Inline Styling):
+<Box
+    sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
+        p: 3,           // padding: theme.spacing(3)
+        m: 2,           // margin: theme.spacing(2)
+        bgcolor: 'primary.main',
+        color: 'white',
+        borderRadius: 2,
+        boxShadow: 3,
+        '&:hover': {
+            bgcolor: 'primary.dark'
+        },
+        // Responsive
+        width: { xs: '100%', md: '50%' }
+    }}
+>
+    Content
+</Box>
+
+FORM WITH VALIDATION:
+import { useState } from 'react';
+import { TextField, Button, Box, Alert } from '@mui/material';
+
+function LoginForm() {
+    const [formData, setFormData] = useState({ email: '', password: '' });
+    const [errors, setErrors] = useState({});
+    
+    const validate = () => {
+        const newErrors = {};
+        if (!formData.email) newErrors.email = 'Email is required';
+        if (!formData.password) newErrors.password = 'Password is required';
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+    
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (validate()) {
+            console.log('Submit:', formData);
+        }
+    };
+    
+    return (
+        <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400 }}>
+            <TextField
+                label="Email"
+                type="email"
+                fullWidth
+                margin="normal"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                error={!!errors.email}
+                helperText={errors.email}
+            />
+            <TextField
+                label="Password"
+                type="password"
+                fullWidth
+                margin="normal"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                error={!!errors.password}
+                helperText={errors.password}
+            />
+            <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
+                Login
+            </Button>
+        </Box>
+    );
+}
+
+DIALOG EXAMPLE:
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
+
+function ConfirmDialog({ open, onClose, onConfirm, title, message }) {
+    return (
+        <Dialog open={open} onClose={onClose}>
+            <DialogTitle>{title}</DialogTitle>
+            <DialogContent>{message}</DialogContent>
+            <DialogActions>
+                <Button onClick={onClose}>Cancel</Button>
+                <Button onClick={onConfirm} variant="contained" color="error">
+                    Confirm
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
+}
+
+DATA TABLE:
+import {
+    Table, TableBody, TableCell, TableContainer,
+    TableHead, TableRow, Paper, TablePagination
+} from '@mui/material';
+
+function DataTable({ data }) {
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    
+    return (
+        <TableContainer component={Paper}>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Email</TableCell>
+                        <TableCell>Status</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {data
+                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map((row) => (
+                            <TableRow key={row.id}>
+                                <TableCell>{row.name}</TableCell>
+                                <TableCell>{row.email}</TableCell>
+                                <TableCell>{row.status}</TableCell>
+                            </TableRow>
+                        ))}
+                </TableBody>
+            </Table>
+            <TablePagination
+                component="div"
+                count={data.length}
+                page={page}
+                onPageChange={(e, newPage) => setPage(newPage)}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={(e) => setRowsPerPage(parseInt(e.target.value, 10))}
+            />
+        </TableContainer>
+    );
+}
+
+================================================================================
+31. FILE UPLOAD
+================================================================================
+
+SIMPLE FILE UPLOAD:
+function FileUpload() {
+    const [file, setFile] = useState(null);
+    const [preview, setPreview] = useState(null);
+    const [uploading, setUploading] = useState(false);
+    
+    const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
+        setFile(selectedFile);
+        
+        // Preview for images
+        if (selectedFile?.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onloadend = () => setPreview(reader.result);
+            reader.readAsDataURL(selectedFile);
+        }
+    };
+    
+    const handleUpload = async () => {
+        if (!file) return;
+        
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        setUploading(true);
+        try {
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            console.log('Uploaded:', data);
+        } catch (error) {
+            console.error('Upload error:', error);
+        } finally {
+            setUploading(false);
+        }
+    };
+    
+    return (
+        <div>
+            <input type="file" onChange={handleFileChange} accept="image/*" />
+            {preview && <img src={preview} alt="Preview" style={{ maxWidth: 200 }} />}
+            <button onClick={handleUpload} disabled={!file || uploading}>
+                {uploading ? 'Uploading...' : 'Upload'}
+            </button>
+        </div>
+    );
+}
+
+UPLOAD WITH AXIOS & PROGRESS:
+function FileUploadWithProgress() {
+    const [file, setFile] = useState(null);
+    const [progress, setProgress] = useState(0);
+    const [uploading, setUploading] = useState(false);
+    
+    const handleUpload = async () => {
+        if (!file) return;
+        
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        setUploading(true);
+        setProgress(0);
+        
+        try {
+            const response = await axios.post('/api/upload', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+                onUploadProgress: (progressEvent) => {
+                    const percent = Math.round(
+                        (progressEvent.loaded * 100) / progressEvent.total
+                    );
+                    setProgress(percent);
+                }
+            });
+            console.log('Uploaded:', response.data);
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            setUploading(false);
+        }
+    };
+    
+    return (
+        <div>
+            <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+            <button onClick={handleUpload} disabled={!file || uploading}>
+                Upload
+            </button>
+            {uploading && (
+                <div>
+                    <progress value={progress} max="100" />
+                    <span>{progress}%</span>
+                </div>
+            )}
+        </div>
+    );
+}
+
+DRAG AND DROP UPLOAD:
+function DragDropUpload() {
+    const [files, setFiles] = useState([]);
+    const [isDragging, setIsDragging] = useState(false);
+    
+    const handleDrag = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+    
+    const handleDragIn = (e) => {
+        e.preventDefault();
+        setIsDragging(true);
+    };
+    
+    const handleDragOut = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+    };
+    
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+        
+        const droppedFiles = [...e.dataTransfer.files];
+        setFiles(prev => [...prev, ...droppedFiles]);
+    };
+    
+    const removeFile = (index) => {
+        setFiles(prev => prev.filter((_, i) => i !== index));
+    };
+    
+    return (
+        <div>
+            <div
+                onDragEnter={handleDragIn}
+                onDragLeave={handleDragOut}
+                onDragOver={handleDrag}
+                onDrop={handleDrop}
+                style={{
+                    border: `2px dashed ${isDragging ? '#007bff' : '#ccc'}`,
+                    borderRadius: 8,
+                    padding: 40,
+                    textAlign: 'center',
+                    backgroundColor: isDragging ? '#f0f8ff' : 'white'
+                }}
+            >
+                <p>Drag & drop files here, or click to select</p>
+                <input
+                    type="file"
+                    multiple
+                    onChange={(e) => setFiles([...files, ...e.target.files])}
+                    style={{ display: 'none' }}
+                    id="file-input"
+                />
+                <label htmlFor="file-input" style={{ cursor: 'pointer', color: '#007bff' }}>
+                    Browse Files
+                </label>
+            </div>
+            
+            {files.length > 0 && (
+                <ul>
+                    {files.map((file, index) => (
+                        <li key={index}>
+                            {file.name} ({(file.size / 1024).toFixed(1)} KB)
+                            <button onClick={() => removeFile(index)}>×</button>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+    );
+}
+
+MULTIPLE FILE UPLOAD:
+function MultiFileUpload() {
+    const [files, setFiles] = useState([]);
+    
+    const handleUploadAll = async () => {
+        const formData = new FormData();
+        files.forEach(file => formData.append('files', file));
+        
+        try {
+            const response = await axios.post('/api/upload/multiple', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            console.log('All uploaded:', response.data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+    
+    return (
+        <div>
+            <input
+                type="file"
+                multiple
+                onChange={(e) => setFiles([...e.target.files])}
+            />
+            <p>Selected: {files.length} files</p>
+            <button onClick={handleUploadAll} disabled={files.length === 0}>
+                Upload All
+            </button>
+        </div>
+    );
+}
+
+EXPRESS BACKEND (Multer):
+// server.js
+const multer = require('multer');
+const path = require('path');
+
+const storage = multer.diskStorage({
+    destination: './uploads/',
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage,
+    limits: { fileSize: 5 * 1024 * 1024 },  // 5MB
+    fileFilter: (req, file, cb) => {
+        const allowed = /jpeg|jpg|png|gif|pdf/;
+        const ext = allowed.test(path.extname(file.originalname).toLowerCase());
+        const mime = allowed.test(file.mimetype);
+        if (ext && mime) cb(null, true);
+        else cb(new Error('Invalid file type'));
+    }
+});
+
+app.post('/api/upload', upload.single('file'), (req, res) => {
+    res.json({ 
+        message: 'File uploaded',
+        filename: req.file.filename,
+        path: `/uploads/${req.file.filename}`
+    });
+});
+
+app.post('/api/upload/multiple', upload.array('files', 10), (req, res) => {
+    res.json({ 
+        message: 'Files uploaded',
+        files: req.files.map(f => f.filename)
+    });
+});
+
+================================================================================
+32. SOCIAL LOGIN (OAuth)
+================================================================================
+
+SOCIAL LOGIN OVERVIEW:
+- OAuth 2.0 authentication
+- Providers: Google, Facebook, GitHub, Twitter
+- Simplifies user registration
+- Secure token-based authentication
+
+GOOGLE LOGIN WITH @react-oauth/google:
+npm install @react-oauth/google
+
+// main.jsx
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+<GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+    <App />
+</GoogleOAuthProvider>
+
+// LoginPage.jsx
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
+
+function LoginPage() {
+    const handleGoogleSuccess = async (credentialResponse) => {
+        const decoded = jwtDecode(credentialResponse.credential);
+        console.log('Google user:', decoded);
+        
+        // Send to backend
+        try {
+            const response = await axios.post('/api/auth/google', {
+                token: credentialResponse.credential
+            });
+            localStorage.setItem('token', response.data.token);
+            // Redirect to dashboard
+        } catch (error) {
+            console.error('Login error:', error);
+        }
+    };
+    
+    return (
+        <div>
+            <h1>Login</h1>
+            <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => console.log('Login Failed')}
+                useOneTap
+            />
+        </div>
+    );
+}
+
+BACKEND GOOGLE AUTH:
+// routes/auth.js
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+router.post('/google', async (req, res) => {
+    try {
+        const { token } = req.body;
+        
+        // Verify Google token
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.GOOGLE_CLIENT_ID
+        });
+        
+        const { email, name, picture, sub: googleId } = ticket.getPayload();
+        
+        // Find or create user
+        let user = await User.findOne({ email });
+        
+        if (!user) {
+            user = await User.create({
+                email,
+                name,
+                avatar: picture,
+                googleId,
+                authProvider: 'google'
+            });
+        }
+        
+        // Generate JWT
+        const jwtToken = jwt.sign(
+            { userId: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: '7d' }
+        );
+        
+        res.json({ token: jwtToken, user });
+    } catch (error) {
+        res.status(401).json({ error: 'Invalid token' });
+    }
+});
+
+FACEBOOK LOGIN:
+npm install react-facebook-login
+
+import FacebookLogin from 'react-facebook-login';
+
+function LoginPage() {
+    const handleFacebookResponse = async (response) => {
+        if (response.accessToken) {
+            try {
+                const res = await axios.post('/api/auth/facebook', {
+                    accessToken: response.accessToken,
+                    userID: response.userID
+                });
+                localStorage.setItem('token', res.data.token);
+            } catch (error) {
+                console.error('Facebook login error:', error);
+            }
+        }
+    };
+    
+    return (
+        <FacebookLogin
+            appId="YOUR_FACEBOOK_APP_ID"
+            autoLoad={false}
+            fields="name,email,picture"
+            callback={handleFacebookResponse}
+        />
+    );
+}
+
+GITHUB LOGIN:
+// Redirect to GitHub OAuth
+const handleGitHubLogin = () => {
+    const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
+    const redirectUri = `${window.location.origin}/auth/github/callback`;
+    window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user:email`;
+};
+
+// Callback component
+function GitHubCallback() {
+    const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        const code = searchParams.get('code');
+        if (code) {
+            axios.post('/api/auth/github', { code })
+                .then(res => {
+                    localStorage.setItem('token', res.data.token);
+                    navigate('/dashboard');
+                })
+                .catch(err => {
+                    console.error(err);
+                    navigate('/login');
+                });
+        }
+    }, [searchParams, navigate]);
+    
+    return <p>Processing login...</p>;
+}
+
+// Backend GitHub auth
+router.post('/github', async (req, res) => {
+    try {
+        const { code } = req.body;
+        
+        // Exchange code for access token
+        const tokenResponse = await axios.post(
+            'https://github.com/login/oauth/access_token',
+            {
+                client_id: process.env.GITHUB_CLIENT_ID,
+                client_secret: process.env.GITHUB_CLIENT_SECRET,
+                code
+            },
+            { headers: { Accept: 'application/json' } }
+        );
+        
+        const accessToken = tokenResponse.data.access_token;
+        
+        // Get user info
+        const userResponse = await axios.get('https://api.github.com/user', {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        
+        const { id: githubId, login, name, avatar_url, email } = userResponse.data;
+        
+        // Find or create user
+        let user = await User.findOne({ githubId });
+        if (!user) {
+            user = await User.create({
+                githubId,
+                username: login,
+                name: name || login,
+                avatar: avatar_url,
+                email,
+                authProvider: 'github'
+            });
+        }
+        
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+        res.json({ token, user });
+    } catch (error) {
+        res.status(401).json({ error: 'GitHub authentication failed' });
+    }
+});
+
+AUTH CONTEXT WITH SOCIAL LOGIN:
+// context/AuthContext.jsx
+const AuthContext = createContext();
+
+export function AuthProvider({ children }) {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            axios.get('/api/auth/me', {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+                .then(res => setUser(res.data))
+                .catch(() => localStorage.removeItem('token'))
+                .finally(() => setLoading(false));
+        } else {
+            setLoading(false);
+        }
+    }, []);
+    
+    const login = (token, userData) => {
+        localStorage.setItem('token', token);
+        setUser(userData);
+    };
+    
+    const logout = () => {
+        localStorage.removeItem('token');
+        setUser(null);
+    };
+    
+    return (
+        <AuthContext.Provider value={{ user, login, logout, loading }}>
+            {children}
+        </AuthContext.Provider>
+    );
+}
+
+export const useAuth = () => useContext(AuthContext);
+
+================================================================================
+33. REACT 19 NEW FEATURES
+================================================================================
+
+USE HOOK (React 19):
+// Read promises and context directly
+import { use } from 'react';
+
+function Comments({ commentsPromise }) {
+    // Suspends until promise resolves
+    const comments = use(commentsPromise);
+    return comments.map(c => <p key={c.id}>{c.text}</p>);
+}
+
+// Usage with Suspense
+<Suspense fallback={<Loading />}>
+    <Comments commentsPromise={fetchComments()} />
+</Suspense>
+
+// Read context conditionally
+function Theme({ show }) {
+    if (show) {
+        const theme = use(ThemeContext);
+        return <div className={theme}>Content</div>;
+    }
+    return null;
+}
+
+ACTIONS:
+// Async functions in transitions
+'use client';
+
+import { useTransition } from 'react';
+
+function UpdateButton() {
+    const [isPending, startTransition] = useTransition();
+    
+    const handleClick = () => {
+        startTransition(async () => {
+            await updateData();
+        });
+    };
+    
+    return (
+        <button onClick={handleClick} disabled={isPending}>
+            {isPending ? 'Updating...' : 'Update'}
+        </button>
+    );
+}
+
+useActionState (React 19):
+import { useActionState } from 'react';
+
+async function submitForm(prevState, formData) {
+    const name = formData.get('name');
+    const result = await saveToDatabase(name);
+    return { success: true, message: 'Saved!' };
+}
+
+function Form() {
+    const [state, formAction, isPending] = useActionState(submitForm, null);
+    
+    return (
+        <form action={formAction}>
+            <input name="name" />
+            <button disabled={isPending}>
+                {isPending ? 'Submitting...' : 'Submit'}
+            </button>
+            {state?.message && <p>{state.message}</p>}
+        </form>
+    );
+}
+
+useFormStatus (React 19):
+import { useFormStatus } from 'react-dom';
+
+function SubmitButton() {
+    const { pending, data, method, action } = useFormStatus();
+    
+    return (
+        <button type="submit" disabled={pending}>
+            {pending ? 'Submitting...' : 'Submit'}
+        </button>
+    );
+}
+
+useOptimistic (React 19):
+import { useOptimistic } from 'react';
+
+function Messages({ messages }) {
+    const [optimisticMessages, addOptimisticMessage] = useOptimistic(
+        messages,
+        (state, newMessage) => [...state, { ...newMessage, sending: true }]
+    );
+    
+    async function sendMessage(formData) {
+        const message = formData.get('message');
+        addOptimisticMessage({ text: message });
+        await saveMessage(message);
+    }
+    
+    return (
+        <div>
+            {optimisticMessages.map((m, i) => (
+                <p key={i} style={{ opacity: m.sending ? 0.5 : 1 }}>
+                    {m.text}
+                </p>
+            ))}
+            <form action={sendMessage}>
+                <input name="message" />
+                <button>Send</button>
+            </form>
+        </div>
+    );
+}
+
+================================================================================
+34. forwardRef & useImperativeHandle
+================================================================================
+
+forwardRef:
+// Forward refs to child components
+import { forwardRef } from 'react';
+
+const CustomInput = forwardRef(function CustomInput(props, ref) {
+    return <input ref={ref} {...props} />;
+});
+
+// Usage
+function Parent() {
+    const inputRef = useRef(null);
+    
+    const focusInput = () => {
+        inputRef.current.focus();
+    };
+    
+    return (
+        <div>
+            <CustomInput ref={inputRef} placeholder="Enter text" />
+            <button onClick={focusInput}>Focus Input</button>
+        </div>
+    );
+}
+
+useImperativeHandle:
+// Customize the ref value exposed to parent
+import { forwardRef, useImperativeHandle, useRef } from 'react';
+
+const VideoPlayer = forwardRef(function VideoPlayer(props, ref) {
+    const videoRef = useRef(null);
+    
+    useImperativeHandle(ref, () => ({
+        play() {
+            videoRef.current.play();
+        },
+        pause() {
+            videoRef.current.pause();
+        },
+        reset() {
+            videoRef.current.currentTime = 0;
+        }
+    }), []);
+    
+    return <video ref={videoRef} src={props.src} />;
+});
+
+// Usage
+function Parent() {
+    const playerRef = useRef(null);
+    
+    return (
+        <div>
+            <VideoPlayer ref={playerRef} src="/video.mp4" />
+            <button onClick={() => playerRef.current.play()}>Play</button>
+            <button onClick={() => playerRef.current.pause()}>Pause</button>
+            <button onClick={() => playerRef.current.reset()}>Reset</button>
+        </div>
+    );
+}
+
+================================================================================
+35. SUSPENSE & TRANSITIONS
+================================================================================
+
+SUSPENSE:
+// Suspend rendering until async content is ready
+import { Suspense } from 'react';
+
+function App() {
+    return (
+        <Suspense fallback={<Loading />}>
+            <AsyncComponent />
+        </Suspense>
+    );
+}
+
+// Nested Suspense boundaries
+function Dashboard() {
+    return (
+        <Suspense fallback={<PageSkeleton />}>
+            <Header />
+            <Suspense fallback={<ContentSkeleton />}>
+                <MainContent />
+            </Suspense>
+            <Suspense fallback={<SidebarSkeleton />}>
+                <Sidebar />
+            </Suspense>
+        </Suspense>
+    );
+}
+
+useTransition:
+// Mark state updates as non-urgent
+import { useState, useTransition } from 'react';
+
+function FilterList() {
+    const [query, setQuery] = useState('');
+    const [isPending, startTransition] = useTransition();
+    
+    const handleChange = (e) => {
+        // Urgent: Update input immediately
+        setQuery(e.target.value);
+        
+        // Non-urgent: Can be interrupted
+        startTransition(() => {
+            setFilteredList(filterExpensiveList(e.target.value));
+        });
+    };
+    
+    return (
+        <div>
+            <input value={query} onChange={handleChange} />
+            {isPending && <span>Updating...</span>}
+            <ExpensiveList />
+        </div>
+    );
+}
+
+useDeferredValue:
+// Defer updating a value
+import { useState, useDeferredValue } from 'react';
+
+function Search() {
+    const [query, setQuery] = useState('');
+    const deferredQuery = useDeferredValue(query);
+    
+    // query updates immediately (for input)
+    // deferredQuery updates when React has time (for expensive list)
+    
+    return (
+        <div>
+            <input 
+                value={query} 
+                onChange={e => setQuery(e.target.value)} 
+            />
+            <Results query={deferredQuery} />
+        </div>
+    );
+}
+
+================================================================================
+36. PORTALS
+================================================================================
+
+// Render children into a different DOM node
+import { createPortal } from 'react-dom';
+
+function Modal({ children, isOpen, onClose }) {
+    if (!isOpen) return null;
+    
+    return createPortal(
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal-content" onClick={e => e.stopPropagation()}>
+                {children}
+                <button onClick={onClose}>Close</button>
+            </div>
+        </div>,
+        document.getElementById('modal-root')
+    );
+}
+
+// Usage
+function App() {
+    const [showModal, setShowModal] = useState(false);
+    
+    return (
+        <div>
+            <button onClick={() => setShowModal(true)}>
+                Open Modal
+            </button>
+            <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+                <h2>Modal Title</h2>
+                <p>Modal content here</p>
+            </Modal>
+        </div>
+    );
+}
+
+// In HTML
+<div id="root"></div>
+<div id="modal-root"></div>
+
+// Tooltip with Portal
+function Tooltip({ children, text, position }) {
+    const [show, setShow] = useState(false);
+    const [coords, setCoords] = useState({ x: 0, y: 0 });
+    const ref = useRef(null);
+    
+    const handleMouseEnter = () => {
+        const rect = ref.current.getBoundingClientRect();
+        setCoords({ x: rect.x, y: rect.y + rect.height });
+        setShow(true);
+    };
+    
+    return (
+        <>
+            <span
+                ref={ref}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={() => setShow(false)}
+            >
+                {children}
+            </span>
+            {show && createPortal(
+                <div 
+                    className="tooltip"
+                    style={{ left: coords.x, top: coords.y }}
+                >
+                    {text}
+                </div>,
+                document.body
+            )}
+        </>
+    );
+}
+
+================================================================================
+37. STRICT MODE
+================================================================================
+
+// Development-only checks for common issues
+import { StrictMode } from 'react';
+
+function App() {
+    return (
+        <StrictMode>
+            <MyApp />
+        </StrictMode>
+    );
+}
+
+// StrictMode behaviors:
+// 1. Double-invokes functions (mount/unmount/remount)
+// 2. Detects unexpected side effects
+// 3. Warns about deprecated APIs
+// 4. Verifies ref callbacks run twice
+
+// Note: Only affects development mode
+// No impact in production
+
+================================================================================
+38. HIGHER-ORDER COMPONENTS (HOC)
+================================================================================
+
+// Function that takes a component and returns a new component
+function withAuth(WrappedComponent) {
+    return function AuthenticatedComponent(props) {
+        const { user } = useAuth();
+        
+        if (!user) {
+            return <Navigate to="/login" />;
+        }
+        
+        return <WrappedComponent {...props} user={user} />;
+    };
+}
+
+// Usage
+const ProtectedDashboard = withAuth(Dashboard);
+
+// With loading state
+function withLoading(WrappedComponent) {
+    return function LoadingComponent({ isLoading, ...props }) {
+        if (isLoading) {
+            return <Spinner />;
+        }
+        return <WrappedComponent {...props} />;
+    };
+}
+
+// Multiple HOCs
+const EnhancedComponent = withAuth(withLoading(withTheme(MyComponent)));
+
+// Note: Prefer hooks over HOCs in modern React
+
+================================================================================
+39. RENDER PROPS
+================================================================================
+
+// Share code between components using a prop whose value is a function
+function MouseTracker({ render }) {
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+    
+    useEffect(() => {
+        const handleMove = (e) => {
+            setPosition({ x: e.clientX, y: e.clientY });
+        };
+        window.addEventListener('mousemove', handleMove);
+        return () => window.removeEventListener('mousemove', handleMove);
+    }, []);
+    
+    return render(position);
+}
+
+// Usage
+<MouseTracker 
+    render={({ x, y }) => (
+        <div>Mouse position: {x}, {y}</div>
+    )}
+/>
+
+// Using children as function
+function DataFetcher({ url, children }) {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    
+    useEffect(() => {
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                setData(data);
+                setLoading(false);
+            });
+    }, [url]);
+    
+    return children({ data, loading });
+}
+
+// Usage
+<DataFetcher url="/api/users">
+    {({ data, loading }) => (
+        loading ? <Spinner /> : <UserList users={data} />
+    )}
+</DataFetcher>
+
+// Note: Prefer hooks for new code
+
+================================================================================
+                           END OF REACT.JS NOTES
+================================================================================

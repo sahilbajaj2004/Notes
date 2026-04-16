@@ -1,0 +1,49 @@
+VS Code Shortcuts (Linux/Windows)
+
+General
+- Command Palette: Ctrl+Shift+P
+- Quick Open: Ctrl+P
+- New File: Ctrl+N
+- Open File: Ctrl+O
+- Save: Ctrl+S
+- Save All: Ctrl+K, S
+- Close Tab: Ctrl+W
+- Reopen Tab: Ctrl+Shift+T
+- Split Editor: Ctrl+\
+- Toggle Sidebar: Ctrl+B
+- Toggle Panel: Ctrl+J
+- Zen Mode: Ctrl+K, Z
+
+Editing
+- Multi-cursor (add): Alt+Click
+- Multi-cursor (next same): Ctrl+D
+- Select all occurrences: Ctrl+Shift+L
+- Select all occurrences (find): Ctrl+F then Alt+Enter
+- Move line up/down: Alt+Up / Alt+Down
+- Copy line up/down: Shift+Alt+Up / Shift+Alt+Down
+- Delete line: Ctrl+Shift+K
+- Duplicate selection/line: Shift+Alt+Down
+- Format document: Shift+Alt+F
+- Comment line: Ctrl+/
+- Block comment: Shift+Alt+A
+- Rename symbol: F2
+- Go to definition: F12
+- Peek definition: Alt+F12
+- Go to line: Ctrl+G
+
+Search
+- Find: Ctrl+F
+- Find next/prev: F3 / Shift+F3
+- Replace: Ctrl+H
+- Find in files: Ctrl+Shift+F
+- Replace in files: Ctrl+Shift+H
+
+Terminal
+- Toggle terminal: Ctrl+`
+- New terminal: Ctrl+Shift+`
+- Kill terminal: Ctrl+Shift+W
+
+Git
+- Source Control: Ctrl+Shift+G
+- Stage: Ctrl+Enter (in SCM input)
+- Commit: Ctrl+Enter (after message)

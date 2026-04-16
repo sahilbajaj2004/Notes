@@ -1,0 +1,1514 @@
+================================================================================
+                      CLOUD & DEVOPS - COMPLETE NOTES
+================================================================================
+
+================================================================================
+1. GIT AND GITHUB - INTRODUCTION
+================================================================================
+
+GIT:
+- Distributed Version Control System (DVCS)
+- Tracks changes in source code
+- Enables collaboration
+- Created by Linus Torvalds (2005)
+
+GITHUB:
+- Web-based Git repository hosting service
+- Provides collaboration features
+- Pull requests, issues, actions
+- Largest code hosting platform
+
+VERSION CONTROL BENEFITS:
+- Track changes over time
+- Collaborate with team members
+- Revert to previous versions
+- Branch for parallel development
+- Merge changes from multiple sources
+- Backup and disaster recovery
+
+INSTALLATION:
+# Windows: Download from git-scm.com
+# Linux
+sudo apt-get install git
+
+# macOS
+brew install git
+
+# Verify installation
+git --version
+
+INITIAL CONFIGURATION:
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+git config --global init.defaultBranch main
+
+# View configuration
+git config --list
+git config user.name
+
+================================================================================
+2. GIT BASH
+================================================================================
+
+Git Bash is a command-line shell for Windows that provides:
+- Unix-like terminal experience
+- Git commands
+- Bash shell commands
+
+BASIC BASH COMMANDS:
+# Navigation
+pwd                     # Print working directory
+ls                      # List files
+ls -la                  # List all files with details
+cd folder               # Change directory
+cd ..                   # Go up one level
+cd ~                    # Go to home directory
+
+# File operations
+touch file.txt          # Create file
+mkdir folder            # Create directory
+mkdir -p a/b/c          # Create nested directories
+rm file.txt             # Remove file
+rm -rf folder           # Remove folder recursively
+cp source dest          # Copy file
+mv source dest          # Move/rename file
+cat file.txt            # View file contents
+
+# Other useful commands
+clear                   # Clear terminal
+history                 # Command history
+echo "text"             # Print text
+echo "text" > file.txt  # Write to file
+echo "text" >> file.txt # Append to file
+
+================================================================================
+3. GIT COMMANDS - COMPLETE REFERENCE
+================================================================================
+
+REPOSITORY SETUP:
+# Initialize new repository
+git init
+
+# Clone existing repository
+git clone https://github.com/user/repo.git
+git clone https://github.com/user/repo.git folder-name
+git clone --depth 1 https://github.com/user/repo.git  # Shallow clone
+
+STAGING AND COMMITTING:
+# Check status
+git status
+git status -s           # Short format
+
+# Stage changes
+git add file.txt        # Stage specific file
+git add .               # Stage all changes
+git add *.js            # Stage by pattern
+git add -p              # Interactive staging
+
+# Unstage changes
+git reset file.txt      # Unstage file
+git reset               # Unstage all
+
+# Commit changes
+git commit -m "Commit message"
+git commit -am "Message" # Stage and commit tracked files
+git commit --amend      # Modify last commit
+
+# View history
+git log                 # Full log
+git log --oneline       # Condensed log
+git log --graph         # Graph view
+git log -n 5            # Last 5 commits
+git log --author="Name" # By author
+git log --since="2024-01-01"
+git log file.txt        # History of specific file
+
+BRANCHING:
+# List branches
+git branch              # Local branches
+git branch -r           # Remote branches
+git branch -a           # All branches
+
+# Create branch
+git branch feature      # Create branch
+git checkout -b feature # Create and switch
+git switch -c feature   # Modern syntax
+
+# Switch branch
+git checkout main       # Switch to main
+git switch main         # Modern syntax
+
+# Rename branch
+git branch -m old-name new-name
+git branch -m new-name  # Rename current branch
+
+# Delete branch
+git branch -d feature   # Delete merged branch
+git branch -D feature   # Force delete
+
+MERGING:
+# Merge branch into current
+git merge feature
+
+# Merge with commit message
+git merge feature -m "Merge feature branch"
+
+# Abort merge
+git merge --abort
+
+# Merge strategies
+git merge --no-ff feature  # No fast-forward
+git merge --squash feature # Squash commits
+
+REBASING:
+# Rebase current branch onto main
+git rebase main
+
+# Interactive rebase (edit last 3 commits)
+git rebase -i HEAD~3
+
+# Abort rebase
+git rebase --abort
+
+# Continue after resolving conflicts
+git rebase --continue
+
+REMOTE REPOSITORIES:
+# View remotes
+git remote -v
+
+# Add remote
+git remote add origin https://github.com/user/repo.git
+
+# Remove remote
+git remote remove origin
+
+# Rename remote
+git remote rename origin upstream
+
+# Fetch from remote
+git fetch origin
+git fetch --all
+
+# Pull from remote
+git pull origin main
+git pull --rebase origin main
+
+# Push to remote
+git push origin main
+git push -u origin main    # Set upstream
+git push --force           # Force push (careful!)
+git push --force-with-lease # Safer force push
+
+STASHING:
+# Save changes temporarily
+git stash
+git stash save "description"
+git stash push -m "message"
+
+# List stashes
+git stash list
+
+# Apply stash
+git stash apply           # Apply latest, keep in stash
+git stash pop             # Apply latest, remove from stash
+git stash apply stash@{2} # Apply specific stash
+
+# View stash contents
+git stash show
+git stash show -p         # With diff
+
+# Delete stash
+git stash drop stash@{0}
+git stash clear           # Delete all
+
+UNDOING CHANGES:
+# Discard working directory changes
+git checkout -- file.txt
+git restore file.txt      # Modern syntax
+
+# Unstage file
+git reset HEAD file.txt
+git restore --staged file.txt
+
+# Reset to previous commit
+git reset --soft HEAD~1   # Keep changes staged
+git reset --mixed HEAD~1  # Keep changes unstaged (default)
+git reset --hard HEAD~1   # Discard changes
+
+# Revert commit (creates new commit)
+git revert HEAD
+git revert abc123
+
+VIEWING CHANGES:
+# View unstaged changes
+git diff
+
+# View staged changes
+git diff --staged
+git diff --cached
+
+# View changes between commits
+git diff abc123 def456
+
+# View changes between branches
+git diff main..feature
+
+TAGGING:
+# List tags
+git tag
+
+# Create lightweight tag
+git tag v1.0.0
+
+# Create annotated tag
+git tag -a v1.0.0 -m "Version 1.0.0"
+
+# Tag specific commit
+git tag v1.0.0 abc123
+
+# Push tags
+git push origin v1.0.0
+git push origin --tags
+
+# Delete tag
+git tag -d v1.0.0
+git push origin --delete v1.0.0
+
+CLEANING:
+# Remove untracked files (dry run)
+git clean -n
+
+# Remove untracked files
+git clean -f
+
+# Remove untracked files and directories
+git clean -fd
+
+# Remove ignored files too
+git clean -fdx
+
+================================================================================
+4. GITHUB WORKFLOW
+================================================================================
+
+FORK WORKFLOW:
+1. Fork repository on GitHub
+2. Clone your fork locally
+   git clone https://github.com/your-username/repo.git
+3. Add upstream remote
+   git remote add upstream https://github.com/original/repo.git
+4. Create feature branch
+   git checkout -b feature
+5. Make changes and commit
+6. Push to your fork
+   git push origin feature
+7. Create Pull Request on GitHub
+8. Keep fork synced
+   git fetch upstream
+   git checkout main
+   git merge upstream/main
+
+PULL REQUEST WORKFLOW:
+1. Create feature branch from main
+2. Make changes, commit with meaningful messages
+3. Push branch to remote
+4. Open Pull Request on GitHub
+5. Request reviews
+6. Address feedback
+7. Merge when approved
+8. Delete feature branch
+
+GITHUB CLI (gh):
+# Install: https://cli.github.com/
+
+# Authentication
+gh auth login
+
+# Repository operations
+gh repo create my-repo --public
+gh repo clone user/repo
+gh repo fork user/repo
+
+# Pull requests
+gh pr create --title "Title" --body "Description"
+gh pr list
+gh pr view 123
+gh pr checkout 123
+gh pr merge 123
+
+# Issues
+gh issue create --title "Bug" --body "Description"
+gh issue list
+gh issue view 123
+
+.GITIGNORE:
+# Node.js
+node_modules/
+npm-debug.log
+.env
+.env.local
+
+# Build output
+dist/
+build/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+
+# Dependencies
+package-lock.json  # Optional
+
+================================================================================
+5. AWS OVERVIEW
+================================================================================
+
+AMAZON WEB SERVICES (AWS):
+- Leading cloud computing platform
+- 200+ services
+- Global infrastructure
+- Pay-as-you-go pricing
+
+KEY SERVICES:
+
+COMPUTE:
+- EC2 (Elastic Compute Cloud) - Virtual servers
+- Lambda - Serverless functions
+- ECS/EKS - Container orchestration
+- Elastic Beanstalk - PaaS deployment
+
+STORAGE:
+- S3 (Simple Storage Service) - Object storage
+- EBS (Elastic Block Store) - Block storage
+- EFS (Elastic File System) - File storage
+- Glacier - Archive storage
+
+DATABASE:
+- RDS (Relational Database Service) - Managed SQL
+- DynamoDB - NoSQL database
+- ElastiCache - In-memory caching
+- DocumentDB - MongoDB compatible
+
+NETWORKING:
+- VPC (Virtual Private Cloud) - Isolated network
+- Route 53 - DNS service
+- CloudFront - CDN
+- API Gateway - API management
+- ELB (Elastic Load Balancing) - Load balancer
+
+SECURITY:
+- IAM (Identity and Access Management)
+- Security Groups
+- ACM (Certificate Manager) - SSL/TLS
+- WAF (Web Application Firewall)
+
+DEPLOYMENT:
+- CodeDeploy
+- CodePipeline
+- CodeBuild
+- CloudFormation
+
+MONITORING:
+- CloudWatch - Metrics and logs
+- X-Ray - Distributed tracing
+
+AWS CLI SETUP:
+# Install AWS CLI
+# Download from aws.amazon.com/cli
+
+# Configure credentials
+aws configure
+# Enter:
+# - AWS Access Key ID
+# - AWS Secret Access Key
+# - Default region (e.g., us-east-1)
+# - Default output format (json)
+
+# Verify
+aws sts get-caller-identity
+
+================================================================================
+6. EC2 INSTANCE
+================================================================================
+
+EC2 (Elastic Compute Cloud):
+- Virtual servers in the cloud
+- Various instance types and sizes
+- Multiple OS options
+- Pay per hour/second
+
+LAUNCHING EC2 INSTANCE:
+
+1. Go to AWS Console → EC2
+2. Click "Launch Instance"
+3. Configure:
+   - Name: my-server
+   - AMI: Amazon Linux 2023 or Ubuntu
+   - Instance type: t2.micro (free tier)
+   - Key pair: Create or select existing
+   - Network settings: Create security group
+   - Storage: 8-30 GB (free tier: 30GB)
+4. Launch instance
+
+SECURITY GROUP RULES:
+# Inbound rules
+SSH         TCP  22    Your IP or 0.0.0.0/0
+HTTP        TCP  80    0.0.0.0/0
+HTTPS       TCP  443   0.0.0.0/0
+Custom      TCP  3000  0.0.0.0/0  (for Node.js)
+Custom      TCP  27017 0.0.0.0/0  (for MongoDB)
+
+CONNECTING TO EC2:
+
+# Using SSH (Linux/Mac/Git Bash)
+chmod 400 my-key.pem
+ssh -i my-key.pem ec2-user@public-ip  # Amazon Linux
+ssh -i my-key.pem ubuntu@public-ip    # Ubuntu
+
+# Using PuTTY (Windows)
+# 1. Convert .pem to .ppk using PuTTYgen
+# 2. Use PuTTY to connect
+
+BASIC SERVER SETUP:
+# Update system
+sudo yum update -y          # Amazon Linux
+sudo apt update && sudo apt upgrade -y  # Ubuntu
+
+# Install Node.js (using nvm)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+source ~/.bashrc
+nvm install --lts
+node --version
+
+# Install Git
+sudo yum install git -y     # Amazon Linux
+sudo apt install git -y     # Ubuntu
+
+# Clone your project
+git clone https://github.com/user/repo.git
+cd repo
+npm install
+
+# Run application
+npm start
+
+ELASTIC IP:
+- Static public IP address
+- Persists after instance stop/start
+- Free when associated with running instance
+
+# Allocate Elastic IP
+# AWS Console → EC2 → Elastic IPs → Allocate
+# Associate with your instance
+
+================================================================================
+7. DOCKER BASICS
+================================================================================
+
+DOCKER:
+- Platform for containerization
+- Package applications with dependencies
+- Consistent environments
+- Lightweight virtualization
+
+KEY CONCEPTS:
+- Image: Blueprint for containers
+- Container: Running instance of image
+- Dockerfile: Instructions to build image
+- Docker Hub: Registry for images
+- Volume: Persistent data storage
+- Network: Container communication
+
+INSTALLATION:
+# Linux
+sudo apt-get update
+sudo apt-get install docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -aG docker $USER
+
+# Verify
+docker --version
+docker run hello-world
+
+BASIC COMMANDS:
+# Images
+docker images                    # List images
+docker pull nginx               # Download image
+docker rmi image-id             # Remove image
+docker build -t my-app .        # Build image
+
+# Containers
+docker ps                       # Running containers
+docker ps -a                    # All containers
+docker run nginx                # Run container
+docker run -d nginx             # Run detached
+docker run -p 80:80 nginx       # Port mapping
+docker run --name web nginx     # Named container
+docker run -it ubuntu bash      # Interactive mode
+
+docker stop container-id        # Stop container
+docker start container-id       # Start container
+docker restart container-id     # Restart container
+docker rm container-id          # Remove container
+docker rm -f container-id       # Force remove
+
+docker logs container-id        # View logs
+docker logs -f container-id     # Follow logs
+docker exec -it container-id bash  # Execute command
+
+# Cleanup
+docker system prune             # Remove unused data
+docker container prune          # Remove stopped containers
+docker image prune              # Remove unused images
+
+DOCKERFILE:
+# Node.js application Dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy application code
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# Set environment
+ENV NODE_ENV=production
+
+# Start command
+CMD ["node", "server.js"]
+
+BUILDING AND RUNNING:
+# Build image
+docker build -t my-node-app .
+
+# Run container
+docker run -d -p 3000:3000 --name my-app my-node-app
+
+# With environment variables
+docker run -d -p 3000:3000 \
+  -e NODE_ENV=production \
+  -e DB_URI=mongodb://host:27017/db \
+  --name my-app my-node-app
+
+# With volume (for development)
+docker run -d -p 3000:3000 \
+  -v $(pwd):/app \
+  -v /app/node_modules \
+  --name my-app my-node-app
+
+.DOCKERIGNORE:
+node_modules
+npm-debug.log
+.git
+.gitignore
+.env
+Dockerfile
+docker-compose.yml
+README.md
+.dockerignore
+
+================================================================================
+8. DOCKER COMPOSE - MULTIPLE PROJECTS
+================================================================================
+
+Docker Compose:
+- Define multi-container applications
+- Single YAML configuration
+- Manage entire application stack
+
+DOCKER-COMPOSE.YML (MERN Stack):
+version: '3.8'
+
+services:
+  # MongoDB
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - mern-network
+
+  # Backend (Node.js/Express)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      MONGO_URI: mongodb://admin:password123@mongodb:27017/mydb?authSource=admin
+      JWT_SECRET: your-jwt-secret
+    depends_on:
+      - mongodb
+    networks:
+      - mern-network
+
+  # Frontend (React)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - mern-network
+
+  # Redis (optional caching)
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - mern-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  mern-network:
+    driver: bridge
+
+FRONTEND DOCKERFILE (React with Nginx):
+# Build stage
+FROM node:18-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# Production stage
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
+NGINX.CONF:
+server {
+    listen 80;
+    server_name localhost;
+    
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+    
+    location /api {
+        proxy_pass http://backend:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+DOCKER COMPOSE COMMANDS:
+# Start all services
+docker-compose up
+
+# Start in detached mode
+docker-compose up -d
+
+# Build and start
+docker-compose up --build
+
+# Stop services
+docker-compose down
+
+# Stop and remove volumes
+docker-compose down -v
+
+# View logs
+docker-compose logs
+docker-compose logs -f backend
+
+# Scale services
+docker-compose up -d --scale backend=3
+
+# Execute command in service
+docker-compose exec backend bash
+
+# Restart specific service
+docker-compose restart backend
+
+================================================================================
+9. VPS SETUP
+================================================================================
+
+VPS (Virtual Private Server):
+- Dedicated virtual server
+- Full root access
+- Various providers: DigitalOcean, Linode, Vultr, AWS Lightsail
+
+INITIAL SERVER SETUP:
+
+# Connect to server
+ssh root@your-server-ip
+
+# Update system
+apt update && apt upgrade -y
+
+# Create new user
+adduser username
+usermod -aG sudo username
+
+# Setup SSH for new user
+mkdir -p /home/username/.ssh
+cp ~/.ssh/authorized_keys /home/username/.ssh/
+chown -R username:username /home/username/.ssh
+chmod 700 /home/username/.ssh
+chmod 600 /home/username/.ssh/authorized_keys
+
+# Disable root login (edit /etc/ssh/sshd_config)
+PermitRootLogin no
+PasswordAuthentication no
+
+# Restart SSH
+systemctl restart sshd
+
+FIREWALL SETUP (UFW):
+# Enable firewall
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
+# Allow SSH
+sudo ufw allow ssh
+sudo ufw allow 22/tcp
+
+# Allow HTTP/HTTPS
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+
+# Allow Node.js port
+sudo ufw allow 3000/tcp
+
+# Enable firewall
+sudo ufw enable
+
+# Check status
+sudo ufw status
+
+INSTALL REQUIRED SOFTWARE:
+# Install Node.js
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Install Nginx
+sudo apt install nginx -y
+
+# Install MongoDB (if not using Atlas)
+# Follow official MongoDB installation guide
+
+# Install PM2
+sudo npm install -g pm2
+
+# Install Git
+sudo apt install git -y
+
+================================================================================
+10. ENVIRONMENT SETUP
+================================================================================
+
+ENVIRONMENT VARIABLES:
+
+# Create .env file
+nano .env
+
+# Example .env content
+NODE_ENV=production
+PORT=5000
+MONGO_URI=mongodb+srv://user:pass@cluster.mongodb.net/dbname
+JWT_SECRET=your-super-secret-key
+JWT_EXPIRE=30d
+CORS_ORIGIN=https://yourdomain.com
+
+# Load in application
+require('dotenv').config();
+const port = process.env.PORT || 3000;
+
+NGINX CONFIGURATION:
+# /etc/nginx/sites-available/myapp
+server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com;
+    
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+# Enable site
+sudo ln -s /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/
+sudo rm /etc/nginx/sites-enabled/default
+
+# Test configuration
+sudo nginx -t
+
+# Restart Nginx
+sudo systemctl restart nginx
+
+PROJECT DEPLOYMENT:
+# Clone project
+cd /var/www
+sudo git clone https://github.com/user/repo.git myapp
+cd myapp
+
+# Set permissions
+sudo chown -R $USER:$USER /var/www/myapp
+
+# Install dependencies
+npm install --production
+
+# Create .env file
+cp .env.example .env
+nano .env
+# Edit with production values
+
+# Build frontend (if applicable)
+npm run build
+
+# Start with PM2
+pm2 start server.js --name myapp
+
+================================================================================
+11. PM2 (PROCESS MANAGER)
+================================================================================
+
+PM2:
+- Production process manager for Node.js
+- Keep applications alive forever
+- Auto-restart on crashes
+- Load balancing
+- Log management
+
+INSTALLATION:
+npm install -g pm2
+
+BASIC COMMANDS:
+# Start application
+pm2 start app.js
+pm2 start app.js --name "my-app"
+pm2 start npm --name "my-app" -- start
+
+# List processes
+pm2 list
+pm2 ls
+pm2 status
+
+# Stop/Restart/Delete
+pm2 stop my-app
+pm2 restart my-app
+pm2 delete my-app
+pm2 stop all
+pm2 restart all
+
+# Logs
+pm2 logs
+pm2 logs my-app
+pm2 logs --lines 100
+
+# Monitoring
+pm2 monit
+
+# Process info
+pm2 show my-app
+pm2 describe my-app
+
+ECOSYSTEM FILE (ecosystem.config.js):
+module.exports = {
+    apps: [{
+        name: 'my-app',
+        script: './server.js',
+        instances: 'max',           // Cluster mode
+        exec_mode: 'cluster',
+        autorestart: true,
+        watch: false,
+        max_memory_restart: '1G',
+        env: {
+            NODE_ENV: 'development',
+            PORT: 3000
+        },
+        env_production: {
+            NODE_ENV: 'production',
+            PORT: 5000
+        }
+    }]
+};
+
+# Start with ecosystem file
+pm2 start ecosystem.config.js
+pm2 start ecosystem.config.js --env production
+
+STARTUP AND SAVE:
+# Generate startup script
+pm2 startup
+# Run the command it outputs
+
+# Save current process list
+pm2 save
+
+# Resurrect saved processes
+pm2 resurrect
+
+DEPLOYMENT WITH PM2:
+# ecosystem.config.js
+module.exports = {
+    apps: [{
+        name: 'my-app',
+        script: './server.js'
+    }],
+    deploy: {
+        production: {
+            user: 'ubuntu',
+            host: 'your-server-ip',
+            ref: 'origin/main',
+            repo: 'git@github.com:user/repo.git',
+            path: '/var/www/my-app',
+            'pre-deploy': 'git fetch --all',
+            'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env production',
+            env: {
+                NODE_ENV: 'production'
+            }
+        }
+    }
+};
+
+# Setup deployment
+pm2 deploy ecosystem.config.js production setup
+
+# Deploy
+pm2 deploy ecosystem.config.js production
+
+================================================================================
+12. MONGODB ATLAS
+================================================================================
+
+MongoDB Atlas:
+- Fully managed MongoDB service
+- Cloud database hosting
+- Free tier available (512MB)
+- Auto-scaling, backups, monitoring
+
+SETUP:
+
+1. Create Account
+   - Go to mongodb.com/atlas
+   - Sign up for free account
+
+2. Create Organization and Project
+   - Organization: Your company/personal
+   - Project: Specific application
+
+3. Build Cluster
+   - Choose provider (AWS, GCP, Azure)
+   - Select region (closest to users)
+   - Choose tier (M0 Free, M10+)
+   - Name your cluster
+
+================================================================================
+13. CLUSTER CREATION
+================================================================================
+
+STEP-BY-STEP:
+
+1. CREATE CLUSTER:
+   - Click "Build a Cluster"
+   - Select "Shared" for free tier
+   - Choose cloud provider and region
+   - Click "Create Cluster"
+
+2. CREATE DATABASE USER:
+   - Go to Database Access
+   - Add New Database User
+   - Authentication Method: Password
+   - Username: myappuser
+   - Password: (auto-generate secure password)
+   - Built-in Role: Read and Write to any database
+   - Add User
+
+3. CONFIGURE NETWORK ACCESS:
+   - Go to Network Access
+   - Add IP Address
+   - For development: Allow Access from Anywhere (0.0.0.0/0)
+   - For production: Add specific server IPs
+   - Add IP Address
+
+4. GET CONNECTION STRING:
+   - Go to Clusters
+   - Click "Connect"
+   - Choose "Connect your application"
+   - Select Driver: Node.js
+   - Copy connection string
+
+CONNECTION STRING FORMAT:
+mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/<dbname>?retryWrites=true&w=majority
+
+# Replace:
+# <username> - Your database user
+# <password> - User password (URL encoded if special chars)
+# <dbname> - Your database name
+
+================================================================================
+14. CONNECTING MERN TO ATLAS
+================================================================================
+
+BACKEND CONNECTION:
+// config/db.js
+const mongoose = require('mongoose');
+
+const connectDB = async () => {
+    try {
+        const conn = await mongoose.connect(process.env.MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+        
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+    } catch (error) {
+        console.error(`Error: ${error.message}`);
+        process.exit(1);
+    }
+};
+
+module.exports = connectDB;
+
+// server.js
+require('dotenv').config();
+const express = require('express');
+const connectDB = require('./config/db');
+
+// Connect to MongoDB Atlas
+connectDB();
+
+const app = express();
+// ... rest of your app
+
+ENVIRONMENT VARIABLES:
+# .env
+MONGO_URI=mongodb+srv://myuser:mypassword@cluster0.xxxxx.mongodb.net/mydb?retryWrites=true&w=majority
+
+# For production on VPS
+# Create .env with production credentials
+# Never commit .env to version control
+
+CONNECTION OPTIONS:
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    maxPoolSize: 10,              // Connection pool size
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+    family: 4                      // Use IPv4
+});
+
+CONNECTION EVENTS:
+mongoose.connection.on('connected', () => {
+    console.log('MongoDB connected');
+});
+
+mongoose.connection.on('error', (err) => {
+    console.log('MongoDB error:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+    console.log('MongoDB disconnected');
+});
+
+// Graceful shutdown
+process.on('SIGINT', async () => {
+    await mongoose.connection.close();
+    console.log('MongoDB connection closed');
+    process.exit(0);
+});
+
+================================================================================
+15. DOMAIN SETUP
+================================================================================
+
+DOMAIN REGISTRATION:
+- Registrars: Namecheap, GoDaddy, Google Domains, Cloudflare
+
+DNS CONFIGURATION:
+
+1. Add A Record:
+   Type: A
+   Name: @ (or blank)
+   Value: Your-Server-IP
+   TTL: 3600
+
+2. Add www subdomain:
+   Type: A (or CNAME)
+   Name: www
+   Value: Your-Server-IP (or yourdomain.com)
+   TTL: 3600
+
+3. Optional - API subdomain:
+   Type: A
+   Name: api
+   Value: Your-Server-IP
+   TTL: 3600
+
+DNS PROPAGATION:
+- Can take 24-48 hours
+- Check with: dig yourdomain.com
+- Or: nslookup yourdomain.com
+
+NGINX CONFIGURATION FOR DOMAIN:
+server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com;
+    
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+# Test and reload
+sudo nginx -t
+sudo systemctl reload nginx
+
+================================================================================
+16. SSL / HTTPS
+================================================================================
+
+CERTBOT (Let's Encrypt):
+Free, automated SSL certificates.
+
+INSTALLATION:
+# Ubuntu/Debian
+sudo apt update
+sudo apt install certbot python3-certbot-nginx
+
+# CentOS/RHEL
+sudo yum install certbot python3-certbot-nginx
+
+OBTAIN CERTIFICATE:
+# Automatically configure Nginx
+sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+
+# Follow prompts:
+# - Enter email for renewal notices
+# - Agree to terms
+# - Choose redirect HTTP to HTTPS
+
+MANUAL CERTIFICATE:
+# Obtain certificate only
+sudo certbot certonly --nginx -d yourdomain.com
+
+# Manual Nginx SSL configuration
+server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com;
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name yourdomain.com www.yourdomain.com;
+    
+    ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256;
+    
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Strict-Transport-Security "max-age=31536000" always;
+    
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+AUTO-RENEWAL:
+# Test renewal
+sudo certbot renew --dry-run
+
+# Certbot auto-renewal is usually set up automatically
+# Check with:
+sudo systemctl status certbot.timer
+
+# Manual cron job (if needed)
+# Run: sudo crontab -e
+0 0,12 * * * certbot renew --quiet --post-hook "systemctl reload nginx"
+
+================================================================================
+17. DEPLOYMENT TESTING
+================================================================================
+
+PRE-DEPLOYMENT CHECKLIST:
+[ ] Environment variables set
+[ ] Database connection tested
+[ ] Build process successful
+[ ] Static files served correctly
+[ ] API endpoints working
+[ ] CORS configured
+[ ] Security headers added
+[ ] Error handling in place
+[ ] Logging configured
+
+TESTING COMMANDS:
+# Check if app is running
+curl http://localhost:3000
+
+# Check through Nginx
+curl http://yourdomain.com
+
+# Check HTTPS
+curl -I https://yourdomain.com
+
+# Check API endpoint
+curl https://yourdomain.com/api/health
+
+# Check SSL certificate
+openssl s_client -connect yourdomain.com:443 -servername yourdomain.com
+
+HEALTH CHECK ENDPOINT:
+// Add to your Express app
+app.get('/api/health', (req, res) => {
+    res.status(200).json({
+        status: 'OK',
+        timestamp: new Date(),
+        uptime: process.uptime(),
+        environment: process.env.NODE_ENV
+    });
+});
+
+LOAD TESTING:
+# Using Apache Bench
+ab -n 1000 -c 100 http://yourdomain.com/
+
+# Using wrk
+wrk -t12 -c400 -d30s http://yourdomain.com/
+
+# Using Artillery
+npm install -g artillery
+artillery quick --count 100 -n 50 http://yourdomain.com/
+
+COMMON ISSUES:
+
+1. 502 Bad Gateway
+   - Check if Node.js app is running
+   - Check PM2 status: pm2 list
+   - Check logs: pm2 logs
+
+2. Connection Refused
+   - Check firewall: sudo ufw status
+   - Check Nginx: sudo systemctl status nginx
+
+3. Mixed Content
+   - Ensure all resources use HTTPS
+   - Update API URLs to HTTPS
+
+4. CORS Errors
+   - Configure CORS in Express:
+     app.use(cors({ origin: 'https://yourdomain.com' }));
+
+================================================================================
+18. MONITORING AND MAINTENANCE
+================================================================================
+
+PM2 MONITORING:
+# Real-time monitoring
+pm2 monit
+
+# Web-based dashboard (PM2 Plus)
+pm2 plus
+
+# Generate web monitoring
+pm2 web
+
+SERVER MONITORING:
+# System resources
+htop
+top
+free -h          # Memory usage
+df -h            # Disk usage
+uptime           # System uptime
+
+# Network
+netstat -tlnp    # Open ports
+ss -tlnp         # Alternative
+
+NGINX MONITORING:
+# Access logs
+sudo tail -f /var/log/nginx/access.log
+
+# Error logs
+sudo tail -f /var/log/nginx/error.log
+
+# Status
+sudo systemctl status nginx
+
+APPLICATION LOGGING:
+// Use Winston for production logging
+const winston = require('winston');
+
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.json()
+    ),
+    transports: [
+        new winston.transports.File({ filename: 'error.log', level: 'error' }),
+        new winston.transports.File({ filename: 'combined.log' })
+    ]
+});
+
+if (process.env.NODE_ENV !== 'production') {
+    logger.add(new winston.transports.Console({
+        format: winston.format.simple()
+    }));
+}
+
+module.exports = logger;
+
+AUTOMATED BACKUPS:
+#!/bin/bash
+# backup.sh
+
+# Database backup (MongoDB Atlas handles this)
+# For self-hosted MongoDB:
+mongodump --uri="mongodb://localhost:27017/mydb" --out=/backup/$(date +%Y%m%d)
+
+# Application backup
+tar -czf /backup/app-$(date +%Y%m%d).tar.gz /var/www/myapp
+
+# Keep last 7 days
+find /backup -type f -mtime +7 -delete
+
+# Cron job: 0 2 * * * /path/to/backup.sh
+
+SECURITY MAINTENANCE:
+# Update system regularly
+sudo apt update && sudo apt upgrade -y
+
+# Check for vulnerable packages
+npm audit
+
+# Fix vulnerabilities
+npm audit fix
+
+# Update dependencies
+npm update
+
+# Check SSL certificate expiry
+echo | openssl s_client -servername yourdomain.com -connect yourdomain.com:443 2>/dev/null | openssl x509 -noout -dates
+
+MONITORING SERVICES (Optional):
+- UptimeRobot (free uptime monitoring)
+- New Relic (application performance)
+- Datadog (infrastructure monitoring)
+- Sentry (error tracking)
+- LogRocket (session replay)
+
+MAINTENANCE TASKS:
+Daily:
+- Check application logs for errors
+- Monitor server resources
+
+Weekly:
+- Review security logs
+- Check disk space
+- Update npm packages
+
+Monthly:
+- Full system update
+- Review and optimize database
+- Security audit
+- Backup verification
+
+AUTOMATED DEPLOYMENT (CI/CD):
+# GitHub Actions workflow
+# .github/workflows/deploy.yml
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /var/www/myapp
+            git pull origin main
+            npm install --production
+            pm2 restart all
+
+================================================================================
+                       END OF CLOUD & DEVOPS NOTES
+================================================================================
