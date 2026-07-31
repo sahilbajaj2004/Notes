@@ -1,0 +1,4053 @@
+================================================================================
+                            JAVA - COMPLETE NOTES
+================================================================================
+
+================================================================================
+1. INTRODUCTION TO JAVA
+================================================================================
+
+Java is:
+- A high-level, object-oriented, class-based programming language
+- Platform-independent ("Write Once, Run Anywhere" - WORA)
+- Strongly typed, compiled, and interpreted
+- Developed by James Gosling at Sun Microsystems (1995)
+- Now owned by Oracle Corporation
+
+History:
+- Originally called "Oak" (1991), then renamed to Java (1995)
+- Java 1.0 released in 1996
+- Java SE 8 (2014) - Major update (Lambdas, Streams, Optional)
+- Java SE 11 (2018) - LTS release
+- Java SE 17 (2021) - LTS release (Sealed Classes, Pattern Matching)
+- Java SE 21 (2023) - LTS release (Virtual Threads, Record Patterns)
+
+Key Features:
+- Platform Independent (JVM)
+- Object-Oriented
+- Robust (strong memory management, exception handling)
+- Secure (no pointers, runs in JVM sandbox)
+- Multithreaded
+- Distributed (RMI, EJB)
+- Automatic Garbage Collection
+
+Java Editions:
+- Java SE (Standard Edition) - Core Java, desktop apps
+- Java EE (Enterprise Edition) / Jakarta EE - Web and enterprise apps
+- Java ME (Micro Edition) - Mobile and embedded devices
+
+Java Can:
+- Build web applications (Spring, Jakarta EE)
+- Build Android apps (Android SDK)
+- Create desktop applications (JavaFX, Swing)
+- Build microservices (Spring Boot, Quarkus)
+- Big Data processing (Hadoop, Spark)
+- Build REST APIs
+- Game development
+- IoT applications
+
+================================================================================
+2. HOW JAVA WORKS (JVM, JDK, JRE)
+================================================================================
+
+COMPILATION & EXECUTION FLOW:
+
+Source Code (.java) → javac compiler → Bytecode (.class) → JVM → Machine Code
+
+JDK (Java Development Kit):
+- Complete development environment
+- Includes JRE + development tools (javac, javadoc, jar, jdb)
+- You need JDK to DEVELOP Java programs
+
+JRE (Java Runtime Environment):
+- Runtime environment to RUN Java programs
+- Includes JVM + core libraries
+- You need JRE to RUN Java programs
+
+JVM (Java Virtual Machine):
+- Executes Java bytecode
+- Platform-specific (different JVM for each OS)
+- Provides garbage collection, memory management
+- Makes Java platform-independent
+
+JVM ARCHITECTURE:
+1. Class Loader     - Loads .class files
+2. Method Area      - Stores class structures, methods, static variables
+3. Heap             - Objects are stored here (shared among threads)
+4. Stack            - Method calls, local variables (one per thread)
+5. PC Register      - Current instruction address (one per thread)
+6. Native Method Stack - For native (C/C++) method calls
+7. Execution Engine - Interpreter + JIT Compiler
+
+JIT (Just-In-Time) Compiler:
+- Converts frequently used bytecode to native code at runtime
+- Improves performance by avoiding repeated interpretation
+
+INSTALLATION:
+# Download JDK from Oracle or adoptium.net
+# Set JAVA_HOME and PATH
+
+# Check version
+java --version
+javac --version
+
+# Compile
+javac FileName.java
+
+# Run
+java FileName
+
+================================================================================
+3. FIRST JAVA PROGRAM
+================================================================================
+
+// File: HelloWorld.java
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}
+
+BREAKDOWN:
+- public          - Access modifier (visible everywhere)
+- class           - Keyword to define a class
+- HelloWorld      - Class name (must match filename)
+- public static   - Method is accessible without creating object
+- void            - Return type (returns nothing)
+- main            - Entry point of the program
+- String[] args   - Command line arguments
+- System.out      - Standard output stream
+- println()       - Print with newline
+
+RULES:
+- File name MUST match the public class name
+- Java is CASE SENSITIVE
+- Every statement ends with semicolon ;
+- Code blocks use curly braces { }
+- main() method is the entry point
+
+COMMENTS:
+// Single line comment
+
+/* Multi-line
+   comment */
+
+/** 
+ * Javadoc comment
+ * Used for documentation
+ * @param args command line arguments
+ * @return void
+ */
+
+================================================================================
+4. VARIABLES & DATA TYPES
+================================================================================
+
+VARIABLE DECLARATION:
+dataType variableName = value;
+
+int age = 25;
+String name = "Sahil";
+double price = 99.99;
+boolean isActive = true;
+
+NAMING RULES:
+- Can contain letters, digits, underscores, dollar signs
+- Must begin with letter, $, or _
+- Cannot use reserved keywords
+- Case sensitive (age ≠ Age)
+
+NAMING CONVENTIONS:
+- camelCase for variables and methods: myVariable, calculateTotal()
+- PascalCase for classes: MyClassName, StudentRecord
+- UPPER_SNAKE_CASE for constants: MAX_SIZE, PI_VALUE
+- lowercase for packages: com.example.myapp
+
+PRIMITIVE DATA TYPES (8 types):
+
+Type      Size      Default    Range
+------    ------    -------    -----
+byte      1 byte    0          -128 to 127
+short     2 bytes   0          -32,768 to 32,767
+int       4 bytes   0          -2^31 to 2^31-1 (~2.1 billion)
+long      8 bytes   0L         -2^63 to 2^63-1
+float     4 bytes   0.0f       ~7 decimal digits precision
+double    8 bytes   0.0d       ~15 decimal digits precision
+char      2 bytes   '\u0000'   0 to 65,535 (Unicode)
+boolean   1 bit     false      true or false
+
+LITERAL EXAMPLES:
+// Integer literals
+int decimal = 100;
+int binary = 0b1010;         // Binary (prefix 0b)
+int octal = 0144;            // Octal (prefix 0)
+int hex = 0x64;              // Hexadecimal (prefix 0x)
+long bigNum = 100L;          // Long (suffix L)
+int million = 1_000_000;     // Underscore separator (Java 7+)
+
+// Floating point literals
+float f = 3.14f;             // Float (suffix f)
+double d = 3.14;             // Double (default)
+double scientific = 1.5e10;  // Scientific notation
+
+// Character literals
+char letter = 'A';
+char unicode = '\u0041';     // Unicode for 'A'
+char escape = '\n';          // Escape character
+
+// Boolean literals
+boolean flag = true;
+boolean check = false;
+
+// String literal (NOT primitive - it's a class)
+String text = "Hello Java";
+
+REFERENCE DATA TYPES:
+- String, Arrays, Classes, Interfaces, Enums
+- Stored on heap, variable holds reference (address)
+- Default value is null
+- Can call methods on them
+
+String name = "Sahil";       // String
+int[] numbers = {1, 2, 3};   // Array
+Object obj = new Object();   // Object
+
+VARIABLE TYPES:
+
+1. Local Variables:
+   - Declared inside methods, constructors, or blocks
+   - No default value (must initialize before use)
+   - Scope: within the method/block
+
+2. Instance Variables:
+   - Declared inside class but outside methods
+   - Each object has its own copy
+   - Have default values
+   - Scope: throughout the class
+
+3. Static/Class Variables:
+   - Declared with static keyword
+   - Shared among all objects of the class
+   - Have default values
+   - Scope: throughout the class
+
+public class VariableTypes {
+    // Instance variable
+    String name = "Sahil";
+    
+    // Static variable
+    static int count = 0;
+    
+    public void method() {
+        // Local variable
+        int age = 25;
+    }
+}
+
+TYPE CASTING:
+
+// Widening (automatic) - smaller to larger
+byte → short → int → long → float → double
+int myInt = 100;
+double myDouble = myInt;         // Automatic: 100.0
+
+// Narrowing (manual) - larger to smaller
+double → float → long → int → short → byte
+double myDouble = 9.78;
+int myInt = (int) myDouble;      // Manual: 9
+
+// String conversions
+String str = String.valueOf(42);         // int to String
+String str2 = Integer.toString(42);      // int to String
+int num = Integer.parseInt("42");        // String to int
+double d = Double.parseDouble("3.14");   // String to double
+
+WRAPPER CLASSES:
+// Primitive → Object wrapper
+// byte    → Byte
+// short   → Short
+// int     → Integer
+// long    → Long
+// float   → Float
+// double  → Double
+// char    → Character
+// boolean → Boolean
+
+// Autoboxing (primitive → wrapper)
+Integer wrapped = 42;           // auto
+Integer wrapped2 = Integer.valueOf(42);  // explicit
+
+// Unboxing (wrapper → primitive)
+int unwrapped = wrapped;        // auto
+int unwrapped2 = wrapped.intValue();     // explicit
+
+VAR KEYWORD (Java 10+):
+// Type inference for local variables
+var name = "Sahil";          // inferred as String
+var age = 25;                // inferred as int
+var list = new ArrayList<String>();  // inferred type
+
+// var can ONLY be used for local variables with initializer
+// Cannot use: var x;  (no initializer)
+// Cannot use for: fields, parameters, return types
+
+================================================================================
+5. OPERATORS
+================================================================================
+
+ARITHMETIC OPERATORS:
++    Addition           5 + 3   = 8
+-    Subtraction        5 - 3   = 2
+*    Multiplication     5 * 3   = 15
+/    Division           5 / 3   = 1 (integer division)
+%    Modulus            5 % 3   = 2
+++   Increment          i++ or ++i
+--   Decrement          i-- or --i
+
+// Pre vs Post increment
+int a = 5;
+int b = ++a;   // a=6, b=6 (increment first, then assign)
+int c = a++;   // a=7, c=6 (assign first, then increment)
+
+ASSIGNMENT OPERATORS:
+=     Assign            x = 10
++=    Add & assign      x += 5    →  x = x + 5
+-=    Subtract & assign x -= 5    →  x = x - 5
+*=    Multiply & assign x *= 5    →  x = x * 5
+/=    Divide & assign   x /= 5    →  x = x / 5
+%=    Modulus & assign  x %= 5    →  x = x % 5
+&=    AND & assign      x &= 5    →  x = x & 5
+|=    OR & assign       x |= 5    →  x = x | 5
+^=    XOR & assign      x ^= 5    →  x = x ^ 5
+<<=   Left shift        x <<= 2   →  x = x << 2
+>>=   Right shift       x >>= 2   →  x = x >> 2
+>>>=  Unsigned right    x >>>= 2  →  x = x >>> 2
+
+COMPARISON / RELATIONAL OPERATORS:
+==    Equal to            5 == 5   → true
+!=    Not equal to        5 != 3   → true
+>     Greater than        5 > 3    → true
+<     Less than           5 < 3    → false
+>=    Greater or equal    5 >= 5   → true
+<=    Less or equal       5 <= 3   → false
+
+LOGICAL OPERATORS:
+&&    Logical AND     (true && false) → false  (short-circuit)
+||    Logical OR      (true || false) → true   (short-circuit)
+!     Logical NOT     !true           → false
+
+BITWISE OPERATORS:
+&     AND              5 & 3   = 1     (0101 & 0011 = 0001)
+|     OR               5 | 3   = 7     (0101 | 0011 = 0111)
+^     XOR              5 ^ 3   = 6     (0101 ^ 0011 = 0110)
+~     NOT (complement) ~5      = -6    (inverts all bits)
+<<    Left shift       5 << 1  = 10    (multiply by 2)
+>>    Right shift      5 >> 1  = 2     (divide by 2)
+>>>   Unsigned right   -1 >>> 28 = 15  (fills with 0)
+
+TERNARY OPERATOR:
+variable = (condition) ? valueIfTrue : valueIfFalse;
+int max = (a > b) ? a : b;
+
+INSTANCEOF OPERATOR:
+String str = "Hello";
+boolean result = str instanceof String;  // true
+boolean result2 = str instanceof Object; // true
+
+OPERATOR PRECEDENCE (High to Low):
+1. ()  []  .
+2. ++ -- ~ !         (unary)
+3. * / %
+4. + -
+5. << >> >>>
+6. < <= > >= instanceof
+7. == !=
+8. &
+9. ^
+10. |
+11. &&
+12. ||
+13. ?:                (ternary)
+14. = += -= etc.      (assignment)
+
+================================================================================
+6. STRINGS
+================================================================================
+
+STRING CREATION:
+// Using literal (stored in String Pool)
+String str1 = "Hello";
+String str2 = "Hello";       // Same reference as str1
+
+// Using new keyword (stored in Heap)
+String str3 = new String("Hello");  // Different reference
+
+// String is IMMUTABLE - cannot be changed after creation
+// Every modification creates a new String object
+
+STRING METHODS:
+String str = "Hello World";
+
+// Length
+str.length()                    // 11
+
+// Character access
+str.charAt(0)                   // 'H'
+str.indexOf('o')                // 4
+str.lastIndexOf('o')            // 7
+
+// Substring
+str.substring(6)                // "World"
+str.substring(0, 5)             // "Hello"
+
+// Search
+str.contains("World")           // true
+str.startsWith("Hello")         // true
+str.endsWith("World")           // true
+str.indexOf("World")            // 6
+str.isEmpty()                   // false
+str.isBlank()                   // false (Java 11+)
+
+// Comparison
+str.equals("Hello World")       // true (content comparison)
+str.equalsIgnoreCase("hello world") // true
+str.compareTo("Hello")          // positive (lexicographic)
+str.compareToIgnoreCase("hello world") // 0
+
+// IMPORTANT: Use equals() NOT == for string comparison
+// == compares references, equals() compares content
+String a = new String("Hi");
+String b = new String("Hi");
+a == b              // false (different references)
+a.equals(b)         // true (same content)
+
+// Case conversion
+str.toUpperCase()               // "HELLO WORLD"
+str.toLowerCase()               // "hello world"
+
+// Trim / Strip
+"  Hello  ".trim()              // "Hello" (removes spaces)
+"  Hello  ".strip()             // "Hello" (Java 11, Unicode-aware)
+"  Hello  ".stripLeading()      // "Hello  "
+"  Hello  ".stripTrailing()     // "  Hello"
+
+// Replace
+str.replace('l', 'L')           // "HeLLo WorLd"
+str.replace("World", "Java")    // "Hello Java"
+str.replaceAll("[aeiou]", "*")  // Regex replacement
+str.replaceFirst("l", "L")     // "HeLlo World"
+
+// Split
+"a,b,c".split(",")             // ["a", "b", "c"]
+"Hello World".split(" ")       // ["Hello", "World"]
+"a.b.c".split("\\.")           // ["a", "b", "c"] (escape dot)
+
+// Join
+String.join(", ", "a", "b", "c")    // "a, b, c"
+String.join("-", listOfStrings)     // Join a list
+
+// Concatenation
+"Hello" + " " + "World"        // "Hello World"
+"Hello".concat(" World")       // "Hello World"
+
+// Formatting
+String.format("Name: %s, Age: %d", "Sahil", 25)
+// %s = string, %d = integer, %f = float, %b = boolean
+// %n = newline, %% = literal %, %.2f = 2 decimal places
+
+// Formatted (Java 15+)
+"Name: %s".formatted("Sahil")   // "Name: Sahil"
+
+// Other
+str.toCharArray()               // char[] {'H','e','l','l','o',...}
+str.getBytes()                  // byte array
+String.valueOf(42)              // "42" (any type to String)
+str.chars()                     // IntStream of characters
+str.repeat(3)                   // "Hello WorldHello WorldHello World" (Java 11+)
+
+STRING POOL:
+// Java maintains a pool of String literals for memory efficiency
+String s1 = "Hello";           // Created in String Pool
+String s2 = "Hello";           // Points to same pool object
+String s3 = new String("Hello"); // Created in Heap (NOT pool)
+String s4 = s3.intern();       // Moves to pool, same as s1
+
+s1 == s2     // true  (same pool reference)
+s1 == s3     // false (pool vs heap)
+s1 == s4     // true  (both in pool)
+
+STRINGBUILDER (Mutable, NOT thread-safe, FASTER):
+StringBuilder sb = new StringBuilder();
+sb.append("Hello");
+sb.append(" ");
+sb.append("World");
+sb.insert(5, ",");             // "Hello, World"
+sb.delete(5, 6);               // "Hello World"
+sb.replace(6, 11, "Java");    // "Hello Java"
+sb.reverse();                  // "avaJ olleH"
+sb.charAt(0);                  // 'a'
+sb.length();                   // 10
+sb.capacity();                 // Current capacity
+sb.toString();                 // Convert to String
+sb.deleteCharAt(0);            // Remove char at index
+
+// Use StringBuilder when doing many string modifications
+// Much faster than String concatenation in loops
+
+STRINGBUFFER (Mutable, Thread-safe, SLOWER):
+StringBuffer sbuf = new StringBuffer("Hello");
+// Same methods as StringBuilder
+// Use when thread safety is needed
+
+// Performance: StringBuilder > StringBuffer > String (for modifications)
+
+TEXT BLOCKS (Java 13+):
+String json = """
+        {
+            "name": "Sahil",
+            "age": 25
+        }
+        """;
+
+String html = """
+        <html>
+            <body>
+                <p>Hello World</p>
+            </body>
+        </html>
+        """;
+
+================================================================================
+7. INPUT / OUTPUT
+================================================================================
+
+OUTPUT:
+System.out.println("Hello");   // Print with newline
+System.out.print("Hello");     // Print without newline
+System.out.printf("Age: %d\n", 25);  // Formatted print
+
+// printf format specifiers
+// %d  - integer
+// %f  - float/double
+// %s  - string
+// %c  - character
+// %b  - boolean
+// %n  - newline
+// %e  - scientific notation
+// %x  - hexadecimal
+// %o  - octal
+// %10d  - right-aligned, width 10
+// %-10d - left-aligned, width 10
+// %.2f  - 2 decimal places
+// %,d   - with comma separators (1,000,000)
+
+System.out.printf("Name: %-10s | Age: %3d | GPA: %.2f%n", "Sahil", 25, 9.5);
+
+INPUT (Scanner):
+import java.util.Scanner;
+
+Scanner scanner = new Scanner(System.in);
+
+// Read different types
+String name = scanner.nextLine();       // Full line
+String word = scanner.next();           // Single word
+int age = scanner.nextInt();            // Integer
+double gpa = scanner.nextDouble();      // Double
+float price = scanner.nextFloat();      // Float
+long big = scanner.nextLong();          // Long
+boolean flag = scanner.nextBoolean();   // Boolean
+char ch = scanner.next().charAt(0);     // Character
+
+// Check if input is available
+scanner.hasNext()                       // Has more tokens
+scanner.hasNextInt()                    // Has an int
+scanner.hasNextLine()                   // Has a line
+
+// IMPORTANT: nextLine() after nextInt() issue
+int num = scanner.nextInt();
+scanner.nextLine();  // Consume leftover newline
+String line = scanner.nextLine();
+
+// Always close scanner
+scanner.close();
+
+INPUT (BufferedReader - faster for large input):
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+
+BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+String line = br.readLine();
+int num = Integer.parseInt(br.readLine());
+br.close();
+
+================================================================================
+8. CONTROL FLOW - CONDITIONALS
+================================================================================
+
+IF-ELSE:
+if (condition) {
+    // code
+} else if (anotherCondition) {
+    // code
+} else {
+    // code
+}
+
+// Example
+int age = 20;
+if (age >= 18) {
+    System.out.println("Adult");
+} else if (age >= 13) {
+    System.out.println("Teenager");
+} else {
+    System.out.println("Child");
+}
+
+SWITCH (Traditional):
+switch (variable) {
+    case value1:
+        // code
+        break;           // Without break, falls through!
+    case value2:
+        // code
+        break;
+    case value3:
+    case value4:          // Multiple cases
+        // code
+        break;
+    default:
+        // code
+}
+
+// Works with: byte, short, int, char, String (Java 7+), enum
+
+int day = 3;
+switch (day) {
+    case 1:
+        System.out.println("Monday");
+        break;
+    case 2:
+        System.out.println("Tuesday");
+        break;
+    case 3:
+        System.out.println("Wednesday");
+        break;
+    default:
+        System.out.println("Other day");
+}
+
+SWITCH EXPRESSION (Java 14+):
+// Arrow syntax (no fall-through, no break needed)
+String dayName = switch (day) {
+    case 1 -> "Monday";
+    case 2 -> "Tuesday";
+    case 3 -> "Wednesday";
+    case 4, 5 -> "Thursday or Friday";   // Multiple labels
+    default -> "Weekend";
+};
+
+// With code blocks
+String result = switch (day) {
+    case 1 -> {
+        System.out.println("Start of week");
+        yield "Monday";    // yield returns value from block
+    }
+    default -> "Other";
+};
+
+PATTERN MATCHING IN SWITCH (Java 21+):
+Object obj = "Hello";
+String result = switch (obj) {
+    case Integer i -> "Integer: " + i;
+    case String s  -> "String: " + s;
+    case null      -> "Null value";
+    default        -> "Unknown type";
+};
+
+================================================================================
+9. CONTROL FLOW - LOOPS
+================================================================================
+
+FOR LOOP:
+for (initialization; condition; update) {
+    // code
+}
+
+for (int i = 0; i < 10; i++) {
+    System.out.println(i);
+}
+
+// Infinite loop
+for (;;) {
+    // runs forever
+}
+
+// Multiple variables
+for (int i = 0, j = 10; i < j; i++, j--) {
+    System.out.println(i + " " + j);
+}
+
+ENHANCED FOR-EACH LOOP:
+int[] numbers = {1, 2, 3, 4, 5};
+for (int num : numbers) {
+    System.out.println(num);
+}
+
+String[] names = {"Sahil", "John", "Alice"};
+for (String name : names) {
+    System.out.println(name);
+}
+
+// Works with arrays, Collections (List, Set, etc.)
+// Cannot modify the collection while iterating (use Iterator)
+
+WHILE LOOP:
+while (condition) {
+    // code
+}
+
+int i = 0;
+while (i < 10) {
+    System.out.println(i);
+    i++;
+}
+
+DO-WHILE LOOP:
+do {
+    // code (executes at least once)
+} while (condition);
+
+int i = 0;
+do {
+    System.out.println(i);
+    i++;
+} while (i < 10);
+
+BREAK:
+// Exits the current loop immediately
+for (int i = 0; i < 10; i++) {
+    if (i == 5) break;    // Stops at 5
+    System.out.println(i);
+}
+
+CONTINUE:
+// Skips current iteration, continues with next
+for (int i = 0; i < 10; i++) {
+    if (i == 5) continue;  // Skips 5
+    System.out.println(i);
+}
+
+LABELED BREAK & CONTINUE:
+outer:
+for (int i = 0; i < 5; i++) {
+    inner:
+    for (int j = 0; j < 5; j++) {
+        if (j == 3) break outer;     // Breaks outer loop
+        if (j == 1) continue outer;  // Continues outer loop
+        System.out.println(i + ", " + j);
+    }
+}
+
+================================================================================
+10. ARRAYS
+================================================================================
+
+DECLARATION & INITIALIZATION:
+// Declaration
+int[] numbers;                          // Preferred
+int numbers2[];                         // Also valid (C-style)
+
+// Initialization
+int[] nums = new int[5];               // Default values (0)
+int[] nums2 = {1, 2, 3, 4, 5};        // With values
+int[] nums3 = new int[]{1, 2, 3};     // Anonymous array
+
+// Default values
+// int/long/short/byte → 0
+// float/double → 0.0
+// boolean → false
+// char → '\u0000'
+// Object/String → null
+
+ACCESSING ELEMENTS:
+int[] arr = {10, 20, 30, 40, 50};
+arr[0]       // 10 (first element)
+arr[4]       // 50 (last element)
+arr.length   // 5 (size of array)
+arr[2] = 99; // Modify element
+
+// ArrayIndexOutOfBoundsException if index < 0 or >= length
+
+TRAVERSING ARRAYS:
+int[] arr = {1, 2, 3, 4, 5};
+
+// For loop
+for (int i = 0; i < arr.length; i++) {
+    System.out.println(arr[i]);
+}
+
+// For-each loop
+for (int num : arr) {
+    System.out.println(num);
+}
+
+// Using Arrays.toString()
+import java.util.Arrays;
+System.out.println(Arrays.toString(arr));  // [1, 2, 3, 4, 5]
+
+MULTIDIMENSIONAL ARRAYS:
+// 2D Array (Matrix)
+int[][] matrix = new int[3][4];        // 3 rows, 4 columns
+int[][] matrix2 = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+
+// Accessing
+matrix2[0][0]     // 1
+matrix2[1][2]     // 6
+matrix2.length    // 3 (rows)
+matrix2[0].length // 3 (columns in row 0)
+
+// Traversing 2D array
+for (int i = 0; i < matrix2.length; i++) {
+    for (int j = 0; j < matrix2[i].length; j++) {
+        System.out.print(matrix2[i][j] + " ");
+    }
+    System.out.println();
+}
+
+// Jagged Array (different column sizes)
+int[][] jagged = new int[3][];
+jagged[0] = new int[]{1, 2};
+jagged[1] = new int[]{3, 4, 5};
+jagged[2] = new int[]{6};
+
+// 3D Array
+int[][][] cube = new int[2][3][4];
+
+ARRAYS UTILITY CLASS:
+import java.util.Arrays;
+
+int[] arr = {5, 2, 8, 1, 9, 3};
+
+Arrays.sort(arr);                      // Sort ascending: [1, 2, 3, 5, 8, 9]
+Arrays.sort(arr, 1, 4);               // Sort range [1, 4)
+Arrays.fill(arr, 0);                   // Fill all with 0
+Arrays.fill(arr, 1, 3, 99);           // Fill range with 99
+int index = Arrays.binarySearch(arr, 5); // Binary search (array must be sorted)
+boolean equal = Arrays.equals(arr1, arr2); // Compare arrays
+int[] copy = Arrays.copyOf(arr, 10);   // Copy with new length
+int[] copy2 = Arrays.copyOfRange(arr, 1, 4); // Copy range
+Arrays.deepToString(matrix);          // Print 2D array
+Arrays.deepEquals(mat1, mat2);        // Compare 2D arrays
+Arrays.stream(arr);                    // Create stream
+
+// Array to List
+List<Integer> list = Arrays.asList(1, 2, 3);   // Fixed-size list
+List<String> list2 = List.of("a", "b", "c");   // Immutable list (Java 9+)
+
+// Copy array
+int[] copy = arr.clone();
+System.arraycopy(src, srcPos, dest, destPos, length);
+
+================================================================================
+11. METHODS (FUNCTIONS)
+================================================================================
+
+METHOD SYNTAX:
+accessModifier returnType methodName(parameters) {
+    // method body
+    return value;   // if returnType is not void
+}
+
+// Example
+public static int add(int a, int b) {
+    return a + b;
+}
+
+// Calling
+int result = add(5, 3);   // 8
+
+METHOD TYPES:
+
+// 1. No parameters, no return
+public void greet() {
+    System.out.println("Hello!");
+}
+
+// 2. With parameters, no return
+public void greetPerson(String name) {
+    System.out.println("Hello, " + name + "!");
+}
+
+// 3. No parameters, with return
+public int getAge() {
+    return 25;
+}
+
+// 4. With parameters, with return
+public int multiply(int a, int b) {
+    return a * b;
+}
+
+// 5. Static method (call without object)
+public static void staticMethod() {
+    System.out.println("Static method");
+}
+// Call: ClassName.staticMethod();
+
+METHOD OVERLOADING:
+// Same method name, different parameters
+public int add(int a, int b) { return a + b; }
+public double add(double a, double b) { return a + b; }
+public int add(int a, int b, int c) { return a + b + c; }
+public String add(String a, String b) { return a + b; }
+
+// Overloading depends on: number, type, order of parameters
+// NOT on return type alone
+
+VARARGS (Variable Arguments):
+public int sum(int... numbers) {
+    int total = 0;
+    for (int num : numbers) {
+        total += num;
+    }
+    return total;
+}
+sum(1, 2);           // 3
+sum(1, 2, 3, 4, 5);  // 15
+sum();               // 0
+
+// Rules:
+// - Only one varargs per method
+// - Must be the last parameter
+// - Internally treated as array
+
+PASS BY VALUE:
+// Java is ALWAYS pass by value
+// Primitives: copy of value is passed
+// Objects: copy of reference is passed (NOT the object itself)
+
+// Primitive - original not changed
+public void change(int x) {
+    x = 100;  // Only local copy changes
+}
+int a = 5;
+change(a);    // a is still 5
+
+// Object - original IS changed (through reference)
+public void change(int[] arr) {
+    arr[0] = 100;  // Modifies original array
+}
+int[] arr = {1, 2, 3};
+change(arr);  // arr[0] is now 100
+
+RECURSION:
+// Method that calls itself
+public int factorial(int n) {
+    if (n <= 1) return 1;          // Base case
+    return n * factorial(n - 1);   // Recursive case
+}
+
+public int fibonacci(int n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+// Every recursion must have:
+// 1. Base case (stopping condition)
+// 2. Recursive case (getting closer to base case)
+
+================================================================================
+12. OBJECT-ORIENTED PROGRAMMING (OOP) BASICS
+================================================================================
+
+FOUR PILLARS OF OOP:
+1. Encapsulation - Wrapping data and methods together, hiding internal details
+2. Inheritance   - Acquiring properties/behaviors from parent class
+3. Polymorphism  - One thing taking many forms
+4. Abstraction   - Hiding complexity, showing only essentials
+
+CLASSES & OBJECTS:
+
+// Class = Blueprint
+public class Student {
+    // Fields (attributes/properties)
+    String name;
+    int age;
+    double gpa;
+    
+    // Constructor
+    public Student(String name, int age, double gpa) {
+        this.name = name;
+        this.age = age;
+        this.gpa = gpa;
+    }
+    
+    // Method (behavior)
+    public void study() {
+        System.out.println(name + " is studying");
+    }
+    
+    public String getInfo() {
+        return name + ", Age: " + age + ", GPA: " + gpa;
+    }
+}
+
+// Object = Instance of class
+Student student1 = new Student("Sahil", 21, 9.5);
+Student student2 = new Student("John", 22, 8.7);
+
+student1.study();              // "Sahil is studying"
+System.out.println(student1.getInfo());
+System.out.println(student1.name);  // "Sahil"
+
+CONSTRUCTORS:
+
+// Default constructor (auto-generated if none defined)
+public class Car {
+    String brand;
+    int year;
+    
+    // No-argument constructor
+    public Car() {
+        this.brand = "Unknown";
+        this.year = 2024;
+    }
+    
+    // Parameterized constructor
+    public Car(String brand, int year) {
+        this.brand = brand;
+        this.year = year;
+    }
+    
+    // Copy constructor
+    public Car(Car other) {
+        this.brand = other.brand;
+        this.year = other.year;
+    }
+}
+
+Car car1 = new Car();                  // No-arg constructor
+Car car2 = new Car("Toyota", 2024);    // Parameterized constructor
+Car car3 = new Car(car2);              // Copy constructor
+
+// Constructor Chaining (calling one constructor from another)
+public class Employee {
+    String name;
+    int age;
+    String dept;
+    
+    public Employee() {
+        this("Unknown", 0, "General");  // Calls 3-arg constructor
+    }
+    
+    public Employee(String name) {
+        this(name, 0, "General");       // Calls 3-arg constructor
+    }
+    
+    public Employee(String name, int age, String dept) {
+        this.name = name;
+        this.age = age;
+        this.dept = dept;
+    }
+}
+
+THIS KEYWORD:
+// Refers to the current object instance
+public class Person {
+    String name;
+    
+    public Person(String name) {
+        this.name = name;           // this.name = field, name = parameter
+    }
+    
+    public Person getThis() {
+        return this;                // Return current object
+    }
+    
+    public void callMethod() {
+        this.display();             // Call method on current object
+    }
+}
+
+STATIC KEYWORD:
+public class Counter {
+    // Static variable (shared by all objects)
+    static int count = 0;
+    
+    // Instance variable (unique to each object)
+    String name;
+    
+    public Counter(String name) {
+        this.name = name;
+        count++;                    // Shared counter
+    }
+    
+    // Static method (belongs to class, not object)
+    public static int getCount() {
+        return count;
+        // Cannot access instance variables/methods here
+        // Cannot use 'this' keyword
+    }
+    
+    // Instance method
+    public void display() {
+        System.out.println(name);
+        System.out.println(count);  // CAN access static from instance
+    }
+    
+    // Static block (runs once when class is loaded)
+    static {
+        System.out.println("Class loaded");
+    }
+}
+
+Counter.getCount();   // Call static method on class
+Counter.count;        // Access static variable on class
+
+FINAL KEYWORD:
+// 1. final variable = constant (cannot be reassigned)
+final int MAX = 100;
+final String NAME = "Sahil";
+
+// 2. final method = cannot be overridden
+public final void display() { }
+
+// 3. final class = cannot be inherited
+public final class Utility { }
+
+// 4. final parameter = cannot be modified in method
+public void process(final int value) {
+    // value = 10;  // Error!
+}
+
+// Blank final variable (assigned in constructor)
+public class MyClass {
+    final int VALUE;
+    
+    public MyClass(int val) {
+        VALUE = val;    // Must be assigned exactly once
+    }
+}
+
+================================================================================
+13. ENCAPSULATION
+================================================================================
+
+// Hiding internal state, exposing through methods
+// Use private fields + public getters/setters
+
+ACCESS MODIFIERS:
+Modifier     Class   Package   Subclass   World
+---------    -----   -------   --------   -----
+private      ✓       ✗         ✗          ✗
+(default)    ✓       ✓         ✗          ✗
+protected    ✓       ✓         ✓          ✗
+public       ✓       ✓         ✓          ✓
+
+ENCAPSULATION EXAMPLE:
+public class BankAccount {
+    // Private fields (hidden from outside)
+    private String accountHolder;
+    private double balance;
+    
+    // Constructor
+    public BankAccount(String accountHolder, double initialBalance) {
+        this.accountHolder = accountHolder;
+        if (initialBalance >= 0) {
+            this.balance = initialBalance;
+        }
+    }
+    
+    // Getter (read access)
+    public String getAccountHolder() {
+        return accountHolder;
+    }
+    
+    // Setter (write access with validation)
+    public void setAccountHolder(String accountHolder) {
+        if (accountHolder != null && !accountHolder.isEmpty()) {
+            this.accountHolder = accountHolder;
+        }
+    }
+    
+    // Getter
+    public double getBalance() {
+        return balance;
+    }
+    
+    // No setter for balance - controlled through methods
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+        }
+    }
+    
+    public boolean withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+            return true;
+        }
+        return false;
+    }
+}
+
+// Usage
+BankAccount account = new BankAccount("Sahil", 1000);
+account.deposit(500);
+account.withdraw(200);
+// account.balance = -1000;  // Error! balance is private
+
+================================================================================
+14. INHERITANCE
+================================================================================
+
+// Child class inherits fields and methods from parent class
+// Java supports SINGLE inheritance (one parent class)
+// Use 'extends' keyword
+
+BASIC INHERITANCE:
+// Parent/Super class
+public class Animal {
+    String name;
+    int age;
+    
+    public Animal(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+    
+    public void eat() {
+        System.out.println(name + " is eating");
+    }
+    
+    public void sleep() {
+        System.out.println(name + " is sleeping");
+    }
+}
+
+// Child/Sub class
+public class Dog extends Animal {
+    String breed;
+    
+    public Dog(String name, int age, String breed) {
+        super(name, age);       // Call parent constructor (MUST be first line)
+        this.breed = breed;
+    }
+    
+    // New method
+    public void bark() {
+        System.out.println(name + " is barking");
+    }
+    
+    // Override parent method
+    @Override
+    public void eat() {
+        System.out.println(name + " is eating dog food");
+    }
+}
+
+Dog dog = new Dog("Buddy", 3, "Labrador");
+dog.eat();     // "Buddy is eating dog food" (overridden)
+dog.sleep();   // "Buddy is sleeping" (inherited)
+dog.bark();    // "Buddy is barking" (own method)
+
+SUPER KEYWORD:
+// 1. Call parent constructor
+super(parameters);          // Must be first line in constructor
+
+// 2. Call parent method
+super.methodName();         // Call overridden parent method
+
+// 3. Access parent field
+super.fieldName;            // Access hidden parent field
+
+TYPES OF INHERITANCE:
+1. Single:      A → B
+2. Multilevel:  A → B → C
+3. Hierarchical: A → B, A → C
+4. Multiple:    NOT supported with classes (use interfaces)
+5. Hybrid:      Combination (achieved through interfaces)
+
+// Why no multiple inheritance with classes?
+// Diamond Problem: If A and B both have method x(),
+// and C extends both A and B, which x() should C inherit?
+
+METHOD OVERRIDING:
+// Rules:
+// 1. Same method name, same parameters, same or covariant return type
+// 2. Access modifier must be same or less restrictive
+// 3. Cannot override: static methods, final methods, private methods
+// 4. Use @Override annotation (optional but recommended)
+
+public class Shape {
+    public double area() {
+        return 0;
+    }
+}
+
+public class Circle extends Shape {
+    double radius;
+    
+    public Circle(double radius) {
+        this.radius = radius;
+    }
+    
+    @Override
+    public double area() {
+        return Math.PI * radius * radius;
+    }
+}
+
+OBJECT CLASS:
+// Every class implicitly extends java.lang.Object
+// Object class methods:
+// toString()      - String representation
+// equals()        - Equality check
+// hashCode()      - Hash code
+// getClass()      - Runtime class info
+// clone()         - Create copy
+// finalize()      - Before garbage collection (deprecated)
+// wait(), notify(), notifyAll() - Thread communication
+
+// Override toString() and equals() in your classes
+public class Student {
+    String name;
+    int id;
+    
+    @Override
+    public String toString() {
+        return "Student{name='" + name + "', id=" + id + "}";
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Student student = (Student) obj;
+        return id == student.id && name.equals(student.name);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, id);
+    }
+}
+
+================================================================================
+15. POLYMORPHISM
+================================================================================
+
+// "Many forms" - one interface, multiple implementations
+
+COMPILE-TIME POLYMORPHISM (Method Overloading):
+// Same method name, different parameters
+// Decided at compile time
+
+public class Calculator {
+    public int add(int a, int b) { return a + b; }
+    public double add(double a, double b) { return a + b; }
+    public int add(int a, int b, int c) { return a + b + c; }
+}
+
+RUNTIME POLYMORPHISM (Method Overriding):
+// Parent reference, child object
+// Decided at runtime (Dynamic Method Dispatch)
+
+Animal animal = new Dog("Buddy", 3, "Lab");  // Upcasting
+animal.eat();     // Calls Dog's eat() - runtime decision
+animal.sleep();   // Calls Animal's sleep()
+// animal.bark();  // Error! Animal reference doesn't know about bark()
+
+// UPCASTING (child → parent reference) - automatic
+Animal a = new Dog("Rex", 2, "Pug");
+
+// DOWNCASTING (parent → child reference) - explicit, risky
+if (a instanceof Dog) {
+    Dog d = (Dog) a;   // Safe downcast
+    d.bark();          // Now we can call Dog methods
+}
+
+// Pattern matching instanceof (Java 16+)
+if (a instanceof Dog d) {
+    d.bark();          // d is automatically cast
+}
+
+POLYMORPHISM WITH ARRAYS/COLLECTIONS:
+Animal[] animals = {
+    new Dog("Buddy", 3, "Lab"),
+    new Cat("Whiskers", 2),
+    new Bird("Tweet", 1)
+};
+
+for (Animal animal : animals) {
+    animal.eat();      // Each calls its own version
+    animal.sleep();    // Polymorphic behavior
+}
+
+================================================================================
+16. ABSTRACTION
+================================================================================
+
+ABSTRACT CLASSES:
+// Cannot be instantiated
+// Can have abstract and concrete methods
+// Can have constructors, fields, static methods
+
+public abstract class Shape {
+    String color;
+    
+    // Constructor
+    public Shape(String color) {
+        this.color = color;
+    }
+    
+    // Abstract method (no body, must be overridden)
+    public abstract double area();
+    public abstract double perimeter();
+    
+    // Concrete method (has body)
+    public void display() {
+        System.out.println("Color: " + color);
+        System.out.println("Area: " + area());
+    }
+}
+
+public class Circle extends Shape {
+    double radius;
+    
+    public Circle(String color, double radius) {
+        super(color);
+        this.radius = radius;
+    }
+    
+    @Override
+    public double area() {
+        return Math.PI * radius * radius;
+    }
+    
+    @Override
+    public double perimeter() {
+        return 2 * Math.PI * radius;
+    }
+}
+
+public class Rectangle extends Shape {
+    double width, height;
+    
+    public Rectangle(String color, double width, double height) {
+        super(color);
+        this.width = width;
+        this.height = height;
+    }
+    
+    @Override
+    public double area() {
+        return width * height;
+    }
+    
+    @Override
+    public double perimeter() {
+        return 2 * (width + height);
+    }
+}
+
+// Usage
+Shape circle = new Circle("Red", 5);
+circle.display();      // Polymorphism + Abstraction
+
+INTERFACES:
+// 100% abstraction (before Java 8)
+// All methods are public abstract by default
+// All fields are public static final by default
+// A class can implement MULTIPLE interfaces
+
+public interface Drawable {
+    // Constants (public static final)
+    int MAX_SIZE = 1000;
+    
+    // Abstract methods (public abstract)
+    void draw();
+    void resize(int factor);
+}
+
+public interface Printable {
+    void print();
+}
+
+// Implementing multiple interfaces
+public class Document implements Drawable, Printable {
+    @Override
+    public void draw() {
+        System.out.println("Drawing document");
+    }
+    
+    @Override
+    public void resize(int factor) {
+        System.out.println("Resizing by " + factor);
+    }
+    
+    @Override
+    public void print() {
+        System.out.println("Printing document");
+    }
+}
+
+INTERFACE EVOLUTION (Java 8+):
+public interface MyInterface {
+    // Abstract method
+    void abstractMethod();
+    
+    // Default method (Java 8) - has implementation
+    default void defaultMethod() {
+        System.out.println("Default implementation");
+        helperMethod();     // Can call private methods
+    }
+    
+    // Static method (Java 8) - called on interface
+    static void staticMethod() {
+        System.out.println("Static method");
+    }
+    
+    // Private method (Java 9) - helper for default methods
+    private void helperMethod() {
+        System.out.println("Private helper");
+    }
+    
+    // Private static method (Java 9)
+    private static void staticHelper() {
+        System.out.println("Private static helper");
+    }
+}
+
+// Default method conflict resolution
+public interface A { default void hello() { System.out.println("A"); } }
+public interface B { default void hello() { System.out.println("B"); } }
+
+public class C implements A, B {
+    @Override
+    public void hello() {
+        A.super.hello();   // Explicitly choose which to call
+    }
+}
+
+FUNCTIONAL INTERFACE:
+// Interface with exactly ONE abstract method
+// Can be used with lambda expressions
+// Annotate with @FunctionalInterface
+
+@FunctionalInterface
+public interface Calculator {
+    int calculate(int a, int b);
+}
+
+// Using lambda
+Calculator add = (a, b) -> a + b;
+Calculator multiply = (a, b) -> a * b;
+
+System.out.println(add.calculate(5, 3));       // 8
+System.out.println(multiply.calculate(5, 3));  // 15
+
+ABSTRACT CLASS vs INTERFACE:
+Feature              Abstract Class        Interface
+-------              --------------        ---------
+Methods              Abstract + concrete   Abstract + default + static
+Fields               Any type              public static final only
+Constructor          Yes                   No
+Inheritance          Single (extends)      Multiple (implements)
+Access modifiers     Any                   public (methods)
+When to use          IS-A relationship     CAN-DO capability
+                     Shared code           Contract/behavior
+
+SEALED CLASSES (Java 17+):
+// Restrict which classes can extend/implement
+public sealed class Shape permits Circle, Rectangle, Triangle {
+    // ...
+}
+
+// Permitted subclasses must be: final, sealed, or non-sealed
+public final class Circle extends Shape { }
+public sealed class Rectangle extends Shape permits Square { }
+public non-sealed class Triangle extends Shape { }  // Open for further extension
+
+================================================================================
+17. INNER CLASSES
+================================================================================
+
+// Classes defined within another class
+
+// 1. Regular Inner Class (Member Inner Class)
+public class Outer {
+    int outerField = 10;
+    
+    class Inner {
+        void display() {
+            System.out.println("Outer field: " + outerField);
+        }
+    }
+}
+Outer outer = new Outer();
+Outer.Inner inner = outer.new Inner();  // Need outer instance
+inner.display();
+
+// 2. Static Nested Class
+public class Outer {
+    static int staticField = 20;
+    
+    static class StaticNested {
+        void display() {
+            System.out.println("Static field: " + staticField);
+            // Cannot access non-static outer fields
+        }
+    }
+}
+Outer.StaticNested nested = new Outer.StaticNested();  // No outer instance needed
+
+// 3. Local Inner Class (inside method)
+public class Outer {
+    void method() {
+        class LocalInner {
+            void display() {
+                System.out.println("Local inner class");
+            }
+        }
+        LocalInner local = new LocalInner();
+        local.display();
+    }
+}
+
+// 4. Anonymous Inner Class (no name, one-time use)
+// Commonly used with interfaces and abstract classes
+Drawable drawable = new Drawable() {
+    @Override
+    public void draw() {
+        System.out.println("Drawing...");
+    }
+};
+drawable.draw();
+
+// Can be replaced with Lambda (if functional interface)
+Runnable runnable = () -> System.out.println("Running...");
+
+================================================================================
+18. ENUMS
+================================================================================
+
+// Enum = Special class representing a fixed set of constants
+
+BASIC ENUM:
+public enum Day {
+    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+}
+
+Day today = Day.MONDAY;
+System.out.println(today);          // MONDAY
+
+// Switch with enum
+switch (today) {
+    case MONDAY:
+        System.out.println("Start of week");
+        break;
+    case FRIDAY:
+        System.out.println("TGIF!");
+        break;
+}
+
+ENUM WITH FIELDS AND METHODS:
+public enum Planet {
+    MERCURY(3.303e+23, 2.4397e6),
+    VENUS(4.869e+24, 6.0518e6),
+    EARTH(5.976e+24, 6.37814e6),
+    MARS(6.421e+23, 3.3972e6);
+    
+    private final double mass;
+    private final double radius;
+    
+    // Constructor (always private)
+    Planet(double mass, double radius) {
+        this.mass = mass;
+        this.radius = radius;
+    }
+    
+    public double getMass() { return mass; }
+    public double getRadius() { return radius; }
+    
+    // Method
+    public double surfaceGravity() {
+        final double G = 6.67300E-11;
+        return G * mass / (radius * radius);
+    }
+}
+
+ENUM METHODS:
+Day.values()                    // Array of all enum values
+Day.valueOf("MONDAY")           // String to enum
+today.name()                    // "MONDAY" (name as String)
+today.ordinal()                 // 0 (position, zero-based)
+today.compareTo(Day.FRIDAY)     // Compare ordinals
+
+// Iterate over enum
+for (Day day : Day.values()) {
+    System.out.println(day);
+}
+
+ENUM WITH ABSTRACT METHODS:
+public enum Operation {
+    ADD {
+        @Override
+        public double apply(double a, double b) { return a + b; }
+    },
+    SUBTRACT {
+        @Override
+        public double apply(double a, double b) { return a - b; }
+    },
+    MULTIPLY {
+        @Override
+        public double apply(double a, double b) { return a * b; }
+    };
+    
+    public abstract double apply(double a, double b);
+}
+
+double result = Operation.ADD.apply(5, 3);  // 8.0
+
+ENUM IMPLEMENTING INTERFACE:
+public interface Describable {
+    String describe();
+}
+
+public enum Season implements Describable {
+    SPRING("Warm and rainy"),
+    SUMMER("Hot and sunny"),
+    AUTUMN("Cool and windy"),
+    WINTER("Cold and snowy");
+    
+    private final String description;
+    
+    Season(String description) {
+        this.description = description;
+    }
+    
+    @Override
+    public String describe() {
+        return name() + ": " + description;
+    }
+}
+
+================================================================================
+19. RECORDS (Java 16+)
+================================================================================
+
+// Immutable data carrier classes
+// Auto-generates: constructor, getters, equals(), hashCode(), toString()
+
+BASIC RECORD:
+public record Point(int x, int y) { }
+
+Point p = new Point(3, 4);
+p.x()           // 3 (accessor, not getX())
+p.y()           // 4
+p.toString()    // "Point[x=3, y=4]"
+
+Point p2 = new Point(3, 4);
+p.equals(p2)    // true (compares all components)
+
+RECORD WITH CUSTOM LOGIC:
+public record Person(String name, int age) {
+    // Compact constructor (validation)
+    public Person {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name cannot be blank");
+        }
+        if (age < 0) {
+            throw new IllegalArgumentException("Age cannot be negative");
+        }
+        name = name.trim();  // Can modify before assignment
+    }
+    
+    // Custom method
+    public String greeting() {
+        return "Hello, I'm " + name + ", age " + age;
+    }
+    
+    // Static method
+    public static Person unknown() {
+        return new Person("Unknown", 0);
+    }
+}
+
+// Records:
+// - Are implicitly final (cannot be extended)
+// - Cannot extend other classes (but can implement interfaces)
+// - Fields are implicitly private final
+// - Cannot have instance fields (only the declared components)
+
+public record Employee(String name, String dept) implements Serializable { }
+
+================================================================================
+20. EXCEPTION HANDLING
+================================================================================
+
+EXCEPTION HIERARCHY:
+Throwable
+├── Error (serious, don't catch)
+│   ├── OutOfMemoryError
+│   ├── StackOverflowError
+│   └── VirtualMachineError
+└── Exception
+    ├── RuntimeException (unchecked)
+    │   ├── NullPointerException
+    │   ├── ArrayIndexOutOfBoundsException
+    │   ├── ArithmeticException
+    │   ├── ClassCastException
+    │   ├── IllegalArgumentException
+    │   ├── NumberFormatException
+    │   └── UnsupportedOperationException
+    └── Checked Exceptions (must handle)
+        ├── IOException
+        ├── FileNotFoundException
+        ├── SQLException
+        ├── ClassNotFoundException
+        └── InterruptedException
+
+Checked vs Unchecked:
+- Checked:   Must handle (try-catch) or declare (throws)
+             Compile-time check
+- Unchecked: RuntimeException and its subclasses
+             No compile-time check
+             Usually programming errors
+
+TRY-CATCH:
+try {
+    int result = 10 / 0;               // ArithmeticException
+} catch (ArithmeticException e) {
+    System.out.println("Cannot divide by zero: " + e.getMessage());
+}
+
+TRY-CATCH-FINALLY:
+try {
+    // Risky code
+    FileReader file = new FileReader("test.txt");
+} catch (FileNotFoundException e) {
+    System.out.println("File not found: " + e.getMessage());
+} catch (IOException e) {
+    System.out.println("IO error: " + e.getMessage());
+} finally {
+    // ALWAYS executes (even if exception occurs)
+    System.out.println("Cleanup code here");
+}
+
+MULTI-CATCH (Java 7+):
+try {
+    // code
+} catch (IOException | SQLException e) {
+    // Handle both exceptions the same way
+    System.out.println("Error: " + e.getMessage());
+}
+
+TRY-WITH-RESOURCES (Java 7+):
+// Auto-closes resources that implement AutoCloseable
+try (FileReader fr = new FileReader("file.txt");
+     BufferedReader br = new BufferedReader(fr)) {
+    String line = br.readLine();
+} catch (IOException e) {
+    e.printStackTrace();
+}
+// fr and br are automatically closed!
+
+THROWING EXCEPTIONS:
+// throw - to throw an exception
+// throws - to declare an exception in method signature
+
+public void divide(int a, int b) throws ArithmeticException {
+    if (b == 0) {
+        throw new ArithmeticException("Cannot divide by zero");
+    }
+    System.out.println(a / b);
+}
+
+// Throwing checked exception
+public void readFile(String path) throws IOException {
+    FileReader fr = new FileReader(path);  // May throw FileNotFoundException
+}
+
+CUSTOM EXCEPTIONS:
+// Checked exception
+public class InsufficientFundsException extends Exception {
+    private double amount;
+    
+    public InsufficientFundsException(String message, double amount) {
+        super(message);
+        this.amount = amount;
+    }
+    
+    public double getAmount() {
+        return amount;
+    }
+}
+
+// Unchecked exception
+public class InvalidAgeException extends RuntimeException {
+    public InvalidAgeException(String message) {
+        super(message);
+    }
+}
+
+// Usage
+public void withdraw(double amount) throws InsufficientFundsException {
+    if (amount > balance) {
+        throw new InsufficientFundsException("Insufficient funds", amount - balance);
+    }
+    balance -= amount;
+}
+
+EXCEPTION METHODS:
+e.getMessage()          // Error message
+e.getCause()            // Root cause exception
+e.printStackTrace()     // Print stack trace to console
+e.getStackTrace()       // Get stack trace as array
+e.toString()            // Exception class + message
+
+EXCEPTION BEST PRACTICES:
+// 1. Catch specific exceptions, not generic Exception
+// 2. Don't catch Error (OutOfMemoryError, etc.)
+// 3. Use try-with-resources for closeable resources
+// 4. Don't ignore exceptions (empty catch blocks)
+// 5. Throw early, catch late
+// 6. Use custom exceptions for domain-specific errors
+// 7. Include meaningful messages
+// 8. Log exceptions properly
+
+================================================================================
+21. COLLECTIONS FRAMEWORK
+================================================================================
+
+COLLECTIONS HIERARCHY:
+
+Iterable
+└── Collection
+    ├── List (ordered, allows duplicates)
+    │   ├── ArrayList
+    │   ├── LinkedList
+    │   ├── Vector (synchronized, legacy)
+    │   └── Stack (legacy, use Deque instead)
+    ├── Set (no duplicates)
+    │   ├── HashSet (unordered)
+    │   ├── LinkedHashSet (insertion order)
+    │   └── TreeSet (sorted, NavigableSet)
+    └── Queue
+        ├── PriorityQueue
+        ├── ArrayDeque (Deque)
+        └── LinkedList (also implements Deque)
+
+Map (NOT Collection, but part of framework)
+├── HashMap (unordered)
+├── LinkedHashMap (insertion order)
+├── TreeMap (sorted by key)
+├── Hashtable (synchronized, legacy)
+└── ConcurrentHashMap (thread-safe)
+
+--- LIST ---
+
+ARRAYLIST (dynamic array, fast random access):
+import java.util.ArrayList;
+
+ArrayList<String> list = new ArrayList<>();
+
+// Add
+list.add("Apple");                  // Add to end
+list.add(0, "Banana");             // Add at index
+list.addAll(otherList);            // Add all from collection
+
+// Access
+list.get(0)                        // Get by index
+list.set(1, "Cherry")             // Replace at index
+list.indexOf("Apple")              // First occurrence index (-1 if not found)
+list.lastIndexOf("Apple")          // Last occurrence index
+list.contains("Apple")             // true/false
+list.size()                        // Number of elements
+list.isEmpty()                     // true/false
+
+// Remove
+list.remove(0)                     // Remove by index
+list.remove("Apple")               // Remove first occurrence
+list.removeAll(otherList)          // Remove all matching
+list.removeIf(s -> s.startsWith("A"))  // Remove with condition
+list.clear()                       // Remove all
+
+// Convert
+list.toArray()                     // To Object[]
+list.toArray(new String[0])        // To String[]
+String[] arr = list.toArray(String[]::new);  // Java 11+
+
+// Sort
+Collections.sort(list)             // Natural order
+list.sort(Comparator.naturalOrder())
+list.sort(Comparator.reverseOrder())
+list.sort(Comparator.comparing(String::length))
+
+// Iterate
+for (String s : list) { }                     // for-each
+for (int i = 0; i < list.size(); i++) { }     // for loop
+list.forEach(s -> System.out.println(s));      // Lambda
+list.forEach(System.out::println);             // Method reference
+
+Iterator<String> it = list.iterator();
+while (it.hasNext()) {
+    String s = it.next();
+    if (s.equals("Apple")) it.remove();        // Safe removal during iteration
+}
+
+// Immutable lists (Java 9+)
+List<String> immutable = List.of("a", "b", "c");  // Cannot modify
+List<String> copy = List.copyOf(list);             // Immutable copy
+
+LINKEDLIST (doubly-linked list, fast insert/delete):
+LinkedList<String> linked = new LinkedList<>();
+linked.addFirst("First");
+linked.addLast("Last");
+linked.getFirst();
+linked.getLast();
+linked.removeFirst();
+linked.removeLast();
+linked.peek();          // View first without removing
+linked.poll();          // Remove and return first
+
+// Use when frequent insertions/deletions at beginning/middle
+// ArrayList for random access, LinkedList for sequential access
+
+--- SET ---
+
+HASHSET (unordered, no duplicates, O(1) operations):
+import java.util.HashSet;
+
+HashSet<String> set = new HashSet<>();
+set.add("Apple");               // true (added)
+set.add("Apple");               // false (duplicate, not added)
+set.remove("Apple");            // Remove element
+set.contains("Apple");          // Check existence
+set.size();                     // Number of elements
+set.isEmpty();
+set.clear();
+
+// Set operations
+Set<Integer> set1 = new HashSet<>(Arrays.asList(1, 2, 3, 4));
+Set<Integer> set2 = new HashSet<>(Arrays.asList(3, 4, 5, 6));
+
+// Union
+Set<Integer> union = new HashSet<>(set1);
+union.addAll(set2);             // {1, 2, 3, 4, 5, 6}
+
+// Intersection
+Set<Integer> intersection = new HashSet<>(set1);
+intersection.retainAll(set2);   // {3, 4}
+
+// Difference
+Set<Integer> difference = new HashSet<>(set1);
+difference.removeAll(set2);     // {1, 2}
+
+LINKEDHASHSET (maintains insertion order):
+LinkedHashSet<String> lhs = new LinkedHashSet<>();
+// Same methods as HashSet, but maintains order
+
+TREESET (sorted, NavigableSet):
+TreeSet<Integer> ts = new TreeSet<>();
+ts.add(5); ts.add(2); ts.add(8); ts.add(1);
+// Automatically sorted: [1, 2, 5, 8]
+
+ts.first()              // 1 (smallest)
+ts.last()               // 8 (largest)
+ts.headSet(5)           // [1, 2] (elements < 5)
+ts.tailSet(5)           // [5, 8] (elements >= 5)
+ts.subSet(2, 8)         // [2, 5] (2 <= x < 8)
+ts.floor(4)             // 2 (greatest element <= 4)
+ts.ceiling(4)           // 5 (smallest element >= 4)
+ts.higher(5)            // 8 (smallest element > 5)
+ts.lower(5)             // 2 (greatest element < 5)
+
+// Immutable sets (Java 9+)
+Set<String> immutable = Set.of("a", "b", "c");
+
+--- MAP ---
+
+HASHMAP (key-value pairs, unordered):
+import java.util.HashMap;
+
+HashMap<String, Integer> map = new HashMap<>();
+
+// Add/Update
+map.put("Apple", 5);              // Add
+map.put("Apple", 10);             // Update (same key)
+map.putIfAbsent("Banana", 3);     // Add only if key absent
+map.putAll(otherMap);             // Add all from another map
+
+// Access
+map.get("Apple")                   // 10 (or null if not found)
+map.getOrDefault("Cherry", 0)     // 0 (default if not found)
+map.containsKey("Apple")          // true
+map.containsValue(10)             // true
+map.size()                        // Number of entries
+map.isEmpty()                     // true/false
+map.keySet()                      // Set of all keys
+map.values()                      // Collection of all values
+map.entrySet()                    // Set of all key-value pairs
+
+// Remove
+map.remove("Apple")               // Remove by key
+map.remove("Apple", 10)           // Remove only if value matches
+map.clear()                       // Remove all
+
+// Compute
+map.compute("Apple", (k, v) -> v == null ? 1 : v + 1);
+map.computeIfAbsent("Cherry", k -> 0);
+map.computeIfPresent("Apple", (k, v) -> v + 1);
+map.merge("Apple", 1, Integer::sum);   // Useful for counting
+
+// Replace
+map.replace("Apple", 20);
+map.replace("Apple", 10, 20);     // Only if current value is 10
+map.replaceAll((k, v) -> v * 2);  // Replace all values
+
+// Iterate
+for (Map.Entry<String, Integer> entry : map.entrySet()) {
+    System.out.println(entry.getKey() + ": " + entry.getValue());
+}
+
+map.forEach((key, value) -> System.out.println(key + ": " + value));
+
+for (String key : map.keySet()) {
+    System.out.println(key + ": " + map.get(key));
+}
+
+// Immutable maps (Java 9+)
+Map<String, Integer> immutable = Map.of("a", 1, "b", 2, "c", 3);
+Map<String, Integer> entries = Map.ofEntries(
+    Map.entry("a", 1),
+    Map.entry("b", 2)
+);
+
+LINKEDHASHMAP (maintains insertion order):
+LinkedHashMap<String, Integer> lhm = new LinkedHashMap<>();
+// Same methods as HashMap, maintains insertion order
+
+// Access-order mode (LRU cache pattern)
+LinkedHashMap<String, Integer> lru = new LinkedHashMap<>(16, 0.75f, true);
+
+TREEMAP (sorted by key):
+TreeMap<String, Integer> tm = new TreeMap<>();
+tm.put("Banana", 2);
+tm.put("Apple", 1);
+tm.put("Cherry", 3);
+// Sorted by key: {Apple=1, Banana=2, Cherry=3}
+
+tm.firstKey()           // "Apple"
+tm.lastKey()            // "Cherry"
+tm.headMap("Cherry")    // {Apple=1, Banana=2}
+tm.tailMap("Banana")    // {Banana=2, Cherry=3}
+
+--- QUEUE & DEQUE ---
+
+QUEUE (FIFO - First In, First Out):
+Queue<String> queue = new LinkedList<>();
+queue.offer("First");           // Add to end (returns false if full)
+queue.add("Second");            // Add to end (throws exception if full)
+queue.peek();                   // View front (null if empty)
+queue.element();                // View front (exception if empty)
+queue.poll();                   // Remove front (null if empty)
+queue.remove();                 // Remove front (exception if empty)
+
+PRIORITYQUEUE (min-heap by default):
+PriorityQueue<Integer> pq = new PriorityQueue<>();
+pq.offer(5);
+pq.offer(1);
+pq.offer(3);
+pq.poll();  // 1 (smallest first)
+pq.poll();  // 3
+pq.poll();  // 5
+
+// Max-heap
+PriorityQueue<Integer> maxPq = new PriorityQueue<>(Comparator.reverseOrder());
+
+// Custom comparator
+PriorityQueue<String> pq = new PriorityQueue<>(Comparator.comparing(String::length));
+
+DEQUE (Double-Ended Queue):
+Deque<String> deque = new ArrayDeque<>();
+deque.offerFirst("Front");     // Add to front
+deque.offerLast("Back");       // Add to back
+deque.peekFirst();             // View front
+deque.peekLast();              // View back
+deque.pollFirst();             // Remove from front
+deque.pollLast();              // Remove from back
+
+// Use as Stack (LIFO)
+Deque<Integer> stack = new ArrayDeque<>();
+stack.push(1);                 // Push to top
+stack.push(2);
+stack.peek();                  // 2 (view top)
+stack.pop();                   // 2 (remove top)
+
+COLLECTIONS UTILITY CLASS:
+import java.util.Collections;
+
+Collections.sort(list);                     // Sort
+Collections.reverse(list);                  // Reverse
+Collections.shuffle(list);                  // Random order
+Collections.min(list);                      // Minimum
+Collections.max(list);                      // Maximum
+Collections.frequency(list, "Apple");       // Count occurrences
+Collections.swap(list, 0, 1);             // Swap elements
+Collections.binarySearch(list, "Apple");   // Binary search (sorted list)
+Collections.unmodifiableList(list);        // Immutable wrapper
+Collections.synchronizedList(list);        // Thread-safe wrapper
+Collections.singletonList("one");         // Single-element list
+Collections.emptyList();                   // Empty immutable list
+Collections.nCopies(5, "Hello");          // List of n copies
+Collections.disjoint(list1, list2);       // True if no common elements
+Collections.rotate(list, 2);             // Rotate elements
+
+================================================================================
+22. GENERICS
+================================================================================
+
+// Enable type-safe collections and classes
+// Compile-time type checking, no casting needed
+
+GENERIC CLASS:
+public class Box<T> {
+    private T content;
+    
+    public Box(T content) {
+        this.content = content;
+    }
+    
+    public T getContent() {
+        return content;
+    }
+    
+    public void setContent(T content) {
+        this.content = content;
+    }
+}
+
+Box<String> stringBox = new Box<>("Hello");
+Box<Integer> intBox = new Box<>(42);
+String s = stringBox.getContent();  // No casting needed
+
+// Multiple type parameters
+public class Pair<K, V> {
+    private K key;
+    private V value;
+    
+    public Pair(K key, V value) {
+        this.key = key;
+        this.value = value;
+    }
+    
+    public K getKey() { return key; }
+    public V getValue() { return value; }
+}
+
+Pair<String, Integer> pair = new Pair<>("Age", 25);
+
+GENERIC METHODS:
+public static <T> void printArray(T[] array) {
+    for (T element : array) {
+        System.out.print(element + " ");
+    }
+}
+
+public static <T extends Comparable<T>> T max(T a, T b) {
+    return a.compareTo(b) > 0 ? a : b;
+}
+
+// Call
+printArray(new Integer[]{1, 2, 3});
+printArray(new String[]{"a", "b", "c"});
+int maxVal = max(5, 10);  // 10
+
+BOUNDED TYPE PARAMETERS:
+// Upper bound - T must be Number or its subclass
+public class NumberBox<T extends Number> {
+    private T value;
+    
+    public double doubleValue() {
+        return value.doubleValue();
+    }
+}
+
+NumberBox<Integer> intBox = new NumberBox<>();    // OK
+NumberBox<Double> dblBox = new NumberBox<>();     // OK
+// NumberBox<String> strBox = new NumberBox<>();  // Error!
+
+// Multiple bounds
+public <T extends Comparable<T> & Serializable> void process(T item) { }
+
+WILDCARDS:
+// ? = unknown type
+List<?> unknown;                             // Any type
+
+// Upper bounded wildcard (read-only)
+List<? extends Number> numbers;              // Number or its subclasses
+// Can read as Number, cannot add (except null)
+
+// Lower bounded wildcard (write-friendly)
+List<? super Integer> integers;              // Integer or its superclasses
+// Can add Integer, read as Object
+
+// PECS: Producer Extends, Consumer Super
+public static void copy(List<? extends Number> src, List<? super Number> dest) {
+    for (Number n : src) {
+        dest.add(n);
+    }
+}
+
+TYPE ERASURE:
+// Generics are a compile-time feature
+// At runtime, generic types are replaced with Object (or bound)
+// This is called Type Erasure
+// Cannot: create generic arrays, use instanceof with generics,
+//         call new T(), have static generic fields
+
+================================================================================
+23. LAMBDA EXPRESSIONS (Java 8+)
+================================================================================
+
+// Anonymous function / short way to implement functional interface
+
+SYNTAX:
+(parameters) -> expression
+(parameters) -> { statements; }
+
+// No parameters
+() -> System.out.println("Hello")
+
+// One parameter (parentheses optional)
+x -> x * 2
+(x) -> x * 2
+
+// Multiple parameters
+(a, b) -> a + b
+
+// Multiple statements
+(a, b) -> {
+    int sum = a + b;
+    return sum;
+}
+
+// With type declaration
+(int a, int b) -> a + b
+
+EXAMPLES WITH FUNCTIONAL INTERFACES:
+
+// Runnable
+Runnable task = () -> System.out.println("Running");
+new Thread(task).start();
+
+// Comparator
+Comparator<String> byLength = (a, b) -> a.length() - b.length();
+list.sort(byLength);
+list.sort((a, b) -> a.length() - b.length());
+
+// ActionListener (Swing)
+button.addActionListener(e -> System.out.println("Clicked"));
+
+// Custom functional interface
+@FunctionalInterface
+interface MathOperation {
+    int operate(int a, int b);
+}
+MathOperation add = (a, b) -> a + b;
+MathOperation multiply = (a, b) -> a * b;
+
+BUILT-IN FUNCTIONAL INTERFACES (java.util.function):
+
+// Predicate<T> - takes T, returns boolean
+Predicate<String> isEmpty = s -> s.isEmpty();
+Predicate<Integer> isEven = n -> n % 2 == 0;
+isEmpty.test("");         // true
+isEven.test(4);           // true
+isEven.negate().test(4);  // false
+isEven.and(n -> n > 0);   // Combine predicates
+isEven.or(n -> n < 0);
+
+// Function<T, R> - takes T, returns R
+Function<String, Integer> length = s -> s.length();
+Function<String, String> upper = s -> s.toUpperCase();
+length.apply("Hello");    // 5
+upper.andThen(s -> s + "!").apply("hello");  // "HELLO!"
+upper.compose(s -> s.trim()).apply("  hi  "); // "HI"
+
+// Consumer<T> - takes T, returns void
+Consumer<String> printer = s -> System.out.println(s);
+printer.accept("Hello");
+printer.andThen(s -> System.out.println(s.length())).accept("Hi");
+
+// Supplier<T> - takes nothing, returns T
+Supplier<String> greeting = () -> "Hello World";
+Supplier<Double> random = () -> Math.random();
+greeting.get();           // "Hello World"
+
+// UnaryOperator<T> - takes T, returns T
+UnaryOperator<String> toUpper = s -> s.toUpperCase();
+toUpper.apply("hello");  // "HELLO"
+
+// BinaryOperator<T> - takes T, T, returns T
+BinaryOperator<Integer> sum = (a, b) -> a + b;
+sum.apply(5, 3);          // 8
+
+// BiFunction<T, U, R>, BiPredicate<T, U>, BiConsumer<T, U>
+BiFunction<String, String, String> concat = (a, b) -> a + b;
+BiPredicate<String, Integer> checkLength = (s, n) -> s.length() > n;
+
+METHOD REFERENCES:
+// Shorthand for lambdas that just call a method
+
+// 1. Static method reference
+Function<String, Integer> parse = Integer::parseInt;     // s -> Integer.parseInt(s)
+
+// 2. Instance method reference (on a specific object)
+String str = "Hello";
+Supplier<String> upper = str::toUpperCase;               // () -> str.toUpperCase()
+
+// 3. Instance method reference (on parameter)
+Function<String, String> toUpper = String::toUpperCase;  // s -> s.toUpperCase()
+
+// 4. Constructor reference
+Supplier<ArrayList<String>> listFactory = ArrayList::new;  // () -> new ArrayList<>()
+Function<String, Person> personFactory = Person::new;      // s -> new Person(s)
+
+// Common usage
+list.forEach(System.out::println);
+list.sort(String::compareToIgnoreCase);
+list.stream().map(String::toUpperCase).collect(Collectors.toList());
+
+================================================================================
+24. STREAMS API (Java 8+)
+================================================================================
+
+// Sequence of elements that supports aggregate operations
+// Declarative way to process collections (like SQL for collections)
+// Lazy evaluation, can be parallelized
+
+CREATING STREAMS:
+// From collection
+List<String> list = Arrays.asList("a", "b", "c");
+Stream<String> stream = list.stream();
+
+// From array
+int[] arr = {1, 2, 3};
+IntStream intStream = Arrays.stream(arr);
+
+// Using Stream.of()
+Stream<String> stream = Stream.of("a", "b", "c");
+
+// From values
+Stream<Integer> nums = Stream.of(1, 2, 3, 4, 5);
+
+// Infinite streams
+Stream<Integer> infinite = Stream.iterate(0, n -> n + 2);  // 0, 2, 4, 6...
+Stream<Double> randoms = Stream.generate(Math::random);
+
+// Range
+IntStream range = IntStream.range(1, 10);       // 1 to 9
+IntStream rangeClosed = IntStream.rangeClosed(1, 10);  // 1 to 10
+
+// Empty stream
+Stream<String> empty = Stream.empty();
+
+INTERMEDIATE OPERATIONS (return a Stream, lazy):
+
+list.stream()
+    .filter(s -> s.length() > 3)        // Filter elements
+    .map(String::toUpperCase)           // Transform elements
+    .sorted()                           // Sort natural order
+    .sorted(Comparator.reverseOrder())  // Sort custom order
+    .distinct()                         // Remove duplicates
+    .limit(5)                           // Take first 5
+    .skip(2)                            // Skip first 2
+    .peek(System.out::println)          // Debug (view elements)
+    .flatMap(s -> Arrays.stream(s.split("")))  // Flatten nested streams
+    .mapToInt(String::length)           // Map to IntStream
+    .mapToDouble(...)                   // Map to DoubleStream
+    .mapToLong(...)                     // Map to LongStream
+    .takeWhile(s -> s.length() < 5)     // Java 9+, take while condition true
+    .dropWhile(s -> s.length() < 5)     // Java 9+, drop while condition true
+
+TERMINAL OPERATIONS (produce result, trigger execution):
+
+// Collect
+List<String> result = stream.collect(Collectors.toList());
+Set<String> set = stream.collect(Collectors.toSet());
+Map<String, Integer> map = stream.collect(Collectors.toMap(s -> s, String::length));
+String joined = stream.collect(Collectors.joining(", "));
+
+// toList() shorthand (Java 16+)
+List<String> result = stream.toList();
+
+// forEach
+stream.forEach(System.out::println);
+
+// Reduce
+int sum = IntStream.of(1, 2, 3, 4, 5).sum();
+OptionalInt max = IntStream.of(1, 2, 3).max();
+OptionalInt min = IntStream.of(1, 2, 3).min();
+long count = stream.count();
+
+Optional<String> reduced = stream.reduce((a, b) -> a + b);
+int total = stream.reduce(0, (a, b) -> a + b);  // With identity
+
+// Match
+boolean anyMatch = stream.anyMatch(s -> s.startsWith("A"));
+boolean allMatch = stream.allMatch(s -> s.length() > 2);
+boolean noneMatch = stream.noneMatch(s -> s.isEmpty());
+
+// Find
+Optional<String> first = stream.findFirst();
+Optional<String> any = stream.findAny();
+
+// toArray
+Object[] array = stream.toArray();
+String[] strArray = stream.toArray(String[]::new);
+
+COLLECTORS:
+import java.util.stream.Collectors;
+
+// Grouping
+Map<Integer, List<String>> byLength = list.stream()
+    .collect(Collectors.groupingBy(String::length));
+
+// Partitioning (true/false groups)
+Map<Boolean, List<Integer>> parts = numbers.stream()
+    .collect(Collectors.partitioningBy(n -> n > 5));
+
+// Counting
+Map<String, Long> counts = list.stream()
+    .collect(Collectors.groupingBy(s -> s, Collectors.counting()));
+
+// Summarizing
+IntSummaryStatistics stats = list.stream()
+    .collect(Collectors.summarizingInt(String::length));
+stats.getAverage();
+stats.getMax();
+stats.getMin();
+stats.getSum();
+stats.getCount();
+
+// Joining
+String result = list.stream()
+    .collect(Collectors.joining(", ", "[", "]"));  // [a, b, c]
+
+// Mapping then collecting
+Map<String, List<Integer>> mapped = list.stream()
+    .collect(Collectors.groupingBy(
+        s -> s.substring(0, 1),
+        Collectors.mapping(String::length, Collectors.toList())
+    ));
+
+PARALLEL STREAMS:
+// Process elements in parallel (multi-threaded)
+list.parallelStream()
+    .filter(s -> s.length() > 3)
+    .map(String::toUpperCase)
+    .collect(Collectors.toList());
+
+// Or convert
+list.stream().parallel().forEach(...);
+
+// Use when: large data, independent operations, no shared mutable state
+// Don't use when: small data, order matters, shared state
+
+PRACTICAL EXAMPLES:
+
+// 1. Filter and collect
+List<String> longNames = names.stream()
+    .filter(n -> n.length() > 5)
+    .collect(Collectors.toList());
+
+// 2. Map and join
+String csv = names.stream()
+    .map(String::toUpperCase)
+    .collect(Collectors.joining(","));
+
+// 3. Sum of specific field
+int totalAge = students.stream()
+    .mapToInt(Student::getAge)
+    .sum();
+
+// 4. Find max
+Optional<Student> topStudent = students.stream()
+    .max(Comparator.comparing(Student::getGpa));
+
+// 5. Group by
+Map<String, List<Student>> byDept = students.stream()
+    .collect(Collectors.groupingBy(Student::getDepartment));
+
+// 6. Distinct sorted
+List<Integer> unique = numbers.stream()
+    .distinct()
+    .sorted()
+    .collect(Collectors.toList());
+
+// 7. Flat map (flatten nested lists)
+List<String> allWords = sentences.stream()
+    .flatMap(s -> Arrays.stream(s.split(" ")))
+    .collect(Collectors.toList());
+
+// 8. Frequency count
+Map<String, Long> freq = words.stream()
+    .collect(Collectors.groupingBy(w -> w, Collectors.counting()));
+
+================================================================================
+25. OPTIONAL (Java 8+)
+================================================================================
+
+// Container object that may or may not contain a value
+// Avoids NullPointerException
+
+CREATING:
+Optional<String> opt1 = Optional.of("Hello");        // Non-null value
+Optional<String> opt2 = Optional.ofNullable(null);    // May be null
+Optional<String> opt3 = Optional.empty();             // Empty optional
+
+CHECKING:
+opt1.isPresent()          // true
+opt3.isPresent()          // false
+opt3.isEmpty()            // true (Java 11+)
+
+GETTING VALUE:
+opt1.get()                // "Hello" (throws NoSuchElementException if empty)
+
+// Safe alternatives
+opt2.orElse("Default")                    // "Default" if empty
+opt2.orElseGet(() -> computeDefault())    // Lazy default
+opt2.orElseThrow()                        // Throws NoSuchElementException
+opt2.orElseThrow(() -> new RuntimeException("No value"))
+
+TRANSFORMING:
+opt1.map(String::toUpperCase)             // Optional<"HELLO">
+opt1.flatMap(s -> Optional.of(s + "!"))   // Optional<"Hello!">
+opt1.filter(s -> s.length() > 3)          // Optional<"Hello">
+opt1.filter(s -> s.length() > 10)         // Optional.empty()
+
+CHAINING:
+Optional<String> result = Optional.ofNullable(user)
+    .map(User::getAddress)
+    .map(Address::getCity)
+    .map(String::toUpperCase)
+    .filter(city -> city.length() > 3);
+
+IF PRESENT:
+opt1.ifPresent(System.out::println);       // Print if present
+opt1.ifPresentOrElse(                      // Java 9+
+    System.out::println,                   // If present
+    () -> System.out.println("Empty")      // If empty
+);
+
+STREAM (Java 9+):
+opt1.stream()             // Stream of 0 or 1 element
+// Useful for flat-mapping a stream of Optionals
+List<String> values = optionals.stream()
+    .flatMap(Optional::stream)
+    .collect(Collectors.toList());
+
+// OR (Java 9+)
+opt2.or(() -> Optional.of("Fallback"))    // Return alternative Optional
+
+================================================================================
+26. FILE I/O
+================================================================================
+
+FILE CLASS:
+import java.io.File;
+
+File file = new File("test.txt");
+File dir = new File("/home/user/docs");
+
+file.exists()               // true/false
+file.isFile()                // true if file
+file.isDirectory()           // true if directory
+file.getName()               // "test.txt"
+file.getPath()               // Relative path
+file.getAbsolutePath()       // Absolute path
+file.length()                // Size in bytes
+file.canRead()               // Readable?
+file.canWrite()              // Writable?
+file.lastModified()          // Last modified time
+file.createNewFile()         // Create new file
+file.mkdir()                 // Create directory
+file.mkdirs()                // Create directories (including parents)
+file.delete()                // Delete file
+file.renameTo(newFile)       // Rename/move
+file.list()                  // String[] of children
+file.listFiles()             // File[] of children
+
+READING FILES:
+
+// 1. FileReader + BufferedReader
+try (BufferedReader br = new BufferedReader(new FileReader("file.txt"))) {
+    String line;
+    while ((line = br.readLine()) != null) {
+        System.out.println(line);
+    }
+}
+
+// 2. Scanner
+try (Scanner scanner = new Scanner(new File("file.txt"))) {
+    while (scanner.hasNextLine()) {
+        System.out.println(scanner.nextLine());
+    }
+}
+
+// 3. Files.readAllLines (Java 7+)
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+List<String> lines = Files.readAllLines(Paths.get("file.txt"));
+
+// 4. Files.readString (Java 11+)
+String content = Files.readString(Path.of("file.txt"));
+
+// 5. Files.lines (Stream, Java 8+)
+try (Stream<String> stream = Files.lines(Paths.get("file.txt"))) {
+    stream.filter(line -> line.contains("Java"))
+          .forEach(System.out::println);
+}
+
+WRITING FILES:
+
+// 1. FileWriter + BufferedWriter
+try (BufferedWriter bw = new BufferedWriter(new FileWriter("file.txt"))) {
+    bw.write("Hello World");
+    bw.newLine();
+    bw.write("Second line");
+}
+
+// 2. FileWriter (append mode)
+try (FileWriter fw = new FileWriter("file.txt", true)) {
+    fw.write("Appended text\n");
+}
+
+// 3. PrintWriter
+try (PrintWriter pw = new PrintWriter("file.txt")) {
+    pw.println("Hello World");
+    pw.printf("Name: %s, Age: %d%n", "Sahil", 25);
+}
+
+// 4. Files.write (Java 7+)
+Files.write(Path.of("file.txt"), "Hello World".getBytes());
+Files.write(Path.of("file.txt"), lines);  // Write list of lines
+
+// 5. Files.writeString (Java 11+)
+Files.writeString(Path.of("file.txt"), "Hello World");
+
+// Append
+Files.writeString(Path.of("file.txt"), "Appended", StandardOpenOption.APPEND);
+
+NIO.2 PATH & FILES (Java 7+):
+Path path = Path.of("file.txt");
+Path path2 = Paths.get("/home", "user", "file.txt");
+
+path.getFileName()          // file.txt
+path.getParent()            // parent directory
+path.toAbsolutePath()       // Absolute path
+path.resolve("sub/file")   // Join paths
+path.normalize()            // Remove redundant elements
+
+Files.exists(path)
+Files.isRegularFile(path)
+Files.isDirectory(path)
+Files.size(path)
+Files.copy(source, target)
+Files.move(source, target)
+Files.delete(path)
+Files.deleteIfExists(path)
+Files.createFile(path)
+Files.createDirectory(path)
+Files.createDirectories(path)
+
+// Walk directory tree
+try (Stream<Path> walk = Files.walk(Paths.get("/home/user"))) {
+    walk.filter(Files::isRegularFile)
+        .filter(p -> p.toString().endsWith(".java"))
+        .forEach(System.out::println);
+}
+
+// List directory
+try (Stream<Path> entries = Files.list(Paths.get("."))) {
+    entries.forEach(System.out::println);
+}
+
+SERIALIZATION:
+// Convert object to byte stream (save/transmit)
+
+import java.io.*;
+
+// Class must implement Serializable
+public class Student implements Serializable {
+    private static final long serialVersionUID = 1L;  // Version control
+    
+    String name;
+    int age;
+    transient String password;  // transient = not serialized
+}
+
+// Serialize (write object)
+try (ObjectOutputStream oos = new ObjectOutputStream(
+        new FileOutputStream("student.ser"))) {
+    oos.writeObject(student);
+}
+
+// Deserialize (read object)
+try (ObjectInputStream ois = new ObjectInputStream(
+        new FileInputStream("student.ser"))) {
+    Student s = (Student) ois.readObject();
+}
+
+================================================================================
+27. MULTITHREADING & CONCURRENCY
+================================================================================
+
+CREATING THREADS:
+
+// Method 1: Extend Thread class
+public class MyThread extends Thread {
+    @Override
+    public void run() {
+        System.out.println("Thread running: " + Thread.currentThread().getName());
+    }
+}
+MyThread t = new MyThread();
+t.start();   // start() not run()!
+
+// Method 2: Implement Runnable interface (preferred)
+public class MyRunnable implements Runnable {
+    @Override
+    public void run() {
+        System.out.println("Runnable running");
+    }
+}
+Thread t = new Thread(new MyRunnable());
+t.start();
+
+// Method 3: Lambda (simplest)
+Thread t = new Thread(() -> System.out.println("Lambda thread"));
+t.start();
+
+// Method 4: Callable (returns result)
+Callable<Integer> callable = () -> {
+    Thread.sleep(1000);
+    return 42;
+};
+
+THREAD METHODS:
+Thread t = new Thread(runnable);
+
+t.start()                    // Start thread
+t.run()                      // DON'T call directly (runs in current thread)
+t.join()                     // Wait for thread to finish
+t.join(1000)                 // Wait max 1 second
+t.isAlive()                  // Is thread running?
+t.getName()                  // Get thread name
+t.setName("MyThread")        // Set thread name
+t.getPriority()              // Get priority (1-10)
+t.setPriority(Thread.MAX_PRIORITY)  // Set priority
+t.setDaemon(true)            // Set as daemon thread (background)
+t.isDaemon()                 // Is daemon thread?
+t.interrupt()                // Request thread interruption
+t.isInterrupted()            // Is interrupted?
+
+Thread.currentThread()       // Get current thread
+Thread.sleep(1000)           // Sleep for 1 second
+Thread.yield()               // Give up time slice
+Thread.interrupted()         // Check and clear interrupt flag
+
+THREAD LIFECYCLE (STATES):
+NEW → RUNNABLE → RUNNING → BLOCKED/WAITING/TIMED_WAITING → TERMINATED
+
+Thread.State state = t.getState();
+// NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, TERMINATED
+
+SYNCHRONIZATION:
+// Prevent race conditions when multiple threads access shared data
+
+// 1. Synchronized method
+public synchronized void increment() {
+    count++;  // Only one thread at a time
+}
+
+// 2. Synchronized block
+public void increment() {
+    synchronized (this) {
+        count++;
+    }
+}
+
+// 3. Synchronized on specific object
+private final Object lock = new Object();
+public void increment() {
+    synchronized (lock) {
+        count++;
+    }
+}
+
+// 4. Static synchronized (locks on Class object)
+public static synchronized void staticMethod() { }
+
+VOLATILE KEYWORD:
+// Ensures visibility across threads (reads/writes directly to main memory)
+private volatile boolean running = true;
+
+// Does NOT provide atomicity
+// Use for simple flags, not for compound operations like count++
+
+WAIT, NOTIFY, NOTIFYALL:
+// Inter-thread communication (must be inside synchronized block)
+synchronized (lock) {
+    while (!condition) {
+        lock.wait();        // Release lock and wait
+    }
+    // Process
+}
+
+synchronized (lock) {
+    condition = true;
+    lock.notify();          // Wake one waiting thread
+    lock.notifyAll();       // Wake all waiting threads
+}
+
+CONCURRENT UTILITIES (java.util.concurrent):
+
+// 1. ExecutorService (Thread Pool)
+ExecutorService executor = Executors.newFixedThreadPool(4);
+executor.submit(() -> System.out.println("Task 1"));
+executor.submit(() -> System.out.println("Task 2"));
+executor.shutdown();   // No new tasks, finish existing
+executor.awaitTermination(5, TimeUnit.SECONDS);
+
+// Types of thread pools
+Executors.newSingleThreadExecutor()    // Single thread
+Executors.newFixedThreadPool(n)        // Fixed n threads
+Executors.newCachedThreadPool()        // Dynamic (reuse threads)
+Executors.newScheduledThreadPool(n)    // Scheduled tasks
+
+// 2. Future
+Future<Integer> future = executor.submit(() -> {
+    Thread.sleep(1000);
+    return 42;
+});
+Integer result = future.get();           // Blocks until done
+Integer result2 = future.get(5, TimeUnit.SECONDS);  // With timeout
+future.isDone();                         // Check completion
+future.cancel(true);                     // Cancel task
+
+// 3. CompletableFuture (Java 8+)
+CompletableFuture<String> cf = CompletableFuture.supplyAsync(() -> "Hello");
+cf.thenApply(s -> s + " World")
+  .thenAccept(System.out::println)
+  .thenRun(() -> System.out.println("Done"));
+
+// Combine
+CompletableFuture<String> cf1 = CompletableFuture.supplyAsync(() -> "Hello");
+CompletableFuture<String> cf2 = CompletableFuture.supplyAsync(() -> "World");
+cf1.thenCombine(cf2, (a, b) -> a + " " + b)
+   .thenAccept(System.out::println);
+
+// 4. Atomic variables
+AtomicInteger atomicInt = new AtomicInteger(0);
+atomicInt.incrementAndGet();     // Thread-safe increment
+atomicInt.decrementAndGet();
+atomicInt.addAndGet(5);
+atomicInt.compareAndSet(5, 10);  // CAS operation
+
+// 5. Concurrent Collections
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();
+ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<>();
+BlockingQueue<String> bq = new LinkedBlockingQueue<>();
+
+// 6. Locks (more flexible than synchronized)
+ReentrantLock lock = new ReentrantLock();
+lock.lock();
+try {
+    // Critical section
+} finally {
+    lock.unlock();   // ALWAYS unlock in finally
+}
+
+// ReadWriteLock
+ReadWriteLock rwLock = new ReentrantReadWriteLock();
+rwLock.readLock().lock();       // Multiple readers allowed
+rwLock.writeLock().lock();      // Exclusive write
+
+// 7. CountDownLatch
+CountDownLatch latch = new CountDownLatch(3);
+// In worker threads:
+latch.countDown();              // Decrement count
+// In main thread:
+latch.await();                  // Wait until count reaches 0
+
+// 8. Semaphore
+Semaphore semaphore = new Semaphore(3);  // Max 3 permits
+semaphore.acquire();            // Get permit (blocks if none)
+semaphore.release();            // Return permit
+
+VIRTUAL THREADS (Java 21+):
+// Lightweight threads (Project Loom)
+// Can create millions of virtual threads
+
+Thread vt = Thread.startVirtualThread(() -> {
+    System.out.println("Virtual thread");
+});
+
+// Using executor
+try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+    executor.submit(() -> System.out.println("Task"));
+}
+
+// Thread.ofVirtual()
+Thread vt = Thread.ofVirtual().name("my-vt").start(() -> {
+    System.out.println("Named virtual thread");
+});
+
+================================================================================
+28. DATE & TIME API (Java 8+)
+================================================================================
+
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+
+LOCAL DATE (date without time):
+LocalDate today = LocalDate.now();                    // 2024-12-25
+LocalDate date = LocalDate.of(2024, 12, 25);         // Specific date
+LocalDate date2 = LocalDate.parse("2024-12-25");     // Parse string
+
+date.getYear()                   // 2024
+date.getMonth()                  // DECEMBER
+date.getMonthValue()             // 12
+date.getDayOfMonth()             // 25
+date.getDayOfWeek()              // WEDNESDAY
+date.getDayOfYear()              // 360
+date.lengthOfMonth()             // 31
+date.isLeapYear()                // true
+
+date.plusDays(5)                 // Add 5 days
+date.minusMonths(2)              // Subtract 2 months
+date.plusYears(1)                // Add 1 year
+
+date.isBefore(otherDate)         // Comparison
+date.isAfter(otherDate)
+date.isEqual(otherDate)
+
+LOCAL TIME (time without date):
+LocalTime now = LocalTime.now();                      // 14:30:45.123
+LocalTime time = LocalTime.of(14, 30, 45);           // 14:30:45
+LocalTime time2 = LocalTime.parse("14:30:45");       // Parse
+
+time.getHour()                   // 14
+time.getMinute()                 // 30
+time.getSecond()                 // 45
+time.plusHours(2)                // Add 2 hours
+time.minusMinutes(30)            // Subtract 30 minutes
+
+LOCAL DATETIME (date + time):
+LocalDateTime now = LocalDateTime.now();
+LocalDateTime dt = LocalDateTime.of(2024, 12, 25, 14, 30);
+LocalDateTime dt2 = LocalDateTime.of(date, time);
+
+ZONED DATETIME (with timezone):
+ZonedDateTime zdt = ZonedDateTime.now();
+ZonedDateTime zdt2 = ZonedDateTime.now(ZoneId.of("America/New_York"));
+ZonedDateTime zdt3 = ZonedDateTime.of(dt, ZoneId.of("Asia/Kolkata"));
+
+ZoneId.getAvailableZoneIds()     // All available zone IDs
+
+INSTANT (machine timestamp):
+Instant now = Instant.now();     // UTC timestamp
+long epoch = now.toEpochMilli(); // Milliseconds since epoch
+
+DURATION & PERIOD:
+// Duration - time-based amount (hours, minutes, seconds)
+Duration duration = Duration.between(time1, time2);
+Duration oneHour = Duration.ofHours(1);
+Duration fiveMinutes = Duration.ofMinutes(5);
+duration.toMinutes()
+duration.toHours()
+
+// Period - date-based amount (years, months, days)
+Period period = Period.between(date1, date2);
+Period oneMonth = Period.ofMonths(1);
+period.getYears()
+period.getMonths()
+period.getDays()
+
+FORMATTING:
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+String formatted = now.format(formatter);        // "25/12/2024 14:30:45"
+LocalDateTime parsed = LocalDateTime.parse("25/12/2024 14:30:45", formatter);
+
+// Predefined formatters
+DateTimeFormatter.ISO_LOCAL_DATE        // 2024-12-25
+DateTimeFormatter.ISO_LOCAL_DATE_TIME   // 2024-12-25T14:30:45
+
+// Common patterns:
+// yyyy - Year (2024)
+// MM   - Month (12)
+// dd   - Day (25)
+// HH   - Hour 24h (14)
+// hh   - Hour 12h (02)
+// mm   - Minute (30)
+// ss   - Second (45)
+// a    - AM/PM
+// E    - Day of week (Wed)
+// MMMM - Month name (December)
+
+================================================================================
+29. ANNOTATIONS
+================================================================================
+
+// Metadata about code, used by compiler, tools, and runtime
+
+BUILT-IN ANNOTATIONS:
+@Override                    // Method overrides parent method
+@Deprecated                  // Marks as deprecated
+@Deprecated(since = "9", forRemoval = true)
+@SuppressWarnings("unchecked")  // Suppress warnings
+@FunctionalInterface         // Exactly one abstract method
+@SafeVarargs                 // Suppress heap pollution warning
+
+// Meta-annotations (annotations on annotations)
+@Target(ElementType.METHOD)  // Where annotation can be used
+@Retention(RetentionPolicy.RUNTIME)  // When annotation is available
+@Documented                  // Include in Javadoc
+@Inherited                   // Subclasses inherit annotation
+@Repeatable(Schedules.class) // Can be used multiple times
+
+// ElementType values:
+// TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR,
+// LOCAL_VARIABLE, ANNOTATION_TYPE, PACKAGE, TYPE_PARAMETER, TYPE_USE
+
+// RetentionPolicy values:
+// SOURCE  - Discarded by compiler
+// CLASS   - Available in .class file, not at runtime (default)
+// RUNTIME - Available at runtime via reflection
+
+CUSTOM ANNOTATIONS:
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MyAnnotation {
+    String value() default "default";
+    int priority() default 0;
+    String[] tags() default {};
+}
+
+// Usage
+@MyAnnotation(value = "test", priority = 1, tags = {"unit", "fast"})
+public void myMethod() { }
+
+// Single value shorthand
+@MyAnnotation("test")  // Uses value()
+
+// Marker annotation (no elements)
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Test { }
+
+@Test
+public void testMethod() { }
+
+READING ANNOTATIONS (Reflection):
+Method method = MyClass.class.getMethod("myMethod");
+MyAnnotation annotation = method.getAnnotation(MyAnnotation.class);
+if (annotation != null) {
+    System.out.println(annotation.value());
+    System.out.println(annotation.priority());
+}
+
+================================================================================
+30. JAVA MODULES (Java 9+)
+================================================================================
+
+// Java Platform Module System (JPMS)
+// Encapsulate packages, explicit dependencies
+
+MODULE DECLARATION (module-info.java):
+module com.example.myapp {
+    // Require other modules
+    requires java.sql;
+    requires java.logging;
+    requires transitive com.example.utils;  // Transitive dependency
+    
+    // Export packages (make accessible to other modules)
+    exports com.example.myapp.api;
+    exports com.example.myapp.model to com.example.client;  // Qualified export
+    
+    // Open for reflection
+    opens com.example.myapp.internal;
+    opens com.example.myapp.model to com.google.gson;  // Qualified open
+    
+    // Provide service implementation
+    provides com.example.api.Service with com.example.impl.ServiceImpl;
+    
+    // Use service
+    uses com.example.api.Service;
+}
+
+// Compile
+javac -d out --module-source-path src $(find src -name "*.java")
+
+// Run
+java --module-path out -m com.example.myapp/com.example.myapp.Main
+
+================================================================================
+31. DESIGN PATTERNS (Common Ones)
+================================================================================
+
+SINGLETON:
+public class Singleton {
+    private static volatile Singleton instance;
+    
+    private Singleton() { }  // Private constructor
+    
+    public static Singleton getInstance() {
+        if (instance == null) {
+            synchronized (Singleton.class) {
+                if (instance == null) {
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+
+// Enum Singleton (best way)
+public enum Singleton {
+    INSTANCE;
+    
+    public void doSomething() { }
+}
+
+FACTORY:
+public interface Shape {
+    void draw();
+}
+
+public class Circle implements Shape {
+    public void draw() { System.out.println("Drawing Circle"); }
+}
+
+public class Rectangle implements Shape {
+    public void draw() { System.out.println("Drawing Rectangle"); }
+}
+
+public class ShapeFactory {
+    public static Shape createShape(String type) {
+        return switch (type.toLowerCase()) {
+            case "circle" -> new Circle();
+            case "rectangle" -> new Rectangle();
+            default -> throw new IllegalArgumentException("Unknown shape: " + type);
+        };
+    }
+}
+
+Shape circle = ShapeFactory.createShape("circle");
+
+BUILDER:
+public class User {
+    private final String name;
+    private final int age;
+    private final String email;
+    private final String phone;
+    
+    private User(Builder builder) {
+        this.name = builder.name;
+        this.age = builder.age;
+        this.email = builder.email;
+        this.phone = builder.phone;
+    }
+    
+    public static class Builder {
+        private final String name;   // Required
+        private int age;             // Optional
+        private String email;        // Optional
+        private String phone;        // Optional
+        
+        public Builder(String name) {
+            this.name = name;
+        }
+        
+        public Builder age(int age) {
+            this.age = age;
+            return this;
+        }
+        
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+        
+        public Builder phone(String phone) {
+            this.phone = phone;
+            return this;
+        }
+        
+        public User build() {
+            return new User(this);
+        }
+    }
+}
+
+User user = new User.Builder("Sahil")
+    .age(25)
+    .email("sahil@example.com")
+    .build();
+
+OBSERVER:
+import java.util.*;
+
+interface Observer {
+    void update(String message);
+}
+
+class EventPublisher {
+    private List<Observer> observers = new ArrayList<>();
+    
+    public void subscribe(Observer o) { observers.add(o); }
+    public void unsubscribe(Observer o) { observers.remove(o); }
+    
+    public void notifyAll(String message) {
+        observers.forEach(o -> o.update(message));
+    }
+}
+
+STRATEGY:
+interface SortStrategy {
+    void sort(int[] array);
+}
+
+class BubbleSort implements SortStrategy {
+    public void sort(int[] array) { /* bubble sort */ }
+}
+
+class QuickSort implements SortStrategy {
+    public void sort(int[] array) { /* quick sort */ }
+}
+
+class Sorter {
+    private SortStrategy strategy;
+    
+    public Sorter(SortStrategy strategy) {
+        this.strategy = strategy;
+    }
+    
+    public void setStrategy(SortStrategy strategy) {
+        this.strategy = strategy;
+    }
+    
+    public void sort(int[] array) {
+        strategy.sort(array);
+    }
+}
+
+================================================================================
+32. JAVA MEMORY MODEL & GARBAGE COLLECTION
+================================================================================
+
+MEMORY AREAS:
+1. Stack Memory:
+   - Stores method frames, local variables, references
+   - One stack per thread
+   - LIFO (Last In, First Out)
+   - Auto-managed (freed when method returns)
+   - Fast access
+   - StackOverflowError if too deep
+
+2. Heap Memory:
+   - Stores objects and instance variables
+   - Shared among all threads
+   - Managed by Garbage Collector
+   - Slower access than stack
+   - OutOfMemoryError if full
+
+3. Method Area (Metaspace):
+   - Stores class metadata, static variables, constant pool
+   - Shared among all threads
+
+4. String Pool:
+   - Part of heap (since Java 7)
+   - Caches String literals for reuse
+
+GARBAGE COLLECTION:
+// Automatic memory management
+// Reclaims memory from unreachable objects
+
+// Make object eligible for GC
+Object obj = new Object();
+obj = null;            // Now eligible for GC
+
+// Request GC (not guaranteed)
+System.gc();
+Runtime.getRuntime().gc();
+
+// GC Algorithms
+// Serial GC       - Single thread, small apps
+// Parallel GC     - Multiple threads, throughput
+// G1 GC           - Default since Java 9, balanced
+// ZGC             - Ultra-low latency (Java 15+)
+// Shenandoah GC   - Low-latency alternative
+
+// JVM memory flags
+// -Xms256m        - Initial heap size
+// -Xmx1024m       - Maximum heap size
+// -Xss512k        - Stack size per thread
+// -XX:+UseG1GC    - Use G1 garbage collector
+
+MEMORY LEAKS IN JAVA:
+// 1. Static collections that grow unbounded
+// 2. Unclosed resources (streams, connections)
+// 3. Listeners/callbacks not unregistered
+// 4. Inner class references to outer class
+// 5. ThreadLocal variables not removed
+// 6. String.intern() abuse
+
+STRONG vs WEAK vs SOFT vs PHANTOM REFERENCES:
+// Strong:  Object obj = new Object();  (normal, prevents GC)
+// Weak:    WeakReference<Object> wr = new WeakReference<>(obj);  (GC anytime)
+// Soft:    SoftReference<Object> sr = new SoftReference<>(obj);  (GC when memory low)
+// Phantom: PhantomReference<Object> pr = new PhantomReference<>(obj, queue);  (post-finalization)
+
+================================================================================
+33. COMMON JAVA CLASSES & UTILITIES
+================================================================================
+
+MATH CLASS:
+Math.abs(-5)                // 5
+Math.max(5, 10)             // 10
+Math.min(5, 10)             // 5
+Math.pow(2, 3)              // 8.0
+Math.sqrt(16)               // 4.0
+Math.cbrt(27)               // 3.0
+Math.ceil(4.2)              // 5.0
+Math.floor(4.8)             // 4.0
+Math.round(4.5)             // 5
+Math.random()               // 0.0 to 0.999...
+Math.PI                     // 3.141592653589793
+Math.E                      // 2.718281828459045
+Math.log(10)                // Natural log
+Math.log10(100)             // 2.0
+Math.sin(Math.PI / 2)       // 1.0
+Math.cos(0)                 // 1.0
+Math.toRadians(180)         // PI
+Math.toDegrees(Math.PI)     // 180.0
+
+RANDOM CLASS:
+import java.util.Random;
+Random rand = new Random();
+rand.nextInt()              // Random int
+rand.nextInt(100)           // 0 to 99
+rand.nextInt(10, 20)        // 10 to 19 (Java 17+)
+rand.nextDouble()           // 0.0 to 0.999...
+rand.nextBoolean()          // true or false
+rand.nextLong()             // Random long
+rand.nextGaussian()         // Normal distribution
+
+// ThreadLocalRandom (better for multithreaded)
+ThreadLocalRandom.current().nextInt(1, 101);  // 1 to 100
+
+OBJECTS UTILITY CLASS:
+import java.util.Objects;
+Objects.equals(a, b)        // Null-safe equals
+Objects.hash(a, b, c)       // Generate hash code
+Objects.toString(obj, "default")  // Null-safe toString
+Objects.requireNonNull(obj, "Must not be null");
+Objects.isNull(obj)         // obj == null
+Objects.nonNull(obj)        // obj != null
+Objects.requireNonNullElse(obj, defaultObj);  // Java 9+
+
+SYSTEM CLASS:
+System.currentTimeMillis()  // Current time in milliseconds
+System.nanoTime()           // High-precision time
+System.exit(0)              // Exit JVM (0 = normal)
+System.getenv("PATH")       // Environment variable
+System.getProperty("user.home")  // System property
+System.arraycopy(src, srcPos, dest, destPos, length);
+System.lineSeparator()      // OS-specific line separator
+System.identityHashCode(obj)  // Identity hash code
+
+RUNTIME CLASS:
+Runtime runtime = Runtime.getRuntime();
+runtime.totalMemory()       // Total memory (bytes)
+runtime.freeMemory()        // Free memory
+runtime.maxMemory()         // Max memory
+runtime.availableProcessors()  // CPU cores
+runtime.gc()                // Request GC
+runtime.exec("notepad")     // Execute external process
+
+PROCESS & PROCESSBUILDER:
+ProcessBuilder pb = new ProcessBuilder("ls", "-la");
+pb.directory(new File("/home"));
+pb.redirectErrorStream(true);
+Process process = pb.start();
+int exitCode = process.waitFor();
+
+================================================================================
+34. REGULAR EXPRESSIONS
+================================================================================
+
+import java.util.regex.*;
+
+PATTERN & MATCHER:
+Pattern pattern = Pattern.compile("\\d+");     // Compile regex
+Matcher matcher = pattern.matcher("abc 123 def 456");
+
+// Find matches
+while (matcher.find()) {
+    System.out.println(matcher.group());        // "123", "456"
+    System.out.println(matcher.start());        // Start index
+    System.out.println(matcher.end());          // End index
+}
+
+// Check full match
+boolean matches = Pattern.matches("\\d+", "12345");  // true
+
+// Quick check
+"Hello123".matches(".*\\d+.*")   // true
+
+// Split
+String[] parts = "a,b,c".split(",");
+String[] parts2 = Pattern.compile(",").split("a,b,c");
+
+// Replace
+"abc123def".replaceAll("\\d+", "#")   // "abc#def"
+"abc123def".replaceFirst("\\d", "#")  // "abc#23def"
+
+REGEX SYNTAX:
+.       Any character (except newline)
+\\d     Digit [0-9]
+\\D     Non-digit [^0-9]
+\\w     Word character [a-zA-Z0-9_]
+\\W     Non-word character
+\\s     Whitespace [ \t\n\r\f]
+\\S     Non-whitespace
+
+^       Start of string
+$       End of string
+\\b     Word boundary
+\\B     Non-word boundary
+
+*       0 or more
++       1 or more
+?       0 or 1
+{n}     Exactly n
+{n,}    n or more
+{n,m}   Between n and m
+
+[abc]   Any of a, b, or c
+[^abc]  Not a, b, or c
+[a-z]   Range a to z
+[A-Z]   Range A to Z
+
+|       OR (alternation)
+()      Group
+(?:)    Non-capturing group
+(?=)    Positive lookahead
+(?!)    Negative lookahead
+(?<=)   Positive lookbehind
+(?<!)   Negative lookbehind
+
+NAMED GROUPS:
+Pattern p = Pattern.compile("(?<year>\\d{4})-(?<month>\\d{2})-(?<day>\\d{2})");
+Matcher m = p.matcher("2024-12-25");
+if (m.matches()) {
+    String year = m.group("year");    // "2024"
+    String month = m.group("month");  // "12"
+    String day = m.group("day");      // "25"
+}
+
+FLAGS:
+Pattern.CASE_INSENSITIVE     // (?i)
+Pattern.MULTILINE            // (?m)
+Pattern.DOTALL               // (?s) dot matches newline
+Pattern.UNICODE_CASE         // (?u)
+Pattern.COMMENTS             // (?x) allow comments
+
+Pattern p = Pattern.compile("hello", Pattern.CASE_INSENSITIVE);
+Pattern p = Pattern.compile("(?i)hello");  // Inline flag
+
+================================================================================
+35. NETWORKING BASICS
+================================================================================
+
+HTTP CLIENT (Java 11+):
+import java.net.http.*;
+import java.net.URI;
+
+HttpClient client = HttpClient.newHttpClient();
+
+// GET request
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.example.com/data"))
+    .header("Accept", "application/json")
+    .GET()
+    .build();
+
+HttpResponse<String> response = client.send(request, 
+    HttpResponse.BodyHandlers.ofString());
+
+System.out.println(response.statusCode());  // 200
+System.out.println(response.body());        // Response body
+
+// POST request
+HttpRequest postRequest = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.example.com/data"))
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString("{\"name\":\"Sahil\"}"))
+    .build();
+
+// Async request
+client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+    .thenApply(HttpResponse::body)
+    .thenAccept(System.out::println);
+
+SOCKETS (TCP):
+// Server
+try (ServerSocket serverSocket = new ServerSocket(8080)) {
+    Socket clientSocket = serverSocket.accept();  // Wait for connection
+    
+    BufferedReader in = new BufferedReader(
+        new InputStreamReader(clientSocket.getInputStream()));
+    PrintWriter out = new PrintWriter(
+        clientSocket.getOutputStream(), true);
+    
+    String message = in.readLine();
+    out.println("Echo: " + message);
+}
+
+// Client
+try (Socket socket = new Socket("localhost", 8080)) {
+    PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+    BufferedReader in = new BufferedReader(
+        new InputStreamReader(socket.getInputStream()));
+    
+    out.println("Hello Server!");
+    String response = in.readLine();
+}
+
+URL:
+URL url = new URL("https://example.com/path?query=value");
+url.getProtocol()       // "https"
+url.getHost()           // "example.com"
+url.getPort()           // -1 (default)
+url.getPath()           // "/path"
+url.getQuery()          // "query=value"
+
+================================================================================
+36. IMPORTANT JAVA KEYWORDS SUMMARY
+================================================================================
+
+KEYWORD         DESCRIPTION
+-------         -----------
+abstract        Declares abstract class or method
+assert          Debug assertion
+boolean         Boolean data type
+break           Exit loop/switch
+byte            Byte data type (8-bit)
+case            Branch in switch
+catch           Handle exception
+char            Character data type (16-bit)
+class           Declares a class
+const           Reserved (not used)
+continue        Skip to next iteration
+default         Default branch in switch / default method in interface
+do              Do-while loop
+double          Double-precision float (64-bit)
+else            Else branch of if
+enum            Declares enum type
+extends         Inherit from class
+final           Constant / prevent override / prevent inheritance
+finally         Always-execute block after try
+float           Single-precision float (32-bit)
+for             For loop
+goto            Reserved (not used)
+if              Conditional branch
+implements      Implement an interface
+import          Import classes/packages
+instanceof      Type check operator
+int             Integer data type (32-bit)
+interface       Declares an interface
+long            Long integer data type (64-bit)
+native          Native method (C/C++)
+new             Create new object
+package         Declares package
+private         Private access modifier
+protected       Protected access modifier
+public          Public access modifier
+return          Return from method
+short           Short integer data type (16-bit)
+static          Belongs to class, not instance
+strictfp        Strict floating point (deprecated Java 17)
+super           Reference to parent class
+switch          Switch statement/expression
+synchronized    Thread synchronization
+this            Reference to current object
+throw           Throw an exception
+throws          Declare exceptions in method signature
+transient       Exclude from serialization
+try             Try block for exception handling
+var             Local variable type inference (Java 10+)
+void            No return value
+volatile        Variable read/written directly to main memory
+while           While loop
+yield            Return value from switch expression block (Java 14+)
+record           Declare immutable data class (Java 16+)
+sealed           Restrict inheritance (Java 17+)
+permits          Specify allowed subclasses (Java 17+)
+non-sealed       Allow unrestricted inheritance (Java 17+)
+
+================================================================================
+37. JAVA NAMING CONVENTIONS & BEST PRACTICES
+================================================================================
+
+NAMING:
+- Classes:        PascalCase        → StudentRecord, BankAccount
+- Interfaces:     PascalCase        → Drawable, Runnable, Comparable
+- Methods:        camelCase         → calculateTotal(), getName()
+- Variables:      camelCase         → firstName, totalAmount
+- Constants:      UPPER_SNAKE_CASE  → MAX_SIZE, PI_VALUE, DEFAULT_NAME
+- Packages:       lowercase         → com.example.myapp, org.utils
+- Enums:          PascalCase        → Season, Day, Color
+- Enum values:    UPPER_SNAKE_CASE  → MONDAY, RED, MAX_VALUE
+- Type params:    Single uppercase  → T, E, K, V, N
+
+BEST PRACTICES:
+1. Follow SOLID principles
+   - S: Single Responsibility - One class, one job
+   - O: Open/Closed - Open for extension, closed for modification
+   - L: Liskov Substitution - Subtypes must be substitutable
+   - I: Interface Segregation - Specific interfaces over general
+   - D: Dependency Inversion - Depend on abstractions, not concretions
+
+2. Prefer composition over inheritance
+3. Program to interfaces, not implementations
+4. Keep methods short and focused
+5. Use meaningful names (avoid abbreviations)
+6. Handle exceptions properly (don't catch and ignore)
+7. Close resources (try-with-resources)
+8. Use immutable objects when possible
+9. Favor Optional over null
+10. Write unit tests
+11. Use constants instead of magic numbers
+12. Make fields private (encapsulation)
+13. Override toString(), equals(), hashCode() together
+14. Use StringBuilder for string concatenation in loops
+15. Prefer List.of(), Map.of() for immutable collections
+16. Use var for readability (Java 10+)
+17. Prefer records for data classes (Java 16+)
+
+================================================================================
+38. COMMON INTERVIEW TOPICS
+================================================================================
+
+JAVA vs C++:
+- Java has no pointers (safer)
+- Java has garbage collection (automatic memory management)
+- Java is platform independent (JVM)
+- Java has no multiple inheritance with classes
+- Java has no operator overloading (except + for strings)
+- Java has no unsigned types
+- Java arrays are objects
+
+== vs .equals():
+- == compares references (memory addresses)
+- .equals() compares content (values)
+- For primitives, == compares values
+- For objects, always use .equals()
+
+String vs StringBuilder vs StringBuffer:
+- String: Immutable, thread-safe, slower for modifications
+- StringBuilder: Mutable, NOT thread-safe, fastest
+- StringBuffer: Mutable, thread-safe, slower than StringBuilder
+
+ArrayList vs LinkedList:
+- ArrayList: Fast random access O(1), slow insert/delete O(n)
+- LinkedList: Slow random access O(n), fast insert/delete O(1)
+
+HashMap vs TreeMap vs LinkedHashMap:
+- HashMap: O(1) operations, unordered
+- TreeMap: O(log n) operations, sorted by key
+- LinkedHashMap: O(1) operations, maintains insertion order
+
+HashSet vs TreeSet:
+- HashSet: O(1) operations, unordered
+- TreeSet: O(log n) operations, sorted
+
+Abstract Class vs Interface:
+- Abstract class: Partial implementation, single inheritance
+- Interface: Contract only, multiple inheritance, default methods
+
+Checked vs Unchecked Exceptions:
+- Checked: Must handle (IOException, SQLException)
+- Unchecked: Optional to handle (NullPointerException, etc.)
+
+Stack vs Heap:
+- Stack: Method frames, local variables, fast, per-thread, auto-managed
+- Heap: Objects, shared, GC-managed, slower
+
+Comparable vs Comparator:
+// Comparable - natural ordering (in the class itself)
+public class Student implements Comparable<Student> {
+    String name;
+    int age;
+    
+    @Override
+    public int compareTo(Student other) {
+        return this.age - other.age;  // Natural order by age
+    }
+}
+Collections.sort(students);  // Uses compareTo
+
+// Comparator - custom ordering (separate class/lambda)
+Comparator<Student> byName = (a, b) -> a.name.compareTo(b.name);
+Comparator<Student> byAge = Comparator.comparingInt(s -> s.age);
+Comparator<Student> byNameThenAge = Comparator.comparing(Student::getName)
+    .thenComparingInt(Student::getAge);
+Collections.sort(students, byName);
+students.sort(byAge);
+students.sort(byNameThenAge.reversed());
+
+IMMUTABLE CLASS:
+// 1. Make class final
+// 2. Make all fields private final
+// 3. No setters
+// 4. Initialize via constructor
+// 5. Deep copy mutable fields
+
+public final class ImmutablePerson {
+    private final String name;
+    private final int age;
+    private final List<String> hobbies;
+    
+    public ImmutablePerson(String name, int age, List<String> hobbies) {
+        this.name = name;
+        this.age = age;
+        this.hobbies = List.copyOf(hobbies);  // Defensive copy
+    }
+    
+    public String getName() { return name; }
+    public int getAge() { return age; }
+    public List<String> getHobbies() { return hobbies; }  // Already immutable
+}
+
+// Or simply use record (Java 16+)
+public record Person(String name, int age) { }
+
+ITERATOR & ITERABLE:
+// Iterable - makes a class usable in for-each loop
+public class NumberRange implements Iterable<Integer> {
+    private final int start, end;
+    
+    public NumberRange(int start, int end) {
+        this.start = start;
+        this.end = end;
+    }
+    
+    @Override
+    public Iterator<Integer> iterator() {
+        return new Iterator<>() {
+            private int current = start;
+            
+            public boolean hasNext() { return current <= end; }
+            public Integer next() { return current++; }
+        };
+    }
+}
+
+for (int n : new NumberRange(1, 5)) {
+    System.out.println(n);  // 1, 2, 3, 4, 5
+}
+
+================================================================================
+39. BUILD TOOLS & PROJECT STRUCTURE
+================================================================================
+
+MAVEN:
+// Build tool + dependency manager
+// Uses pom.xml for configuration
+
+// Project structure:
+my-project/
+├── pom.xml
+├── src/
+│   ├── main/
+│   │   ├── java/           // Source code
+│   │   │   └── com/example/
+│   │   │       └── App.java
+│   │   └── resources/      // Config files
+│   │       └── application.properties
+│   └── test/
+│       ├── java/           // Test code
+│       │   └── com/example/
+│       │       └── AppTest.java
+│       └── resources/      // Test resources
+└── target/                 // Build output
+
+// pom.xml (key sections):
+<project>
+    <groupId>com.example</groupId>
+    <artifactId>my-app</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>5.10.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
+
+// Maven commands:
+mvn compile              // Compile
+mvn test                 // Run tests
+mvn package              // Build JAR
+mvn install              // Install to local repo
+mvn clean                // Clean build artifacts
+mvn dependency:tree      // Show dependency tree
+
+GRADLE:
+// Build tool using Groovy/Kotlin DSL
+// Uses build.gradle
+
+// build.gradle (Groovy):
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.example'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:32.0.0-jre'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+}
+
+application {
+    mainClass = 'com.example.App'
+}
+
+// Gradle commands:
+gradle build              // Build project
+gradle test               // Run tests
+gradle run                // Run application
+gradle clean              // Clean build
+gradle dependencies       // Show dependency tree
+
+================================================================================
+40. TESTING (JUnit 5)
+================================================================================
+
+import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+BASIC TEST:
+public class CalculatorTest {
+    private Calculator calc;
+    
+    @BeforeEach
+    void setUp() {
+        calc = new Calculator();
+    }
+    
+    @AfterEach
+    void tearDown() {
+        // Cleanup
+    }
+    
+    @BeforeAll
+    static void initAll() {
+        // Run once before all tests
+    }
+    
+    @AfterAll
+    static void tearDownAll() {
+        // Run once after all tests
+    }
+    
+    @Test
+    @DisplayName("Addition of two positive numbers")
+    void testAdd() {
+        assertEquals(5, calc.add(2, 3));
+    }
+    
+    @Test
+    void testDivideByZero() {
+        assertThrows(ArithmeticException.class, () -> calc.divide(1, 0));
+    }
+    
+    @Test
+    @Disabled("Not implemented yet")
+    void testSubtract() { }
+}
+
+ASSERTIONS:
+assertEquals(expected, actual)
+assertEquals(expected, actual, "Message")
+assertNotEquals(a, b)
+assertTrue(condition)
+assertFalse(condition)
+assertNull(obj)
+assertNotNull(obj)
+assertSame(a, b)               // Same reference
+assertNotSame(a, b)
+assertArrayEquals(arr1, arr2)
+assertIterableEquals(list1, list2)
+assertThrows(Exception.class, () -> { })
+assertDoesNotThrow(() -> { })
+assertTimeout(Duration.ofSeconds(1), () -> { })
+assertAll(
+    () -> assertEquals(1, 1),
+    () -> assertTrue(true),
+    () -> assertNotNull("hello")
+);
+
+PARAMETERIZED TESTS:
+@ParameterizedTest
+@ValueSource(ints = {1, 2, 3, 4, 5})
+void testIsPositive(int number) {
+    assertTrue(number > 0);
+}
+
+@ParameterizedTest
+@CsvSource({"1, 2, 3", "5, 5, 10", "0, 0, 0"})
+void testAdd(int a, int b, int expected) {
+    assertEquals(expected, calc.add(a, b));
+}
+
+@ParameterizedTest
+@MethodSource("provideStrings")
+void testLength(String input, int expected) {
+    assertEquals(expected, input.length());
+}
+
+static Stream<Arguments> provideStrings() {
+    return Stream.of(
+        Arguments.of("Hello", 5),
+        Arguments.of("", 0),
+        Arguments.of("Java", 4)
+    );
+}
+
+================================================================================
+================================================================================
